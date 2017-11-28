@@ -1,3 +1,8 @@
+
+[![Build status](https://ci.appveyor.com/api/projects/status/n6mfcq24ud5lecvb?svg=true)](https://ci.appveyor.com/project/Xabaril/acheve-testhost)
+
+[![NuGet](https://img.shields.io/nuget/v/Acheve.TestHost.svg)](https://www.nuget.org/packages/Acheve.TestHost/)
+
 # Acheve
 
 NuGet package to improve  AspNetCore TestServer experiences
