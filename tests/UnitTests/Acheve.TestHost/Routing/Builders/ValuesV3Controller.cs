@@ -1,0 +1,59 @@
+﻿using Microsoft.AspNetCore.Mvc;
+
+namespace UnitTests.Acheve.TestHost.Builders
+{
+    [Route("api/values")]
+    public class ValuesV3Controller
+        : Controller
+    {
+        [HttpGet("get1")]
+        public IActionResult Get1([FromQuery]Pagination pagination)
+        {
+            return Ok();
+        }
+
+        [HttpGet("get2/{pageindex}/{pagecount}")]
+        public IActionResult Get2([FromQuery]Pagination pagination)
+        {
+            return Ok();
+        }
+
+        [Route("get3"),HttpGet]
+        public IActionResult Get3([FromQuery]Pagination pagination)
+        {
+            return Ok();
+        }
+
+        [Route("get4/{pageindex}/{pagecount}"),HttpGet]
+        public IActionResult Get4([FromQuery]Pagination pagination)
+        {
+            return Ok();
+        }
+
+        [HttpPost("")]
+        public IActionResult Post1([FromBody]Pagination pagination)
+        {
+            return Ok();
+        }
+
+        [HttpPost("post/{id:int}")]
+        public IActionResult Post2(int id, [FromBody]Pagination pagination1)
+        {
+            return Ok();
+        }
+
+        [HttpPost("post/{id:int}/{pageIndex}/{pagecount}")]
+        public IActionResult Post3(int id,[FromBody]Pagination pagination1,Pagination pagination2)
+        {
+            return Ok();
+        }
+
+    }
+
+    public  class Pagination
+    {
+        public int PageIndex { get; set; }
+
+        public int PageCount{ get; set; }
+    }
+}
