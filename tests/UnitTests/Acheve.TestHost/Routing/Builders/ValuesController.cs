@@ -11,7 +11,16 @@ namespace UnitTests.Acheve.TestHost.Builders
         {
             return Ok();
         }
-
+        [HttpGet("stringasprimitive")]
+        public IActionResult GetStringAsParameter(string value)
+        {
+            return Ok();
+        }
+        [HttpGet("decimalasprimitive")]
+        public IActionResult GetDecimalAsParameter(decimal value)
+        {
+            return Ok();
+        }
         [HttpGet("OverrideMethodName")]
         public IActionResult Get2(int id = 0)
         {

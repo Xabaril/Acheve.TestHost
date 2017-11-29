@@ -1,4 +1,6 @@
-﻿namespace Acheve.TestHost.Routing.Tokenizers
+﻿using System;
+
+namespace Acheve.TestHost.Routing.Tokenizers
 {
     class PrimitiveParameterActionTokenizer
         : ITokenizer
@@ -10,7 +12,11 @@
 
             for (int i = 0; i < parameters.Length; i++)
             {
-                if (parameters[i].ParameterType.IsPrimitive)
+                if (parameters[i].ParameterType.IsPrimitive 
+                    ||
+                    parameters[i].ParameterType == typeof(String)
+                    ||
+                    parameters[i].ParameterType == typeof(Decimal))
                 {
                     var tokenName = parameters[i].Name.ToLowerInvariant();
                     var tokenValue = action.ArgumentValues[i];

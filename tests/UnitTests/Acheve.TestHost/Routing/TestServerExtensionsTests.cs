@@ -52,7 +52,7 @@ namespace UnitTests.Acheve.TestHost.Routing
         }
 
         [Fact]
-        public void create_valid_request_for_conventional_action()
+        public void create_valid_request_for_primitive_parameter_action()
         {
             var server = new TestServerBuilder()
               .UseDefaultStartup()
@@ -64,6 +64,35 @@ namespace UnitTests.Acheve.TestHost.Routing
             request.GetConfiguredAddress()
                 .Should().Be("api/values?id=0");
         }
+
+        [Fact]
+        public void create_valid_request_for_string_as_primitive_parameter_tokenizer_action()
+        {
+            var server = new TestServerBuilder()
+              .UseDefaultStartup()
+              .Build();
+
+            var request = server.CreateHttpApiRequest<ValuesController>(
+                controller => controller.GetStringAsParameter("unai"));
+
+            request.GetConfiguredAddress()
+                .Should().Be("api/values/stringasprimitive?value=unai");
+        }
+
+        [Fact]
+        public void create_valid_request_for_string_as_decimal_parameter_tokenizer_action()
+        {
+            var server = new TestServerBuilder()
+              .UseDefaultStartup()
+              .Build();
+
+            var request = server.CreateHttpApiRequest<ValuesController>(
+                controller => controller.GetDecimalAsParameter(2m));
+
+            request.GetConfiguredAddress()
+                .Should().Be("api/values/decimalasprimitive?value=2");
+        }
+
         [Fact]
         public void create_valid_request_for_conventional_action_with_extra_parameters()
         {
