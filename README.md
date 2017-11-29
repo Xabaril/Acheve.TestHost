@@ -7,18 +7,18 @@
 
 NuGet package to improve  AspNetCore TestServer experiences
 
-Unit testing your Mvc controllers is not enougth to verify the correctness of your WebApi. Are the filters working? The correct status code is sent when that condition is reached? Is the user authorized to request that endpoint? 
+Unit testing your Mvc controllers is not enough to verify the correctness of your WebApi. Are the filters working? Is the correct status code sent when that condition is reached? Is the user authorized to request that endpoint? 
 
 
-The NuGet package [Microsoft.AspNetCore.TestHost](https://www.nuget.org/packages/Microsoft.AspNetCore.TestHost/) allows you to create an in memory server that exposes an HttpClient to be able to send request to the server. All in memory, all in the same process. Fast. It's the best way to create integration test in your Mvc application. But at this moment this library have some gaps that *Acheve* try to fill.
+The NuGet package [Microsoft.AspNetCore.TestHost](https://www.nuget.org/packages/Microsoft.AspNetCore.TestHost/) allows you to create an in memory server that exposes an HttpClient to be able to send request to the server. All in memory, all in the same process. Fast. It's the best way to create integration tests in your Mvc application. But at this moment this library has some gaps that *Acheve* try to fill.
 
 ## About Security
 
-But when your Mvc application requires authenticated request it could be a little more dificult...
+But when your Mvc application requires an authenticated request it could be a little more dificult...
 
 What if you have an easy way to indicate the claims in the request? 
 
-This package implements an authentication middleware and several extension methods to easiy indicate
+This package implements an authentication middleware and several extension methods to easily indicate
 the claims for authenticated calls to the WebApi.
 
 In the TestServer startup class you shoud incude the authentication service and add the .Net Core new AUthentication middleware:
@@ -50,7 +50,7 @@ In the TestServer startup class you shoud incude the authentication service and 
 ```
 
 And in your tests you can use an HttpClient with default credentials or build 
-the request with the server RequestBuilder and with the specified claims:
+the request with the server RequestBuilder and the desired claims:
 
 ```csharp
 
@@ -108,7 +108,7 @@ the request with the server RequestBuilder and with the specified claims:
     }
 ```
 
-Both methods (`WithDefaultIdentity` and `WithIdentity`) accept as the only parameter an IEnumerabe&lt;Claim&gt; that should include the desired user claims in the request.
+Both methods (`WithDefaultIdentity` and `WithIdentity`) accept as the only parameter an IEnumerabe&lt;Claim&gt; that should include the desired user claims for the request.
 
 ```csharp
 
@@ -165,7 +165,7 @@ The main problems on this approach are:
     1.- If any route convention is changed all integration test will fail.
     2.- If you refactor any parameter order the integration test will fail.
 
-With *Acheve* you can create uri dynamically using the attribute routing directly from yours controllers.
+With *Acheve* you can create the uri dynamically using the attribute routing directly from your controllers.
 
 ```csharp
 
