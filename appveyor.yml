@@ -13,9 +13,9 @@ pull_requests:
 nuget:  
   disable_publish_on_pr: true
 build_script:  
-- # ps: .\Build.ps1
+# ps: .\Build.ps1
   # output will be in ./artifacts
-  - cmd: dotnet pack .\src\Acheve.TestHost -c Release -o ..\..\artifacts
+  cmd: dotnet pack .\src\Acheve.TestHost -c Release -o ..\..\artifacts
 # test: off
 test:
   assemblies:
