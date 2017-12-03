@@ -7,7 +7,7 @@
     <Description>Achve.TestHost is a nuget package to improve TestServer experiences.
     For more information see http://github.com/Xabaril/Acheve.TestHost </Description>
     <PackageTags>TestHost;TestServer</PackageTags>
-    <Version>1.1.1</Version>
+    <Version>1.1.2</Version>
   </PropertyGroup>
   
   <ItemGroup>
