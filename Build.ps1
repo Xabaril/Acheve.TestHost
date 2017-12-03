@@ -60,5 +60,6 @@ Invoke-MSBuild
 
 
 exec { & dotnet test .\tests\UnitTests -c Release }
+exec { & dotnet test .\samples\Sample.IntegrationTests -c Release }
 
 exec { & dotnet pack .\src\Acheve.TestHost -c Release -o ..\..\artifacts  }
