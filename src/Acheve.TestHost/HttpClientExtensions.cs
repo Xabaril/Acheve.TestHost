@@ -7,16 +7,48 @@ namespace System.Net.Http
 {
     public static class HttpClientExtensions
     {
+        /// <summary>
+        /// Adds an Authentication header to the default request headers of the <see cref="HttpClient"/>. 
+        /// Uses the provided claims and "TestServer" as authentication scheme.
+        /// </summary>
+        /// <param name="httpClient">The httpClient instance</param>
+        /// <param name="claims">The claims collection that represents the user identity</param>
+        /// <returns></returns>
         public static HttpClient WithDefaultIdentity(this HttpClient httpClient, IEnumerable<Claim> claims)
         {
-            httpClient.DefaultRequestHeaders.Authorization =
-                new AuthenticationHeaderValue(
-                    TestServerAuthenticationDefaults.AuthenticationScheme,
-                    DefautClaimsEncoder.Encode(claims));
+            var headerName =
+                AuthenticationHeaderHelper.GetHeaderName(TestServerAuthenticationDefaults.AuthenticationScheme);
+
+            httpClient.DefaultRequestHeaders.Add(
+                name: headerName,
+                value: $"{TestServerAuthenticationDefaults.AuthenticationScheme} {DefautClaimsEncoder.Encode(claims)}");
 
             return httpClient;
         }
 
-       
+        /// <summary>
+        /// Adds an Authentication header to the default request headers of the <see cref="HttpClient"/>. 
+        /// Uses the provided claims and authentication scheme.
+        /// </summary>
+        /// <param name="httpClient">The httpClient instance</param>
+        /// <param name="claims">The claims collection that represents the user identity</param>
+        /// <param name="scheme">The authentication scheme</param>
+        /// <returns></returns>
+        public static HttpClient WithDefaultIdentity(this HttpClient httpClient, IEnumerable<Claim> claims, string scheme)
+        {
+            if (string.IsNullOrWhiteSpace(scheme))
+            {
+                throw new ArgumentNullException(nameof(scheme));
+            }
+
+            var headerName =
+                AuthenticationHeaderHelper.GetHeaderName(scheme);
+
+            httpClient.DefaultRequestHeaders.Add(
+                name: headerName,
+                value: $"{scheme} {DefautClaimsEncoder.Encode(claims)}");
+
+            return httpClient;
+        }
     }
 }

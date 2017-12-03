@@ -13,6 +13,13 @@ namespace Sample.Api.Controllers
             return Ok(new[] { "Value1", "Value2" });
         }
 
+        [Authorize(AuthenticationSchemes = "Bearer")]
+        [HttpGet("schema")]
+        public IActionResult ValuesWithSchema()
+        {
+            return Ok(new[] { "Value1", "Value2" });
+        }
+
         [HttpGet("public")]
         public IActionResult PublicValues()
         {

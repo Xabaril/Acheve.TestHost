@@ -13,7 +13,6 @@
   <ItemGroup>
     <Folder Include="Routing\AttributeTemplates\" />
     <Folder Include="Routing\Tokenizers\" />
-    <Folder Include="Security\" />
   </ItemGroup>
 
   <ItemGroup>

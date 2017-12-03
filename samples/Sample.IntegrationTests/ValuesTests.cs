@@ -1,5 +1,4 @@
-﻿using Acheve.AspNetCore.TestHost.Security;
-using FluentAssertions;
+﻿using FluentAssertions;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Sample.Api.Controllers;
@@ -54,6 +53,28 @@ namespace Sample.IntegrationTests
             // Or you can create a request and assign the identity to the RequestBuilder
             var response = await _server.CreateHttpApiRequest<ValuesController>(controller => controller.Values())
                 .WithIdentity(Identities.Empty)
+                .GetAsync();
+
+            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+        }
+
+        [Fact]
+        public async Task WithRequestBuilderAndSpecificScheme()
+        {
+            // Or you can create a request and assign the identity to the RequestBuilder
+            var response = await _server.CreateHttpApiRequest<ValuesController>(controller => controller.ValuesWithSchema())
+                .WithIdentity(Identities.User, "Bearer")
+                .GetAsync();
+
+            response.EnsureSuccessStatusCode();
+        }
+
+        [Fact]
+        public async Task WithRequestBuilderAndSpecificSchemeUnauthorized()
+        {
+            // Or you can create a request and assign the identity to the RequestBuilder
+            var response = await _server.CreateHttpApiRequest<ValuesController>(controller => controller.ValuesWithSchema())
+                .WithIdentity(Identities.User)
                 .GetAsync();
 
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);

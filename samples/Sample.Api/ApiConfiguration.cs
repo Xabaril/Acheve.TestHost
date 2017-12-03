@@ -22,7 +22,6 @@ namespace Sample.Api
         public static void Configure(IServiceCollection services)
         {
             // Configure other services
-
         }
     }
 }

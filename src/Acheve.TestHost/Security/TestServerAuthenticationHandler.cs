@@ -23,20 +23,24 @@ namespace Acheve.TestHost
 
         protected override Task<AuthenticateResult> HandleAuthenticateAsync()
         {
+            var headerName = AuthenticationHeaderHelper.GetHeaderName(Scheme.Name);
+
             StringValues authHeaderString;
             var existAuthorizationHeader =
-                Context.Request.Headers.TryGetValue(Constants.AuthenticationHeaderName, out authHeaderString);
+                Context.Request.Headers.TryGetValue(headerName, out authHeaderString);
 
             if (existAuthorizationHeader == false)
             {
+                Logger.LogInformation("{Scheme} No {HeaderName} header present", Scheme.Name, headerName);
                 return Task.FromResult(AuthenticateResult.Fail("No Authorization header present"));
             }
 
             AuthenticationHeaderValue authHeader;
             var canParse = AuthenticationHeaderValue.TryParse(authHeaderString[0], out authHeader);
 
-            if (canParse == false || authHeader.Scheme != TestServerAuthenticationDefaults.AuthenticationScheme)
+            if (canParse == false)
             {
+                Logger.LogInformation("{Scheme} {HeaderName} header not valid", Scheme.Name, headerName);
                 return Task.FromResult(AuthenticateResult.Fail("Authorization header not valid"));
             }
 
@@ -44,7 +48,8 @@ namespace Acheve.TestHost
 
             if (headerClaims.Length == 0)
             {
-                return Task.FromResult(AuthenticateResult.Fail("Authorization header with no claims"));
+                Logger.LogInformation("{Scheme} Invalid claims", Scheme.Name);
+                return Task.FromResult(AuthenticateResult.Fail("Invalid claims"));
             }
 
             var identity = new ClaimsIdentity(
@@ -57,7 +62,8 @@ namespace Acheve.TestHost
                 new ClaimsPrincipal(identity),
                 new AuthenticationProperties(),
                 Scheme.Name);
-
+            
+            Logger.LogInformation("{Scheme} Authenticated", Scheme.Name);
             return Task.FromResult(AuthenticateResult.Success(ticket));
         }
     }
