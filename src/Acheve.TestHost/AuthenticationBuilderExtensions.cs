@@ -9,6 +9,15 @@ namespace Acheve.AspNetCore.TestHost.Security
         public static AuthenticationBuilder AddTestServerAuthentication(this AuthenticationBuilder builder)
             => builder.AddTestServerAuthentication(
                 authenticationScheme: TestServerAuthenticationDefaults.AuthenticationScheme,
+                displayName: null,
+                configureOptions: _ => { });
+
+        public static AuthenticationBuilder AddTestServerAuthentication(
+            this AuthenticationBuilder builder,
+            string authenticationScheme)
+            => builder.AddTestServerAuthentication(
+                authenticationScheme: authenticationScheme,
+                displayName: null,
                 configureOptions: _ => { });
 
         public static AuthenticationBuilder AddTestServerAuthentication(
@@ -16,6 +25,7 @@ namespace Acheve.AspNetCore.TestHost.Security
             Action<TestServerAuthenticationOptions> configureOptions)
             => builder.AddTestServerAuthentication(
                 authenticationScheme: TestServerAuthenticationDefaults.AuthenticationScheme,
+                displayName: null,
                 configureOptions: configureOptions);
 
         public static AuthenticationBuilder AddTestServerAuthentication(

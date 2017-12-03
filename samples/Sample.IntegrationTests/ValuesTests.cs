@@ -33,7 +33,7 @@ namespace Sample.IntegrationTests
         {
             var response = await _userHttpCient.GetAsync("api/values");
 
-            response.EnsureSuccessStatusCode();
+            await response.IsSuccessStatusCodeOrThrow();
         }
 
         [Fact]
@@ -44,7 +44,7 @@ namespace Sample.IntegrationTests
                 .WithIdentity(Identities.User)
                 .GetAsync();
 
-            response.EnsureSuccessStatusCode();
+            await response.IsSuccessStatusCodeOrThrow();
         }
 
         [Fact]
@@ -66,7 +66,7 @@ namespace Sample.IntegrationTests
                 .WithIdentity(Identities.User, "Bearer")
                 .GetAsync();
 
-            response.EnsureSuccessStatusCode();
+            await response.IsSuccessStatusCodeOrThrow();
         }
 
         [Fact]
@@ -86,7 +86,7 @@ namespace Sample.IntegrationTests
             var response = await _server.CreateHttpApiRequest<ValuesController>(controller => controller.PublicValues())
                 .GetAsync();
 
-            response.EnsureSuccessStatusCode();
+            await response.IsSuccessStatusCodeOrThrow();
         }
 
         public void Dispose()
