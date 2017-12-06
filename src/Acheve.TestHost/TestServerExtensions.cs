@@ -1,8 +1,12 @@
 ﻿using Acheve.TestHost.Routing;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Linq.Expressions;
+using System.Net.Http;
 using System.Reflection;
+using System.Text;
+using Newtonsoft.Json;
 
 namespace Microsoft.AspNetCore.TestHost
 {
@@ -45,7 +49,19 @@ namespace Microsoft.AspNetCore.TestHost
             var validUri = UriDiscover.Discover<TController>(
                 action, tokenValues);
 
-            return server.CreateRequest(validUri.ToLowerInvariant());
+            var requestBuilder = server.CreateRequest(validUri.ToLowerInvariant());
+            
+            var fromBodyArgument = action.ArgumentValues.Values.SingleOrDefault(x => x.IsBody);
+
+            if (fromBodyArgument != null)
+            {
+                requestBuilder.And(x => x.Content = new StringContent(
+                    JsonConvert.SerializeObject(fromBodyArgument.Instance),
+                    Encoding.UTF8,
+                    "application/json"));
+            }
+
+            return requestBuilder;
         }
 
         static bool IsController<TController>()
@@ -124,7 +140,7 @@ namespace Microsoft.AspNetCore.TestHost
 
             var methodCall = (MethodCallExpression)actionSelector.Body;
 
-            var action =  new TestServerAction(methodCall.Method);
+            var action = new TestServerAction(methodCall.Method);
 
             int index = 0;
 

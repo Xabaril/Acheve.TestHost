@@ -2,6 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.TestHost;
 using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Http;
 using UnitTests.Acheve.TestHost.Builders;
 using Xunit;
 
@@ -448,7 +452,7 @@ namespace UnitTests.Acheve.TestHost.Routing
         }
 
         [Fact]
-        public void create_valid_request_using_from_body_complex_arguments_and_primitive_query_parameters()
+        public async Task create_valid_request_using_from_body_complex_arguments_and_primitive_query_parameters()
         {
             var server = new TestServerBuilder()
             .UseDefaultStartup()
@@ -461,10 +465,14 @@ namespace UnitTests.Acheve.TestHost.Routing
             };
 
             var requestPost = server.CreateHttpApiRequest<ValuesV3Controller>(
-                controller => controller.Post2(2,complexParameter));
+                controller => controller.Post2(2, complexParameter));
 
             requestPost.GetConfiguredAddress()
                 .Should().Be("api/values/post/2");
+
+            var response = await requestPost.SendAsync(HttpMethods.Post);
+
+            await response.IsSuccessStatusCodeOrThrow();
         }
 
         [Fact]

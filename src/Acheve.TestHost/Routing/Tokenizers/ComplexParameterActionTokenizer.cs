@@ -23,7 +23,7 @@ namespace Acheve.TestHost.Routing.Tokenizers
                         foreach (var property in type.GetProperties())
                         {
                             var tokenName = property.Name.ToLowerInvariant();
-                            var value = property.GetValue(action.ArgumentValues[i]);
+                            var value = property.GetValue(action.ArgumentValues[i].Instance);
 
                             tokens.AddToken(tokenName, value.ToString(), isConventional: false);
                         }

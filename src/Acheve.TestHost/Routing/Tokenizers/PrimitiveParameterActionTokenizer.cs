@@ -19,7 +19,7 @@ namespace Acheve.TestHost.Routing.Tokenizers
                     parameters[i].ParameterType == typeof(Decimal))
                 {
                     var tokenName = parameters[i].Name.ToLowerInvariant();
-                    var tokenValue = action.ArgumentValues[i];
+                    var tokenValue = action.ArgumentValues[i].Instance;
 
                     tokens.AddToken(tokenName, tokenValue.ToString(), isConventional: false);
                 }
