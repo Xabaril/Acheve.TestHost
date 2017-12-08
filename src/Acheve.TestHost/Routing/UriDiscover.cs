@@ -42,13 +42,18 @@ namespace Acheve.TestHost.Routing
                 .GetTemplates<TController>(action, testServerTokens)
                 .FirstOrDefault();
 
-            if (verbsTemplate != null)
+            var template = (verbsTemplate ?? routeTemplate);
+
+            if (template != null)
             {
-                return $"{controllerTemplate}/{verbsTemplate}{queryStringTemplate}";
-            }
-            else if ( routeTemplate != null )
-            {
-                return $"{controllerTemplate}/{routeTemplate}{queryStringTemplate}";
+                if (IsTildeOverride(template, out string overrideTemplate))
+                {
+                    return $"{overrideTemplate}{queryStringTemplate}";
+                }
+                else
+                {
+                    return $"{controllerTemplate}/{template}{queryStringTemplate}";
+                }
             }
 
             return $"{controllerTemplate}{queryStringTemplate}";
@@ -74,6 +79,20 @@ namespace Acheve.TestHost.Routing
             }
 
             return testServerTokens;
+        }
+        static bool IsTildeOverride(string template, out string overrideTemplate)
+        {
+            const string TILDE = "~";
+
+            overrideTemplate = null;
+            var isTildeOverride = template.StartsWith(TILDE);
+
+            if (isTildeOverride)
+            {
+                overrideTemplate = template.Substring(2); // remove ~/
+            }
+
+            return isTildeOverride;
         }
     }
 }
