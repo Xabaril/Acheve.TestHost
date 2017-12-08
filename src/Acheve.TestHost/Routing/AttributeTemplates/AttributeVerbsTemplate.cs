@@ -11,10 +11,10 @@ namespace Acheve.TestHost.Routing.AttributeTemplates
     {
         public override IEnumerable<string> GetTemplates<TController>(TestServerAction action, TestServerTokenCollection tokens)
         {
-            var getAttributes = action.MethodInfo.GetCustomAttributes<HttpPostAttribute>()
+            var getAttributes = action.MethodInfo.GetCustomAttributes<HttpGetAttribute>()
                 .OfType<HttpMethodAttribute>();
 
-            var postAttributes = action.MethodInfo.GetCustomAttributes<HttpGetAttribute>()
+            var postAttributes = action.MethodInfo.GetCustomAttributes<HttpPostAttribute>()
                 .OfType<HttpMethodAttribute>();
 
             var putAttributes = action.MethodInfo.GetCustomAttributes<HttpPutAttribute>()
