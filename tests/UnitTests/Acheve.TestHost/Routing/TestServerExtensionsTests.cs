@@ -492,12 +492,98 @@ namespace UnitTests.Acheve.TestHost.Routing
         }
 
         [Fact]
-        public async Task create_request_including_fromBody_argument_as_content_as_default_behavior()
+        public void create_valid_request_when_action_use_tilde_to_override_controller_route()
         {
             var server = new TestServerBuilder()
                 .UseDefaultStartup()
                 .Build();
+            
+            var requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+               controller => controller.Get1(1));
 
+            requestPost.GetConfiguredAddress()
+                .Should().Be("get1/1");
+
+            requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+               controller => controller.Post1(2));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("post1/2");
+
+            requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+              controller => controller.Put1(3));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("put1/3");
+
+            requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+              controller => controller.Delete1(4));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("delete1/4");
+
+            var pagination = new Pagination()
+            {
+                PageIndex = 1,
+                PageCount = 2
+            };
+
+            requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+               controller => controller.Get2(1,pagination));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("get2/1?pageindex=1&pagecount=2");
+
+            requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+               controller => controller.Post2(1, pagination));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("post2/1?pageindex=1&pagecount=2");
+
+            requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+               controller => controller.Put2(1, pagination));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("put2/1?pageindex=1&pagecount=2");
+
+            requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+                controller => controller.Delete2(1, pagination));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("delete2/1?pageindex=1&pagecount=2");
+
+            requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+               controller => controller.Get3(1, pagination));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("get3/1?pageindex=1&pagecount=2");
+
+            requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+               controller => controller.Post3(1, pagination));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("post3/1?pageindex=1&pagecount=2");
+
+            requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+               controller => controller.Put3(1, pagination));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("put3/1?pageindex=1&pagecount=2");
+
+            requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+                controller => controller.Delete3(1, pagination));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("delete3/1?pageindex=1&pagecount=2");
+       }
+
+       [Fact]
+       public async Task create_request_including_fromBody_argument_as_content_as_default_behavior()
+       {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+  
             var complexParameter = new Pagination()
             {
                 PageCount = 10,
