@@ -2,6 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.TestHost;
 using System;
+using System.Net;
+using System.Net.Http;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using UnitTests.Acheve.TestHost.Builders;
 using Xunit;
 
@@ -461,7 +465,7 @@ namespace UnitTests.Acheve.TestHost.Routing
             };
 
             var requestPost = server.CreateHttpApiRequest<ValuesV3Controller>(
-                controller => controller.Post2(2,complexParameter));
+                controller => controller.Post2(2, complexParameter));
 
             requestPost.GetConfiguredAddress()
                 .Should().Be("api/values/post/2");
@@ -481,7 +485,7 @@ namespace UnitTests.Acheve.TestHost.Routing
             };
 
             var requestPost = server.CreateHttpApiRequest<ValuesV3Controller>(
-                controller => controller.Post3(2, complexParameter,complexParameter));
+                controller => controller.Post3(2, complexParameter, complexParameter));
 
             requestPost.GetConfiguredAddress()
                 .Should().Be("api/values/post/2/1/10");
@@ -493,7 +497,7 @@ namespace UnitTests.Acheve.TestHost.Routing
             var server = new TestServerBuilder()
                 .UseDefaultStartup()
                 .Build();
-
+            
             var requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
                controller => controller.Get1(1));
 
@@ -571,9 +575,74 @@ namespace UnitTests.Acheve.TestHost.Routing
 
             requestPost.GetConfiguredAddress()
                 .Should().Be("delete3/1?pageindex=1&pagecount=2");
+       }
+
+       [Fact]
+       public async Task create_request_including_fromBody_argument_as_content_as_default_behavior()
+       {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+  
+            var complexParameter = new Pagination()
+            {
+                PageCount = 10,
+                PageIndex = 1
+            };
+
+            var request = server.CreateHttpApiRequest<ValuesV3Controller>(
+                controller => controller.Post2(2, complexParameter));
+
+            var response = await request.PostAsync();
+
+            await response.IsSuccessStatusCodeOrThrow();
         }
 
+        [Fact]
+        public async Task create_request_including_fromBody_argument_as_content_configured_explicitly()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
 
+            var complexParameter = new Pagination()
+            {
+                PageCount = 10,
+                PageIndex = 1
+            };
+
+            var request = server.CreateHttpApiRequest<ValuesV3Controller>(
+                actionSelector: controller => controller.Post2(2, complexParameter),
+                tokenValues: null,
+                contentOptions: new IncludeContentAsJson());
+
+            var response = await request.PostAsync();
+
+            await response.IsSuccessStatusCodeOrThrow();
+        }
+
+        [Fact]
+        public async Task create_request_not_adding_fromBody_argument_as_content()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var complexParameter = new Pagination()
+            {
+                PageCount = 10,
+                PageIndex = 1
+            };
+
+            var request = server.CreateHttpApiRequest<ValuesV3Controller>(
+                actionSelector: controller => controller.Post2(2, complexParameter),
+                tokenValues: null,
+                contentOptions: new NotIncludeContent());
+
+            var response = await request.PostAsync();
+
+            response.StatusCode.Should().Be(HttpStatusCode.UnsupportedMediaType);
+        }
 
         private class PrivateNonControllerClass
         {

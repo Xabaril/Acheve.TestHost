@@ -1,6 +1,7 @@
 ﻿using Acheve.TestHost.Routing;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -17,10 +18,13 @@ namespace Microsoft.AspNetCore.TestHost
         /// <param name="server">The TestServer</param>
         /// <param name="actionSelector">The action selector used to discover the uri</param>
         /// <param name="tokenValues">The optional token values used to create the uri</param>
+        /// <param name="contentOptions">Determines if [FromBody] arguments are included as request content. 
+        ///      By default they are included as application/json content</param>
         /// <returns></returns>
         public static RequestBuilder CreateHttpApiRequest<TController>(this TestServer server,
             Expression<Func<TController, object>> actionSelector,
-            object tokenValues = null)
+            object tokenValues = null,
+            RequestContentOptions contentOptions = null)
             where TController : class
         {
             if (!IsController<TController>())
@@ -32,6 +36,9 @@ namespace Microsoft.AspNetCore.TestHost
             {
                 throw new ArgumentNullException(nameof(actionSelector));
             }
+
+            // Include content as Json by default
+            contentOptions = contentOptions ?? new IncludeContentAsJson();
 
             var action = GetTestServerAction(actionSelector);
 
@@ -45,10 +52,17 @@ namespace Microsoft.AspNetCore.TestHost
             var validUri = UriDiscover.Discover<TController>(
                 action, tokenValues);
 
-            return server.CreateRequest(validUri.ToLowerInvariant());
+            var requestBuilder = server.CreateRequest(validUri.ToLowerInvariant());
+
+            if (contentOptions.IncludeFromBodyAsContent)
+            {
+                AddFromBodyArgumentsToRequestBody(requestBuilder, action, contentOptions);
+            }
+
+            return requestBuilder;
         }
 
-        static bool IsController<TController>()
+        private static bool IsController<TController>()
         {
             const string ControllerTypeNameSuffix = "Controller";
 
@@ -89,7 +103,7 @@ namespace Microsoft.AspNetCore.TestHost
             return true;
         }
 
-        static bool IsValidActionMethod(MethodInfo methodInfo)
+        private static bool IsValidActionMethod(MethodInfo methodInfo)
         {
             if (!methodInfo.IsPublic)
             {
@@ -115,7 +129,7 @@ namespace Microsoft.AspNetCore.TestHost
             return true;
         }
 
-        static TestServerAction GetTestServerAction<TController>(Expression<Func<TController, object>> actionSelector)
+        private static TestServerAction GetTestServerAction<TController>(Expression<Func<TController, object>> actionSelector)
         {
             if (actionSelector.NodeType != ExpressionType.Lambda)
             {
@@ -124,7 +138,7 @@ namespace Microsoft.AspNetCore.TestHost
 
             var methodCall = (MethodCallExpression)actionSelector.Body;
 
-            var action =  new TestServerAction(methodCall.Method);
+            var action = new TestServerAction(methodCall.Method);
 
             int index = 0;
 
@@ -136,6 +150,20 @@ namespace Microsoft.AspNetCore.TestHost
             }
 
             return action;
+        }
+
+        private static void AddFromBodyArgumentsToRequestBody(
+            RequestBuilder requestBuilder,
+            TestServerAction action,
+            RequestContentOptions contentOptions)
+        {
+            var fromBodyArgument = action.ArgumentValues.Values.SingleOrDefault(x => x.IsBody);
+
+            if (fromBodyArgument != null)
+            {
+                requestBuilder.And(x => x.Content =
+                    contentOptions.ContentBuilder(fromBodyArgument.Instance));
+            }
         }
     }
 }
