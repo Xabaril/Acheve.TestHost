@@ -1,7 +1,6 @@
+[![Build status](https://ci.appveyor.com/api/projects/status/n6mfcq24ud5lecvb?svg=true)](https://ci.appveyor.com/project/Xabaril/acheve-testhost) [![NuGet](https://img.shields.io/nuget/v/acheve-testhost.svg)](https://www.nuget.org/packages/acheve-testhost/)
 
-[![Build status](https://ci.appveyor.com/api/projects/status/n6mfcq24ud5lecvb?svg=true)](https://ci.appveyor.com/project/Xabaril/acheve-testhost)
-
-[![NuGet](https://img.shields.io/nuget/v/Acheve.TestHost.svg)](https://www.nuget.org/packages/Acheve.TestHost/)
+[![Build history](https://buildstats.info/appveyor/chart/xabaril/Acheve.TestHost)](https://ci.appveyor.com/project/xabaril/Acheve.TestHost/history)
 
 # Acheve
 

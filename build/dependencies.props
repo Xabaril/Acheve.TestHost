@@ -1,0 +1,36 @@
+<Project>
+  <PropertyGroup Label="SDK Versions">
+    <NetStandardTargetVersion>netstandard2.0</NetStandardTargetVersion>
+    <NetCoreTargetVersion>netcoreapp2.0</NetCoreTargetVersion>
+    <MicrosoftNETTestSdkPackageVersion>15.6.1</MicrosoftNETTestSdkPackageVersion>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+  
+  <PropertyGroup Label="Package Versions">
+    <MicrosoftAspNetCoreAuthenticationVersion>2.0.3</MicrosoftAspNetCoreAuthenticationVersion>
+    <MicrosoftAspNetCoreMvcCoreVersion>2.0.3</MicrosoftAspNetCoreMvcCoreVersion>
+    <MicrosoftAspNetCoreMvcVersion>2.0.3</MicrosoftAspNetCoreMvcVersion>
+    <MicrosoftAspNetCoreTestHostVersion>2.0.2</MicrosoftAspNetCoreTestHostVersion>
+    <FluentAssertionsVersion>5.2.0</FluentAssertionsVersion>
+    <MicrosoftAspNetCoreAllVersion>2.0.6</MicrosoftAspNetCoreAllVersion>
+    <MicrosoftWebCodeGenerationVersion>2.0.1</MicrosoftWebCodeGenerationVersion>
+    <MicrosoftWebCodeGenerationToolsVersion>2.0.0</MicrosoftWebCodeGenerationToolsVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Label="CLI Tools Versions">
+    <DotnetXUnitPackageVersion>2.3.1</DotnetXUnitPackageVersion>
+    <DotnetWatcherToolPackageVersion>2.0.0</DotnetWatcherToolPackageVersion>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Package information">
+    <PackageLicenseUrl>https://github.com/Xabaril/Acheve.TestHost/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageProjectUrl>http://github.com/xabaril/Acheve.TestHost</PackageProjectUrl>
+    <RepositoryUrl>http://github.com/xabaril/Acheve.TestHost</RepositoryUrl>    
+    <Authors>Xabaril Contributors</Authors>
+    <Company>Xabaril</Company>
+    <Version>1.3.0</Version>
+    <Description>Achve.TestHost is a nuget package to improve TestServer experiences.
+    For more information see http://github.com/Xabaril/Acheve.TestHost</Description>
+    <Tags>TestHost;TestServer</Tags>
+  </PropertyGroup>
+</Project>
