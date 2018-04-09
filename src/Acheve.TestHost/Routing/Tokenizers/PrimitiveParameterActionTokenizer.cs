@@ -16,7 +16,9 @@ namespace Acheve.TestHost.Routing.Tokenizers
                     ||
                     parameters[i].ParameterType == typeof(String)
                     ||
-                    parameters[i].ParameterType == typeof(Decimal))
+                    parameters[i].ParameterType == typeof(Decimal)
+                    ||
+                    parameters[i].ParameterType == typeof(Guid))
                 {
                     var tokenName = parameters[i].Name.ToLowerInvariant();
                     var tokenValue = action.ArgumentValues[i].Instance;

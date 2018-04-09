@@ -16,7 +16,7 @@ namespace Acheve.TestHost.Routing.Tokenizers
             {
                 var type = parameters[i].ParameterType;
 
-                if (!(type.IsPrimitive || type == typeof(String) || type == typeof(Decimal)))
+                if (!(type.IsPrimitive || type == typeof(String) || type == typeof(Decimal) || type == typeof(Guid)))
                 {
                     if (!IgnoreBind(parameters[i]))
                     {

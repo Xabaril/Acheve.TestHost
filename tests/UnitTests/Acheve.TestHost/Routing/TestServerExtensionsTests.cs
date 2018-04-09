@@ -644,6 +644,24 @@ namespace UnitTests.Acheve.TestHost.Routing
             response.StatusCode.Should().Be(HttpStatusCode.UnsupportedMediaType);
         }
 
+        [Fact]
+        public async Task create_request_supporting_guid_types_on_parameters_and_numbes_on_parameters_names()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var guidValue = Guid.NewGuid();
+
+            var request = server.CreateHttpApiRequest<BugsController>(
+                actionSelector: controller => controller.GuidSupport("prm1", guidValue),
+                tokenValues: null,
+                contentOptions: new NotIncludeContent());
+
+            request.GetConfiguredAddress()
+                .Should().Be($"api/bugs/prm1/{guidValue}");
+        }
+
         private class PrivateNonControllerClass
         {
             public int SomeAction()

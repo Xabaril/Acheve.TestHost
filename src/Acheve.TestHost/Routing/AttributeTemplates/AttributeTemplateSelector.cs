@@ -11,7 +11,7 @@ namespace Acheve.TestHost.Routing.AttributeTemplates
 
         public virtual string SubstituteTokens(string template, TestServerTokenCollection tokens)
         {
-            const string regex_pattern = "{[a-zA-Z]*:??[a-zA-Z]*}";
+            const string regex_pattern = "{[a-zA-Z0-9]*:??[a-zA-Z0-9]*}";
 
             template = template.ToLowerInvariant();
 
