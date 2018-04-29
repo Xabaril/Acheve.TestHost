@@ -1,6 +1,4 @@
-﻿using System;
-using System.Security.Claims;
-using Acheve.AspNetCore.TestHost.Security;
+﻿using Acheve.AspNetCore.TestHost.Security;
 using Acheve.TestHost;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
