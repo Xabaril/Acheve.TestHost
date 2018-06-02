@@ -1,8 +1,8 @@
-﻿using System;
-using System.Security.Claims;
+﻿using System.Reflection;
 using Acheve.AspNetCore.TestHost.Security;
 using Acheve.TestHost;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Sample.Api;
 
@@ -20,7 +20,10 @@ namespace Sample.IntegrationTests
                      options.RoleClaimType = "role";
                  });
 
-            var mvcCoreBuilder = services.AddMvcCore();
+            var mvcCoreBuilder = services.AddMvcCore()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .AddApplicationPart(Assembly.Load(new AssemblyName("Sample.Api")));
+
             ApiConfiguration.ConfigureCoreMvc(mvcCoreBuilder);
         }
 

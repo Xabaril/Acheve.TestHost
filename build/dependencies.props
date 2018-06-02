@@ -1,25 +1,22 @@
 <Project>
   <PropertyGroup Label="SDK Versions">
     <NetStandardTargetVersion>netstandard2.0</NetStandardTargetVersion>
-    <NetCoreTargetVersion>netcoreapp2.0</NetCoreTargetVersion>
-    <MicrosoftNETTestSdkPackageVersion>15.6.1</MicrosoftNETTestSdkPackageVersion>
+    <NetCoreTargetVersion>netcoreapp2.1</NetCoreTargetVersion>
+    <MicrosoftNETTestSdkPackageVersion>15.7.2</MicrosoftNETTestSdkPackageVersion>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   
   <PropertyGroup Label="Package Versions">
-    <MicrosoftAspNetCoreAuthenticationVersion>2.0.3</MicrosoftAspNetCoreAuthenticationVersion>
-    <MicrosoftAspNetCoreMvcCoreVersion>2.0.3</MicrosoftAspNetCoreMvcCoreVersion>
-    <MicrosoftAspNetCoreMvcVersion>2.0.3</MicrosoftAspNetCoreMvcVersion>
-    <MicrosoftAspNetCoreTestHostVersion>2.0.2</MicrosoftAspNetCoreTestHostVersion>
-    <FluentAssertionsVersion>5.2.0</FluentAssertionsVersion>
-    <MicrosoftAspNetCoreAllVersion>2.0.6</MicrosoftAspNetCoreAllVersion>
-    <MicrosoftWebCodeGenerationVersion>2.0.1</MicrosoftWebCodeGenerationVersion>
-    <MicrosoftWebCodeGenerationToolsVersion>2.0.0</MicrosoftWebCodeGenerationToolsVersion>
+    <MicrosoftAspNetCoreAuthenticationVersion>2.1.0</MicrosoftAspNetCoreAuthenticationVersion>
+    <MicrosoftAspNetCoreMvcCoreVersion>2.1.0</MicrosoftAspNetCoreMvcCoreVersion>
+    <MicrosoftAspNetCoreMvcVersion>2.1.0</MicrosoftAspNetCoreMvcVersion>
+    <MicrosoftAspNetCoreTestHostVersion>2.1.0</MicrosoftAspNetCoreTestHostVersion>
+    <FluentAssertionsVersion>5.3.2</FluentAssertionsVersion>
+    <MicrosoftAspNetCoreAllVersion>2.1.0</MicrosoftAspNetCoreAllVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
     <DotnetXUnitPackageVersion>2.3.1</DotnetXUnitPackageVersion>
-    <DotnetWatcherToolPackageVersion>2.0.0</DotnetWatcherToolPackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Package information">
