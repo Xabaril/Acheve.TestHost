@@ -53,12 +53,12 @@ the request with the server RequestBuilder and the desired claims:
 
 ```csharp
 
-    public class VauesWithDefaultUserTests : IDisposable
+    public class ValuesWithDefaultUserTests : IDisposable
     {
         private readonly TestServer _server;
         private readonly HttpClient _userHttpCient;
 
-        public VauesWithDefaultUserTests()
+        public ValuesWithDefaultUserTests()
         {
             // Build the test server
             var host = new WebHostBuilder()
