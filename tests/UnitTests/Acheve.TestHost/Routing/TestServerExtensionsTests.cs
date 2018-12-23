@@ -471,25 +471,25 @@ namespace UnitTests.Acheve.TestHost.Routing
                 .Should().Be("api/values/post/2");
         }
 
-        [Fact]
-        public void create_valid_request_using_from_body_complex_arguments_and_complex_query_parameters()
-        {
-            var server = new TestServerBuilder()
-            .UseDefaultStartup()
-            .Build();
+        //[Fact]
+        //public void create_valid_request_using_from_body_complex_arguments_and_complex_query_parameters()
+        //{
+        //    var server = new TestServerBuilder()
+        //    .UseDefaultStartup()
+        //    .Build();
 
-            var complexParameter = new Pagination()
-            {
-                PageCount = 10,
-                PageIndex = 1
-            };
+        //    var complexParameter = new Pagination()
+        //    {
+        //        PageCount = 10,
+        //        PageIndex = 1
+        //    };
 
-            var requestPost = server.CreateHttpApiRequest<ValuesV3Controller>(
-                controller => controller.Post3(2, complexParameter, complexParameter));
+        //    var requestPost = server.CreateHttpApiRequest<ValuesV3Controller>(
+        //        controller => controller.Post3(2, complexParameter, complexParameter));
 
-            requestPost.GetConfiguredAddress()
-                .Should().Be("api/values/post/2/1/10");
-        }
+        //    requestPost.GetConfiguredAddress()
+        //        .Should().Be("api/values/post/2/1/10");
+        //}
 
         [Fact]
         public void create_valid_request_when_action_use_tilde_to_override_controller_route()
@@ -591,8 +591,10 @@ namespace UnitTests.Acheve.TestHost.Routing
             };
 
             var request = server.CreateHttpApiRequest<ValuesV3Controller>(
-                controller => controller.Post2(2, complexParameter));
-
+                controller => controller.Post2(2, complexParameter),
+                tokenValues: null,
+                new IncludeContentAsJson());
+            
             var response = await request.PostAsync();
 
             await response.IsSuccessStatusCodeOrThrow();
@@ -641,11 +643,11 @@ namespace UnitTests.Acheve.TestHost.Routing
 
             var response = await request.PostAsync();
 
-            response.StatusCode.Should().Be(HttpStatusCode.UnsupportedMediaType);
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
         }
 
         [Fact]
-        public async Task create_request_supporting_guid_types_on_parameters_and_numbes_on_parameters_names()
+        public void create_request_supporting_guid_types_on_parameters_and_numbes_on_parameters_names()
         {
             var server = new TestServerBuilder()
                 .UseDefaultStartup()

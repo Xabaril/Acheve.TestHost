@@ -3,8 +3,9 @@
 namespace UnitTests.Acheve.TestHost.Builders
 {
     [Route("api/values")]
+    [ApiController]
     public class ValuesV3Controller
-        : Controller
+        : ControllerBase
     {
         [HttpGet("get1")]
         public IActionResult Get1([FromQuery]Pagination pagination)
@@ -47,11 +48,11 @@ namespace UnitTests.Acheve.TestHost.Builders
             return Ok();
         }
 
-        [HttpPost("post/{id:int}/{pageIndex}/{pagecount}")]
-        public IActionResult Post3(int id, [FromBody]Pagination pagination1, Pagination pagination2)
-        {
-            return Ok();
-        }
+        //[HttpPost("post/{id:int}/{pageIndex}/{pagecount}")]
+        //public IActionResult Post3(int id, [FromBody]Pagination pagination1, Pagination pagination2)
+        //{
+        //    return Ok();
+        //}
 
     }
 

@@ -1,25 +1,24 @@
 <Project>
   <PropertyGroup Label="SDK Versions">
     <NetStandardTargetVersion>netstandard2.0</NetStandardTargetVersion>
-    <NetCoreTargetVersion>netcoreapp2.0</NetCoreTargetVersion>
-    <MicrosoftNETTestSdkPackageVersion>15.6.1</MicrosoftNETTestSdkPackageVersion>
+    <NetCoreTargetVersion>netcoreapp2.1</NetCoreTargetVersion>
+    <MicrosoftNETTestSdkPackageVersion>15.8.0</MicrosoftNETTestSdkPackageVersion>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   
   <PropertyGroup Label="Package Versions">
-    <MicrosoftAspNetCoreAuthenticationVersion>2.0.3</MicrosoftAspNetCoreAuthenticationVersion>
-    <MicrosoftAspNetCoreMvcCoreVersion>2.0.3</MicrosoftAspNetCoreMvcCoreVersion>
-    <MicrosoftAspNetCoreMvcVersion>2.0.3</MicrosoftAspNetCoreMvcVersion>
-    <MicrosoftAspNetCoreTestHostVersion>2.0.2</MicrosoftAspNetCoreTestHostVersion>
-    <FluentAssertionsVersion>5.2.0</FluentAssertionsVersion>
-    <MicrosoftAspNetCoreAllVersion>2.0.6</MicrosoftAspNetCoreAllVersion>
-    <MicrosoftWebCodeGenerationVersion>2.0.1</MicrosoftWebCodeGenerationVersion>
-    <MicrosoftWebCodeGenerationToolsVersion>2.0.0</MicrosoftWebCodeGenerationToolsVersion>
+    <MicrosoftAspNetCoreAuthenticationVersion>2.1.1</MicrosoftAspNetCoreAuthenticationVersion>
+    <MicrosoftAspNetCoreMvcCoreVersion>2.1.1</MicrosoftAspNetCoreMvcCoreVersion>
+    <MicrosoftAspNetCoreMvcVersion>2.1.1</MicrosoftAspNetCoreMvcVersion>
+    <MicrosoftAspNetCoreTestHostVersion>2.1.1</MicrosoftAspNetCoreTestHostVersion>
+    <FluentAssertionsVersion>5.4.1</FluentAssertionsVersion>
+    <MicrosoftAspNetCoreAllVersion>2.1.2</MicrosoftAspNetCoreAllVersion>
+    <MicrosoftWebCodeGenerationVersion>2.1.1</MicrosoftWebCodeGenerationVersion>
+    <MicrosoftWebCodeGenerationToolsVersion>2.1.1</MicrosoftWebCodeGenerationToolsVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
-    <DotnetXUnitPackageVersion>2.3.1</DotnetXUnitPackageVersion>
-    <DotnetWatcherToolPackageVersion>2.0.0</DotnetWatcherToolPackageVersion>
+    <DotnetXUnitPackageVersion>2.4.0</DotnetXUnitPackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Package information">

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace Sample.Api.Controllers
 {
     [Route("api/values")]
+    [ApiController]
     public class ValuesController : ControllerBase
     {
         [Authorize]

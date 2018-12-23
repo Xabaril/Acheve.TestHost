@@ -3,8 +3,9 @@
 namespace UnitTests.Acheve.TestHost.Builders
 {
     [Route("api/[controller]")]
+    [ApiController]
     public class ValuesController
-        : Controller
+        : ControllerBase
     {
         [HttpGet()]
         public IActionResult Get(int id = 0)
