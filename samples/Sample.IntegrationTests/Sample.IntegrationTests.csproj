@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.All" Version="$(MicrosoftAspNetCoreAllVersion)" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="$(MicrosoftAspNetCoreAllVersion)" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
     <PackageReference Include="xunit.runner.visualstudio" Version="$(DotnetXUnitPackageVersion)" />
     <PackageReference Include="FluentAssertions" Version="$(FluentAssertionsVersion)" />
