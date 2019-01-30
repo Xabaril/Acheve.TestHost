@@ -23,7 +23,7 @@ namespace Sample.IntegrationTests
                  });
 
             var mvcCoreBuilder = services.AddMvcCore()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
                 .AddApplicationPart(Assembly.Load(new AssemblyName("Sample.Api")));
 
             ApiConfiguration.ConfigureCoreMvc(mvcCoreBuilder);

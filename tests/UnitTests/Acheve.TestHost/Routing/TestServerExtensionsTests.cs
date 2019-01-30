@@ -643,7 +643,7 @@ namespace UnitTests.Acheve.TestHost.Routing
 
             var response = await request.PostAsync();
 
-            response.StatusCode.Should().Be(HttpStatusCode.BadRequest);
+            response.StatusCode.Should().Be(HttpStatusCode.UnsupportedMediaType);
         }
 
         [Fact]
