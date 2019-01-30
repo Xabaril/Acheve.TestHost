@@ -27,7 +27,7 @@
     <RepositoryUrl>http://github.com/xabaril/Acheve.TestHost</RepositoryUrl>    
     <Authors>Xabaril Contributors</Authors>
     <Company>Xabaril</Company>
-    <Version>1.4.0</Version>
+    <Version>1.4.1</Version>
     <Description>Achve.TestHost is a nuget package to improve TestServer experiences.
     For more information see http://github.com/Xabaril/Acheve.TestHost</Description>
     <Tags>TestHost;TestServer</Tags>
