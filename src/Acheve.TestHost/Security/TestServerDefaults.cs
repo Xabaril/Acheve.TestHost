@@ -1,6 +1,6 @@
 ﻿namespace Acheve.TestHost
 {
-    public static class TestServerAuthenticationDefaults
+    public static class TestServerDefaults
     {
         public const string AuthenticationScheme = "TestServer";
     }

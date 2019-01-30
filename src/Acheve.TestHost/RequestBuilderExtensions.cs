@@ -17,11 +17,11 @@ namespace Microsoft.AspNetCore.TestHost
         public static RequestBuilder WithIdentity(this RequestBuilder requestBuilder, IEnumerable<Claim> claims)
         {
             var headerName =
-                AuthenticationHeaderHelper.GetHeaderName(TestServerAuthenticationDefaults.AuthenticationScheme);
+                AuthenticationHeaderHelper.GetHeaderName(TestServerDefaults.AuthenticationScheme);
 
             requestBuilder.AddHeader(
                 headerName,
-                $"{TestServerAuthenticationDefaults.AuthenticationScheme} {DefautClaimsEncoder.Encode(claims)}");
+                $"{TestServerDefaults.AuthenticationScheme} {DefautClaimsEncoder.Encode(claims)}");
 
             return requestBuilder;
         }

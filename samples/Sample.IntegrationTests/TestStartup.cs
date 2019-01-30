@@ -1,6 +1,5 @@
-﻿using System;
-using System.Reflection;
-using System.Security.Claims;
+﻿using System.Reflection;
+using System.Threading.Tasks;
 using Acheve.AspNetCore.TestHost.Security;
 using Acheve.TestHost;
 using Microsoft.AspNetCore.Builder;
@@ -14,12 +13,28 @@ namespace Sample.IntegrationTests
     {
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddAuthentication(TestServerAuthenticationDefaults.AuthenticationScheme)
-                .AddTestServerAuthentication()
-                .AddTestServerAuthentication("Bearer", options =>
+            services.AddAuthentication(TestServerDefaults.AuthenticationScheme)
+                .AddTestServer(options =>
+                {
+                    options.Events = new TestServerEvents
+                    {
+                        OnMessageReceived = context => Task.CompletedTask,
+                        OnTokenValidated = context => Task.CompletedTask,
+                        OnAuthenticationFailed = context => Task.CompletedTask,
+                        OnChallenge = context => Task.CompletedTask
+                    };
+                })
+                .AddTestServer("Bearer", options =>
                  {
                      options.NameClaimType = "name";
                      options.RoleClaimType = "role";
+                     options.Events = new TestServerEvents
+                     {
+                         OnMessageReceived = context => Task.CompletedTask,
+                         OnTokenValidated = context => Task.CompletedTask,
+                         OnAuthenticationFailed = context => Task.CompletedTask,
+                         OnChallenge = context => Task.CompletedTask
+                     };
                  });
 
             var mvcCoreBuilder = services.AddMvcCore()

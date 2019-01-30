@@ -17,11 +17,11 @@ namespace System.Net.Http
         public static HttpClient WithDefaultIdentity(this HttpClient httpClient, IEnumerable<Claim> claims)
         {
             var headerName =
-                AuthenticationHeaderHelper.GetHeaderName(TestServerAuthenticationDefaults.AuthenticationScheme);
+                AuthenticationHeaderHelper.GetHeaderName(TestServerDefaults.AuthenticationScheme);
 
             httpClient.DefaultRequestHeaders.Add(
                 name: headerName,
-                value: $"{TestServerAuthenticationDefaults.AuthenticationScheme} {DefautClaimsEncoder.Encode(claims)}");
+                value: $"{TestServerDefaults.AuthenticationScheme} {DefautClaimsEncoder.Encode(claims)}");
 
             return httpClient;
         }
