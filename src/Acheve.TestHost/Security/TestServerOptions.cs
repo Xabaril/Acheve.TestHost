@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace Acheve.TestHost
 {
-    public class TestServerAuthenticationOptions : AuthenticationSchemeOptions
+    public class TestServerOptions : AuthenticationSchemeOptions
     {
         public IEnumerable<Claim> CommonClaims { get; set; } = new Claim[0];
 

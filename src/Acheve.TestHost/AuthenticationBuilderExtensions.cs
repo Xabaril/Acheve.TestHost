@@ -6,44 +6,44 @@ namespace Acheve.AspNetCore.TestHost.Security
 {
     public static class AuthenticationBuilderExtensions
     {
-        public static AuthenticationBuilder AddTestServerAuthentication(this AuthenticationBuilder builder)
-            => builder.AddTestServerAuthentication(
-                authenticationScheme: TestServerAuthenticationDefaults.AuthenticationScheme,
+        public static AuthenticationBuilder AddTestServer(this AuthenticationBuilder builder)
+            => builder.AddTestServer(
+                authenticationScheme: TestServerDefaults.AuthenticationScheme,
                 displayName: null,
                 configureOptions: _ => { });
 
-        public static AuthenticationBuilder AddTestServerAuthentication(
+        public static AuthenticationBuilder AddTestServer(
             this AuthenticationBuilder builder,
             string authenticationScheme)
-            => builder.AddTestServerAuthentication(
+            => builder.AddTestServer(
                 authenticationScheme: authenticationScheme,
                 displayName: null,
                 configureOptions: _ => { });
 
-        public static AuthenticationBuilder AddTestServerAuthentication(
+        public static AuthenticationBuilder AddTestServer(
             this AuthenticationBuilder builder,
-            Action<TestServerAuthenticationOptions> configureOptions)
-            => builder.AddTestServerAuthentication(
-                authenticationScheme: TestServerAuthenticationDefaults.AuthenticationScheme,
+            Action<TestServerOptions> configureOptions)
+            => builder.AddTestServer(
+                authenticationScheme: TestServerDefaults.AuthenticationScheme,
                 displayName: null,
                 configureOptions: configureOptions);
 
-        public static AuthenticationBuilder AddTestServerAuthentication(
+        public static AuthenticationBuilder AddTestServer(
             this AuthenticationBuilder builder,
             string authenticationScheme,
-            Action<TestServerAuthenticationOptions> configureOptions)
-            => builder.AddTestServerAuthentication(
+            Action<TestServerOptions> configureOptions)
+            => builder.AddTestServer(
                 authenticationScheme: authenticationScheme,
                 displayName: null,
                 configureOptions: configureOptions);
 
-        public static AuthenticationBuilder AddTestServerAuthentication(
+        public static AuthenticationBuilder AddTestServer(
             this AuthenticationBuilder builder,
             string authenticationScheme,
             string displayName,
-            Action<TestServerAuthenticationOptions> configureOptions)
+            Action<TestServerOptions> configureOptions)
         {
-            return builder.AddScheme<TestServerAuthenticationOptions, TestServerAuthenticationHandler>(
+            return builder.AddScheme<TestServerOptions, TestServerHandler>(
                 authenticationScheme: authenticationScheme,
                 displayName: displayName,
                 configureOptions: configureOptions);

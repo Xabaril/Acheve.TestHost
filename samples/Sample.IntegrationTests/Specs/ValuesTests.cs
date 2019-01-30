@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using FluentAssertions;
@@ -20,9 +21,8 @@ namespace Sample.IntegrationTests.Specs
         }
 
         [Fact]
-        public async Task WithRequestBuilder()
+        public async Task Authorized_User_Should_Get_200()
         {
-            // Or you can create a request and assign the identity to the RequestBuilder
             var response = await _fixture.Server.CreateHttpApiRequest<ValuesController>(controller=>controller.Values())
                 .WithIdentity(Identities.User)
                 .GetAsync();
@@ -31,20 +31,20 @@ namespace Sample.IntegrationTests.Specs
         }
 
         [Fact]
-        public async Task WithEmptyRequestBuilder()
+        public async Task User_With_No_Claims_Is_Unauthorized()
         {
-            // Or you can create a request and assign the identity to the RequestBuilder
             var response = await _fixture.Server.CreateHttpApiRequest<ValuesController>(controller => controller.Values())
                 .WithIdentity(Identities.Empty)
                 .GetAsync();
 
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+            response.Headers.WwwAuthenticate.Count.Should().Be(1);
+            response.Headers.WwwAuthenticate.First().Scheme.Should().Be("TestServer");
         }
 
         [Fact]
-        public async Task WithRequestBuilderAndSpecificScheme()
+        public async Task Authorized_User_Should_Get_200_Using_A_Specific_Scheme()
         {
-            // Or you can create a request and assign the identity to the RequestBuilder
             var response = await _fixture.Server.CreateHttpApiRequest<ValuesController>(controller => controller.ValuesWithSchema())
                 .WithIdentity(Identities.User, "Bearer")
                 .GetAsync();
@@ -55,16 +55,17 @@ namespace Sample.IntegrationTests.Specs
         [Fact]
         public async Task WithRequestBuilderAndSpecificSchemeUnauthorized()
         {
-            // Or you can create a request and assign the identity to the RequestBuilder
             var response = await _fixture.Server.CreateHttpApiRequest<ValuesController>(controller => controller.ValuesWithSchema())
-                .WithIdentity(Identities.User)
+                .WithIdentity(Identities.User) // We are not using the expected "Bearer" schema
                 .GetAsync();
 
             response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
+            response.Headers.WwwAuthenticate.Count.Should().Be(1);
+            response.Headers.WwwAuthenticate.First().Scheme.Should().Be("Bearer");
         }
 
         [Fact]
-        public async Task Anonymous()
+        public async Task Authentication_Is_Not_Performed_For_Non_Protected_Endpoints()
         {
             var response = await _fixture.Server.CreateHttpApiRequest<ValuesController>(controller => controller.PublicValues())
                 .GetAsync();
