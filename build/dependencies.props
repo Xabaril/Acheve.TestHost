@@ -1,24 +1,24 @@
 <Project>
   <PropertyGroup Label="SDK Versions">
     <NetStandardTargetVersion>netstandard2.0</NetStandardTargetVersion>
-    <NetCoreTargetVersion>netcoreapp2.1</NetCoreTargetVersion>
-    <MicrosoftNETTestSdkPackageVersion>15.8.0</MicrosoftNETTestSdkPackageVersion>
+    <NetCoreTargetVersion>netcoreapp2.2</NetCoreTargetVersion>
+    <MicrosoftNETTestSdkPackageVersion>15.9.0</MicrosoftNETTestSdkPackageVersion>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   
   <PropertyGroup Label="Package Versions">
-    <MicrosoftAspNetCoreAuthenticationVersion>2.1.1</MicrosoftAspNetCoreAuthenticationVersion>
-    <MicrosoftAspNetCoreMvcCoreVersion>2.1.1</MicrosoftAspNetCoreMvcCoreVersion>
-    <MicrosoftAspNetCoreMvcVersion>2.1.1</MicrosoftAspNetCoreMvcVersion>
-    <MicrosoftAspNetCoreTestHostVersion>2.1.1</MicrosoftAspNetCoreTestHostVersion>
-    <FluentAssertionsVersion>5.4.1</FluentAssertionsVersion>
-    <MicrosoftAspNetCoreAllVersion>2.1.2</MicrosoftAspNetCoreAllVersion>
-    <MicrosoftWebCodeGenerationVersion>2.1.1</MicrosoftWebCodeGenerationVersion>
-    <MicrosoftWebCodeGenerationToolsVersion>2.1.1</MicrosoftWebCodeGenerationToolsVersion>
+    <MicrosoftAspNetCoreAuthenticationVersion>2.2.0</MicrosoftAspNetCoreAuthenticationVersion>
+    <MicrosoftAspNetCoreMvcCoreVersion>2.2.0</MicrosoftAspNetCoreMvcCoreVersion>
+    <MicrosoftAspNetCoreMvcVersion>2.2.0</MicrosoftAspNetCoreMvcVersion>
+    <MicrosoftAspNetCoreTestHostVersion>2.2.0</MicrosoftAspNetCoreTestHostVersion>
+    <FluentAssertionsVersion>5.6.0</FluentAssertionsVersion>
+    <MicrosoftAspNetCoreAllVersion>2.2.1</MicrosoftAspNetCoreAllVersion>
+    <MicrosoftWebCodeGenerationVersion>2.2.1</MicrosoftWebCodeGenerationVersion>
+    <MicrosoftWebCodeGenerationToolsVersion>2.2.1</MicrosoftWebCodeGenerationToolsVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
-    <DotnetXUnitPackageVersion>2.4.0</DotnetXUnitPackageVersion>
+    <DotnetXUnitPackageVersion>2.4.1</DotnetXUnitPackageVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="Package information">
@@ -27,7 +27,7 @@
     <RepositoryUrl>http://github.com/xabaril/Acheve.TestHost</RepositoryUrl>    
     <Authors>Xabaril Contributors</Authors>
     <Company>Xabaril</Company>
-    <Version>1.4.1</Version>
+    <Version>1.4.2</Version>
     <Description>Achve.TestHost is a nuget package to improve TestServer experiences.
     For more information see http://github.com/Xabaril/Acheve.TestHost</Description>
     <Tags>TestHost;TestServer</Tags>
