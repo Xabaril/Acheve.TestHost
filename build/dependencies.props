@@ -12,9 +12,9 @@
     <MicrosoftAspNetCoreMvcVersion>2.2.0</MicrosoftAspNetCoreMvcVersion>
     <MicrosoftAspNetCoreTestHostVersion>2.2.0</MicrosoftAspNetCoreTestHostVersion>
     <FluentAssertionsVersion>5.6.0</FluentAssertionsVersion>
-    <MicrosoftAspNetCoreAllVersion>2.2.1</MicrosoftAspNetCoreAllVersion>
-    <MicrosoftWebCodeGenerationVersion>2.2.1</MicrosoftWebCodeGenerationVersion>
-    <MicrosoftWebCodeGenerationToolsVersion>2.2.1</MicrosoftWebCodeGenerationToolsVersion>
+    <MicrosoftAspNetCoreAllVersion>2.2.0</MicrosoftAspNetCoreAllVersion>
+    <MicrosoftWebCodeGenerationVersion>2.2.0</MicrosoftWebCodeGenerationVersion>
+    <MicrosoftWebCodeGenerationToolsVersion>2.2.0</MicrosoftWebCodeGenerationToolsVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
