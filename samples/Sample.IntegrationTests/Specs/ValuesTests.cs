@@ -31,15 +31,13 @@ namespace Sample.IntegrationTests.Specs
         }
 
         [Fact]
-        public async Task User_With_No_Claims_Is_Unauthorized()
+        public async Task User_With_No_Claims_Is_Forbidden()
         {
             var response = await _fixture.Server.CreateHttpApiRequest<ValuesController>(controller => controller.Values())
                 .WithIdentity(Identities.Empty)
                 .GetAsync();
 
-            response.StatusCode.Should().Be(HttpStatusCode.Unauthorized);
-            response.Headers.WwwAuthenticate.Count.Should().Be(1);
-            response.Headers.WwwAuthenticate.First().Scheme.Should().Be("TestServer");
+            response.StatusCode.Should().Be(HttpStatusCode.Forbidden);
         }
 
         [Fact]

@@ -7,8 +7,13 @@ namespace Sample.IntegrationTests
     {
         public static readonly IEnumerable<Claim> User = new[]
         {
-            new Claim(ClaimTypes.NameIdentifier, "1"),
-            new Claim(ClaimTypes.Name, "User"),
+            new Claim(
+                type: ClaimTypes.NameIdentifier,
+                value: "1",
+                valueType: ClaimValueTypes.Integer32,
+                issuer: "TestIssuer",
+                originalIssuer: "OriginalTestIssuer"),
+            new Claim(type: ClaimTypes.Name, value: "User"),
         };
 
         public static readonly IEnumerable<Claim> Empty = new Claim[0];
