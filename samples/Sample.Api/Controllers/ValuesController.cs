@@ -7,7 +7,7 @@ namespace Sample.Api.Controllers
     [ApiController]
     public class ValuesController : ControllerBase
     {
-        [Authorize]
+        [Authorize(Policy = "ValidateClaims")]
         [HttpGet]
         public IActionResult Values()
         {

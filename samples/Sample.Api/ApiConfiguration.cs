@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
+using System.Security.Claims;
 
 namespace Sample.Api
 {
@@ -7,7 +8,29 @@ namespace Sample.Api
     {
         public static void ConfigureCoreMvc(IMvcCoreBuilder builder)
         {
-            builder.AddAuthorization();
+            builder.AddAuthorization(options =>
+            {
+                options.AddPolicy("ValidateClaims", policyBuilder =>
+                {
+                    policyBuilder.RequireAuthenticatedUser();
+                    policyBuilder.RequireAssertion(context =>
+                    {
+                        var principal = context.User;
+                        var nameIdentifierClaim = principal.FindFirst(ClaimTypes.NameIdentifier);
+                        
+                        if (nameIdentifierClaim == null
+                           || nameIdentifierClaim.Value != "1"
+                           || nameIdentifierClaim.ValueType != ClaimValueTypes.Integer32
+                           || nameIdentifierClaim.Issuer != "TestIssuer"
+                           || nameIdentifierClaim.OriginalIssuer != "OriginalTestIssuer")
+                        {
+                            return false;
+                        }
+
+                        return true;
+                    });
+                });
+            });
             builder.AddJsonFormatters(options =>
             {
                 options.NullValueHandling = NullValueHandling.Ignore;

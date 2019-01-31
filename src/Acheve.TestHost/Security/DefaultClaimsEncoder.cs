@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Authentication;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -10,8 +11,15 @@ namespace Acheve.TestHost
     {
         public static string Encode(IEnumerable<Claim> claims)
         {
-            var sourceString = string.Join("&", claims.Select(c => $"{c.Type}={c.Value}"));
-            return Convert.ToBase64String(Encoding.UTF8.GetBytes(sourceString));
+            var ticket = new AuthenticationTicket(
+                principal: new ClaimsPrincipal(
+                    new ClaimsIdentity(claims)),
+                authenticationScheme: "TestServer");
+
+            var serializer = new TicketSerializer();
+            var bytes = serializer.Serialize(ticket);
+
+            return Convert.ToBase64String(bytes);
         }
 
         public static IEnumerable<Claim> Decode(string encodedValue)
@@ -21,14 +29,17 @@ namespace Acheve.TestHost
                 return Enumerable.Empty<Claim>();
             }
 
-            var decodedString = Encoding.UTF8.GetString(Convert.FromBase64String(encodedValue));
-            return decodedString.Split(new[] { "&" }, StringSplitOptions.RemoveEmptyEntries)
-                .DefaultIfEmpty()
-                .Select(x =>
-                {
-                    var values = x.Split(new[] { "=" }, StringSplitOptions.RemoveEmptyEntries);
-                    return new Claim(values[0], values[1]);
-                });
+            var serializer = new TicketSerializer();
+            try
+            {
+                var ticket = serializer.Deserialize(Convert.FromBase64String(encodedValue));
+
+                return ticket.Principal.Claims;
+            }
+            catch (Exception)
+            {
+                return Enumerable.Empty<Claim>();
+            }            
         }
     }
 }
