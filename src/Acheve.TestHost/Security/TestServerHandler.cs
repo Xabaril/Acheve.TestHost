@@ -138,7 +138,16 @@ namespace Acheve.TestHost
 
             Response.StatusCode = 401;
 
-            Response.Headers.Append(HeaderNames.WWWAuthenticate, Scheme.Name);
+            if (string.IsNullOrEmpty(eventContext.Error))
+            {
+                Response.Headers.Append(HeaderNames.WWWAuthenticate, Scheme.Name);
+            }
+            else
+            {
+                // https://tools.ietf.org/html/rfc6750#section-3.1
+                // WWW-Authenticate: Bearer realm="example", error="invalid_token", error_description="The access token expired"
+                Response.Headers.Append(HeaderNames.WWWAuthenticate, $"{Scheme.Name} realm=\"test\", error=\"{eventContext.Error}\"");
+            }
         }
     }
 }
