@@ -30,9 +30,9 @@ In the TestServer startup class you shoud incude the authentication service and 
         {
             services.AddAuthentication(options =>
                 {
-                    options.DefaultScheme = TestServerAuthenticationDefaults.AuthenticationScheme;
+                    options.DefaultScheme = TestServerDefaults.AuthenticationScheme;
                 })
-                .AddTestServerAuthentication();
+                .AddTestServer();
 
             var mvcCoreBuilder = services.AddMvcCore();
             ApiConfiguration.ConfigureCoreMvc(mvcCoreBuilder);
