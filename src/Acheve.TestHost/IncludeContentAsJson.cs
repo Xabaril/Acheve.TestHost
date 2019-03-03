@@ -1,7 +1,7 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using System;
 using System.Net.Http;
 using System.Text;
-using Newtonsoft.Json;
 
 namespace Microsoft.AspNetCore.TestHost
 {
@@ -13,6 +13,8 @@ namespace Microsoft.AspNetCore.TestHost
     {
         /// <inheritdoc/>
         public override bool IncludeFromBodyAsContent => true;
+        /// <inheritdoc/>
+        public override bool IncludeFromFormAsContent => false;
 
         /// <inheritdoc/>
         public override Func<object, HttpContent> ContentBuilder =>

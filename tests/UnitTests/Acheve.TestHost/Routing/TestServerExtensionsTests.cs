@@ -452,6 +452,26 @@ namespace UnitTests.Acheve.TestHost.Routing
         }
 
         [Fact]
+        public void create_valid_request_using_from_form_complex_arguments()
+        {
+            var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+            var complexParameter = new Pagination()
+            {
+                PageCount = 10,
+                PageIndex = 1
+            };
+
+            var requestPost = server.CreateHttpApiRequest<ValuesV3Controller>(
+                controller => controller.Post3(complexParameter));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("api/values/post3");
+        }
+
+        [Fact]
         public void create_valid_request_using_from_body_complex_arguments_and_primitive_query_parameters()
         {
             var server = new TestServerBuilder()
@@ -497,7 +517,7 @@ namespace UnitTests.Acheve.TestHost.Routing
             var server = new TestServerBuilder()
                 .UseDefaultStartup()
                 .Build();
-            
+
             var requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
                controller => controller.Get1(1));
 
@@ -529,7 +549,7 @@ namespace UnitTests.Acheve.TestHost.Routing
             };
 
             requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
-               controller => controller.Get2(1,pagination));
+               controller => controller.Get2(1, pagination));
 
             requestPost.GetConfiguredAddress()
                 .Should().Be("get2/1?pageindex=1&pagecount=2");
@@ -575,15 +595,15 @@ namespace UnitTests.Acheve.TestHost.Routing
 
             requestPost.GetConfiguredAddress()
                 .Should().Be("delete3/1?pageindex=1&pagecount=2");
-       }
+        }
 
-       [Fact]
-       public async Task create_request_including_fromBody_argument_as_content_as_default_behavior()
-       {
+        [Fact]
+        public async Task create_request_including_fromBody_argument_as_content_as_default_behavior()
+        {
             var server = new TestServerBuilder()
                 .UseDefaultStartup()
                 .Build();
-  
+
             var complexParameter = new Pagination()
             {
                 PageCount = 10,
@@ -594,7 +614,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Post2(2, complexParameter),
                 tokenValues: null,
                 new IncludeContentAsJson());
-            
+
             var response = await request.PostAsync();
 
             await response.IsSuccessStatusCodeOrThrow();
@@ -617,6 +637,52 @@ namespace UnitTests.Acheve.TestHost.Routing
                 actionSelector: controller => controller.Post2(2, complexParameter),
                 tokenValues: null,
                 contentOptions: new IncludeContentAsJson());
+
+            var response = await request.PostAsync();
+
+            await response.IsSuccessStatusCodeOrThrow();
+        }
+
+        [Fact]
+        public async Task create_request_including_fromForm_argument_as_content_as_default_behavior()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var complexParameter = new Pagination()
+            {
+                PageCount = 10,
+                PageIndex = 1
+            };
+
+            var request = server.CreateHttpApiRequest<ValuesV3Controller>(
+                controller => controller.Post4(2, complexParameter),
+                tokenValues: null,
+                new IncludeContentAsUrl());
+
+            var response = await request.PostAsync();
+
+            await response.IsSuccessStatusCodeOrThrow();
+        }
+
+        [Fact]
+        public async Task create_request_including_fromForm_argument_as_content_configured_explicitly()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var complexParameter = new Pagination()
+            {
+                PageCount = 10,
+                PageIndex = 1
+            };
+
+            var request = server.CreateHttpApiRequest<ValuesV3Controller>(
+                actionSelector: controller => controller.Post4(2, complexParameter),
+                tokenValues: null,
+                contentOptions: new IncludeContentAsUrl());
 
             var response = await request.PostAsync();
 
