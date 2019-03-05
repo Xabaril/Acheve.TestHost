@@ -14,6 +14,11 @@ namespace Microsoft.AspNetCore.TestHost
         public abstract bool IncludeFromBodyAsContent { get; }
 
         /// <summary>
+        /// If true, if there are arguments with the [FromForm] attribute they are included as content in the request
+        /// </summary>
+        public abstract bool IncludeFromFormAsContent { get; }
+
+        /// <summary>
         /// Factory method to create the HttpContent
         /// </summary>
         public abstract Func<object, HttpContent> ContentBuilder { get; }

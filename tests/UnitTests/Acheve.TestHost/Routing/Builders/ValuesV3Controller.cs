@@ -48,6 +48,28 @@ namespace UnitTests.Acheve.TestHost.Builders
             return Ok();
         }
 
+        [HttpPost("post3")]
+        public IActionResult Post3([FromForm]Pagination pagination)
+        {
+            return Ok();
+        }
+
+        [HttpPost("post4/{id:int}")]
+        public IActionResult Post4(int id, [FromForm]Pagination pagination1)
+        {
+            if (pagination1 == null)
+            {
+                return BadRequest();
+            }
+
+            if (pagination1.PageCount == 0 || pagination1.PageIndex == 0)
+            {
+                return BadRequest();
+            }
+
+            return Ok();
+        }
+
         //[HttpPost("post/{id:int}/{pageIndex}/{pagecount}")]
         //public IActionResult Post3(int id, [FromBody]Pagination pagination1, Pagination pagination2)
         //{

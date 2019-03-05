@@ -13,6 +13,9 @@ namespace Microsoft.AspNetCore.TestHost
         public override bool IncludeFromBodyAsContent => false;
 
         /// <inheritdoc/>
+        public override bool IncludeFromFormAsContent => false;
+
+        /// <inheritdoc/>
         public override Func<object, HttpContent> ContentBuilder =>
             content => throw new InvalidOperationException("Unable to build content");
     }

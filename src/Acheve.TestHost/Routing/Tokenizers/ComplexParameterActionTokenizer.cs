@@ -27,7 +27,7 @@ namespace Acheve.TestHost.Routing.Tokenizers
 
                             tokens.AddToken(tokenName, value.ToString(), isConventional: false);
                         }
-                    }   
+                    }
                 }
             }
         }
@@ -41,6 +41,7 @@ namespace Acheve.TestHost.Routing.Tokenizers
                 switch (attribute)
                 {
                     case FromBodyAttribute body: return true;
+                    case FromFormAttribute form: return true;
                     case BindNeverAttribute bind: return true;
                     default: continue;
                 }

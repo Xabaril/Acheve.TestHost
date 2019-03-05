@@ -59,6 +59,11 @@ namespace Microsoft.AspNetCore.TestHost
                 AddFromBodyArgumentsToRequestBody(requestBuilder, action, contentOptions);
             }
 
+            if (contentOptions.IncludeFromFormAsContent)
+            {
+                AddFromFormArgumentsToRequestForm(requestBuilder, action, contentOptions);
+            }
+
             return requestBuilder;
         }
 
@@ -157,12 +162,26 @@ namespace Microsoft.AspNetCore.TestHost
             TestServerAction action,
             RequestContentOptions contentOptions)
         {
-            var fromBodyArgument = action.ArgumentValues.Values.SingleOrDefault(x => x.IsBody);
+            var fromBodyArgument = action.ArgumentValues.Values.SingleOrDefault(x => x.IsFromBody);
 
             if (fromBodyArgument != null)
             {
                 requestBuilder.And(x => x.Content =
                     contentOptions.ContentBuilder(fromBodyArgument.Instance));
+            }
+        }
+
+        private static void AddFromFormArgumentsToRequestForm(
+            RequestBuilder requestBuilder,
+            TestServerAction action,
+            RequestContentOptions contentOptions)
+        {
+            var fromFormArgument = action.ArgumentValues.Values.SingleOrDefault(x => x.IsFromForm);
+
+            if (fromFormArgument != null)
+            {
+                requestBuilder.And(x => x.Content =
+                    contentOptions.ContentBuilder(fromFormArgument.Instance));
             }
         }
     }

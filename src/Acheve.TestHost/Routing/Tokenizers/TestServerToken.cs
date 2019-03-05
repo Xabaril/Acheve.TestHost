@@ -15,7 +15,7 @@ namespace Acheve.TestHost.Routing.Tokenizers
         public TestServerToken(string name, string value, bool isConventional)
         {
             Name = name ?? throw new ArgumentNullException(nameof(name));
-            Value = value ?? throw new ArgumentNullException(nameof(Value));
+            Value = value ?? throw new ArgumentNullException(nameof(value));
             IsConventional = isConventional;
         }
 
