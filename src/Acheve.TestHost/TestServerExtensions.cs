@@ -162,7 +162,7 @@ namespace Microsoft.AspNetCore.TestHost
             TestServerAction action,
             RequestContentOptions contentOptions)
         {
-            var fromBodyArgument = action.ArgumentValues.Values.SingleOrDefault(x => x.IsBody);
+            var fromBodyArgument = action.ArgumentValues.Values.SingleOrDefault(x => x.IsFromBody);
 
             if (fromBodyArgument != null)
             {
@@ -176,7 +176,7 @@ namespace Microsoft.AspNetCore.TestHost
             TestServerAction action,
             RequestContentOptions contentOptions)
         {
-            var fromFormArgument = action.ArgumentValues.Values.SingleOrDefault(x => x.IsForm);
+            var fromFormArgument = action.ArgumentValues.Values.SingleOrDefault(x => x.IsFromForm);
 
             if (fromFormArgument != null)
             {

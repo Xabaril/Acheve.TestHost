@@ -49,7 +49,7 @@ namespace UnitTests.Acheve.TestHost.Builders
         }
 
         [HttpPost("post3")]
-        public IActionResult Post3([FromBody]Pagination pagination)
+        public IActionResult Post3([FromForm]Pagination pagination)
         {
             return Ok();
         }

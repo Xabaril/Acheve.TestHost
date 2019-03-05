@@ -2,16 +2,16 @@
 {
     public class TestServerArgument
     {
-        public TestServerArgument(object instance, bool isBody = false, bool isForm = false)
+        public TestServerArgument(object instance, bool isFromBody = false, bool isFromForm = false)
         {
             Instance = instance;
-            IsBody = isBody;
-            IsForm = isForm;
+            IsFromBody = isFromBody;
+            IsFromForm = isFromForm;
         }
 
         public object Instance { get; private set; }
 
-        public bool IsBody { get; private set; }
-        public bool IsForm { get; private set; }
+        public bool IsFromBody { get; private set; }
+        public bool IsFromForm { get; private set; }
     }
 }

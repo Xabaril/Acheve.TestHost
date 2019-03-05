@@ -23,8 +23,8 @@ namespace Acheve.TestHost.Routing
         public void AddArgument(int order, Expression expression)
         {
             var argument = MethodInfo.GetParameters()[order];
-            var isBody = argument.GetCustomAttributes<FromBodyAttribute>().Any();
-            var isForm = argument.GetCustomAttributes<FromFormAttribute>().Any();
+            var isFromBody = argument.GetCustomAttributes<FromBodyAttribute>().Any();
+            var isFromForm = argument.GetCustomAttributes<FromFormAttribute>().Any();
 
             if (!ArgumentValues.ContainsKey(order))
             {
@@ -32,7 +32,7 @@ namespace Acheve.TestHost.Routing
                 {
                     case ConstantExpression constant:
                         {
-                            ArgumentValues.Add(order, new TestServerArgument(constant.Value.ToString(), isBody, isForm));
+                            ArgumentValues.Add(order, new TestServerArgument(constant.Value.ToString(), isFromBody, isFromForm));
                         }
                         break;
                     case MemberExpression member when member.NodeType == ExpressionType.MemberAccess:
@@ -41,7 +41,7 @@ namespace Acheve.TestHost.Routing
                                 .Compile()
                                 .DynamicInvoke();
 
-                            ArgumentValues.Add(order, new TestServerArgument(instance, isBody, isForm));
+                            ArgumentValues.Add(order, new TestServerArgument(instance, isFromBody, isFromForm));
                         }
                         break;
                     default: return;

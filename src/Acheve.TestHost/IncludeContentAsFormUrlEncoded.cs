@@ -9,12 +9,13 @@ namespace Microsoft.AspNetCore.TestHost
 {
     /// <summary>
     /// An implementation of <see cref="RequestContentOptions"/> that includes 
-    /// the [FromFornm] parameter as <see cref="IDictionary<>"/>
+    /// the [FromForm] parameter as <see cref="IDictionary<>"/>
     /// </summary>
-    public class IncludeContentAsUrl : RequestContentOptions
+    public class IncludeContentAsFormUrlEncoded : RequestContentOptions
     {
         /// <inheritdoc/>
         public override bool IncludeFromBodyAsContent => false;
+        
         /// <inheritdoc/>
         public override bool IncludeFromFormAsContent => true;
 
@@ -29,8 +30,7 @@ namespace Microsoft.AspNetCore.TestHost
                 return null;
             }
 
-            JToken token = metaToken as JToken;
-            if (token == null)
+            if (!(metaToken is JToken token))
             {
                 return ToKeyValue(JObject.FromObject(metaToken));
             }

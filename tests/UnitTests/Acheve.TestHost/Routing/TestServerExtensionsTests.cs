@@ -5,7 +5,6 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using UnitTests.Acheve.TestHost.Builders;
 using Xunit;
 
@@ -465,7 +464,9 @@ namespace UnitTests.Acheve.TestHost.Routing
             };
 
             var requestPost = server.CreateHttpApiRequest<ValuesV3Controller>(
-                controller => controller.Post3(complexParameter));
+                controller => controller.Post3(complexParameter),
+                tokenValues: null,
+                new IncludeContentAsFormUrlEncoded());
 
             requestPost.GetConfiguredAddress()
                 .Should().Be("api/values/post3");
@@ -489,6 +490,28 @@ namespace UnitTests.Acheve.TestHost.Routing
 
             requestPost.GetConfiguredAddress()
                 .Should().Be("api/values/post/2");
+        }
+
+        [Fact]
+        public void create_valid_request_using_from_form_complex_arguments_and_primitive_query_parameters()
+        {
+            var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+            var complexParameter = new Pagination()
+            {
+                PageCount = 10,
+                PageIndex = 1
+            };
+
+            var requestPost = server.CreateHttpApiRequest<ValuesV3Controller>(
+                controller => controller.Post4(2, complexParameter),
+                tokenValues: null,
+                new IncludeContentAsFormUrlEncoded());
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("api/values/post4/2");
         }
 
         //[Fact]
@@ -659,7 +682,7 @@ namespace UnitTests.Acheve.TestHost.Routing
             var request = server.CreateHttpApiRequest<ValuesV3Controller>(
                 controller => controller.Post4(2, complexParameter),
                 tokenValues: null,
-                new IncludeContentAsUrl());
+                new IncludeContentAsFormUrlEncoded());
 
             var response = await request.PostAsync();
 
@@ -682,7 +705,44 @@ namespace UnitTests.Acheve.TestHost.Routing
             var request = server.CreateHttpApiRequest<ValuesV3Controller>(
                 actionSelector: controller => controller.Post4(2, complexParameter),
                 tokenValues: null,
-                contentOptions: new IncludeContentAsUrl());
+                contentOptions: new IncludeContentAsFormUrlEncoded());
+
+            var response = await request.PostAsync();
+
+            await response.IsSuccessStatusCodeOrThrow();
+        }
+
+        [Fact]
+        public async Task create_request_including_fromForm_argument_as_content_with_complex_object()
+        {
+            var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+            var complexObject = new ComplexObject()
+            {
+                BoolNullableParameter = true,
+                BoolParameter = true,
+                ComplexParameter = new Complex()
+                {
+                    Pagination = new Pagination()
+                    {
+                        PageCount = 10,
+                        PageIndex = 1
+                    },
+                    LongNullableParameter = 1,
+                    LongParameter = 1
+                },
+                IntNullableParameter = 1,
+                IntParameter = 1,
+                StringParameter = "Test",
+                DateTimeParameter = DateTime.Now
+            };
+
+            var request = server.CreateHttpApiRequest<RequestContentController>(
+                controller => controller.Post(complexObject),
+                tokenValues: null,
+                new IncludeContentAsFormUrlEncoded());
 
             var response = await request.PostAsync();
 

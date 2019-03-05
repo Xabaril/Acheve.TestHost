@@ -11,6 +11,8 @@ namespace Microsoft.AspNetCore.TestHost
     {
         /// <inheritdoc/>
         public override bool IncludeFromBodyAsContent => false;
+
+        /// <inheritdoc/>
         public override bool IncludeFromFormAsContent => false;
 
         /// <inheritdoc/>
