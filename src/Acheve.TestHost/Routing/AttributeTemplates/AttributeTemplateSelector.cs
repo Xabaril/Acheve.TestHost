@@ -55,7 +55,7 @@ namespace Acheve.TestHost.Routing.AttributeTemplates
                 }
             }
 
-            return template;
+            return template.ToLowerInvariant();
         }
     }
 }

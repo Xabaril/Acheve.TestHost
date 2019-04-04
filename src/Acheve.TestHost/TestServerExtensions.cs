@@ -52,7 +52,7 @@ namespace Microsoft.AspNetCore.TestHost
             var validUri = UriDiscover.Discover<TController>(
                 action, tokenValues);
 
-            var requestBuilder = server.CreateRequest(validUri.ToLowerInvariant());
+            var requestBuilder = server.CreateRequest(validUri);
 
             if (contentOptions.IncludeFromBodyAsContent)
             {
