@@ -61,8 +61,8 @@ try {
 
 
 if ($suffix -eq "") {
-    exec { & dotnet pack .\src\Acheve.TestHost\Acheve.TestHost.csproj -c Release -o ..\..\artifacts --include-symbols --no-build }
+    exec { & dotnet pack .\src\Acheve.TestHost\Acheve.TestHost.csproj -c Release -o artifacts --include-symbols --no-build }
 } else {
-    exec { & dotnet pack .\src\Acheve.TestHost\Acheve.TestHost.csproj -c Release -o ..\..\artifacts --include-symbols --no-build --version-suffix=$suffix }
+    exec { & dotnet pack .\src\Acheve.TestHost\Acheve.TestHost.csproj -c Release -o artifacts --include-symbols --no-build --version-suffix=$suffix }
 }
 
