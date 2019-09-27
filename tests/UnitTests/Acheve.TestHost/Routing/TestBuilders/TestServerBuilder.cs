@@ -26,7 +26,7 @@ namespace UnitTests.Acheve.TestHost.TestBuilders
             public void ConfigureServices(IServiceCollection services)
             {
             }
-            public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+            public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
             {
 
             }

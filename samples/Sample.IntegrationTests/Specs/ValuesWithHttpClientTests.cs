@@ -7,11 +7,11 @@ using Xunit;
 namespace Sample.IntegrationTests.Specs
 {
     [Collection(Collections.Api)]
-    public class VauesWithHttpClientTests : IDisposable
+    public class ValuesWithHttpClientTests : IDisposable
     {
         private readonly HttpClient _userHttpCient;
 
-        public VauesWithHttpClientTests(TestHostFixture fixture)
+        public ValuesWithHttpClientTests(TestHostFixture fixture)
         {
             // You can create an HttpClient instance with a default identity
             _userHttpCient = fixture.Server.CreateClient()
@@ -19,7 +19,7 @@ namespace Sample.IntegrationTests.Specs
         }
 
         [Fact]
-        public async Task WithHttpClientWithDefautIdentity()
+        public async Task WithHttpClientWithDefaultIdentity()
         {
             var response = await _userHttpCient.GetAsync("api/values");
 
