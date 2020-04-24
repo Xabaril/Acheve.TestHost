@@ -11,11 +11,11 @@ using Xunit;
 namespace Sample.IntegrationTests.Specs
 {
     [Collection(Collections.Api)]
-    public class VauesWithDefaultUserTests
+    public class ValuesWithDefaultUserTests
     {
         private readonly TestHostFixture _fixture;
 
-        public VauesWithDefaultUserTests(TestHostFixture fixture)
+        public ValuesWithDefaultUserTests(TestHostFixture fixture)
         {
             _fixture = fixture;
         }

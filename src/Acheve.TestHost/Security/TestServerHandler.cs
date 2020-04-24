@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using System;
 using System.Linq;
@@ -33,7 +32,6 @@ namespace Acheve.TestHost
 
         protected override async Task<AuthenticateResult> HandleAuthenticateAsync()
         {
-            string token = null;
             try
             {
                 // Give application opportunity to find from a different location, adjust, or reject token
@@ -47,7 +45,7 @@ namespace Acheve.TestHost
                 }
 
                 // If application retrieved token from somewhere else, use that.
-                token = messageReceivedContext.Token;
+                var token = messageReceivedContext.Token;
 
                 // If not, use the default location
                 if (string.IsNullOrEmpty(token))

@@ -50,5 +50,41 @@ namespace System.Net.Http
 
             return httpClient;
         }
+
+        /// <summary>
+        /// Get the header string for the provided claims
+        /// </summary>
+        /// <param name="httpClient">The httpClient instance</param>
+        /// <param name="claims">The claims collection that represents the user identity</param>
+        /// <returns></returns>
+        public static string GetHeaderForIdentity(this HttpClient httpClient, IEnumerable<Claim> claims)
+        {
+            return httpClient.GetHeaderForIdentity(
+                claims,
+                TestServerDefaults.AuthenticationScheme);
+        }
+
+        /// <summary>
+        /// Get the header string for the provided claims
+        /// </summary>
+        /// <param name="httpClient">The httpClient instance</param>
+        /// <param name="claims">The claims collection that represents the user identity</param>
+        /// <param name="scheme">The authentication scheme</param>
+        /// <returns></returns>
+        public static string GetHeaderForIdentity(this HttpClient httpClient, IEnumerable<Claim> claims, string scheme)
+        {
+            if (string.IsNullOrWhiteSpace(scheme))
+            {
+                throw new ArgumentNullException(nameof(scheme));
+            }
+
+            var headerName = AuthenticationHeaderHelper.GetHeaderName(scheme);
+
+            var header = new NameValueHeaderValue(
+                headerName,
+                $"{TestServerDefaults.AuthenticationScheme} {DefautClaimsEncoder.Encode(claims)}");
+
+            return header.ToString();
+        }
     }
 }

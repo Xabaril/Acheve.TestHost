@@ -37,18 +37,24 @@ namespace Sample.IntegrationTests
                      };
                  });
 
-            var mvcCoreBuilder = services.AddMvcCore()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+            services.AddControllers()
+                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddApplicationPart(Assembly.Load(new AssemblyName("Sample.Api")));
-
-            ApiConfiguration.ConfigureCoreMvc(mvcCoreBuilder);
+            
+            ApiConfiguration.Configure(services);
         }
 
         public void Configure(IApplicationBuilder app)
         {
-            app.UseAuthentication();
+            app.UseRouting();
 
-            app.UseMvcWithDefaultRoute();
+            app.UseAuthentication();
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
         }
     }
 }

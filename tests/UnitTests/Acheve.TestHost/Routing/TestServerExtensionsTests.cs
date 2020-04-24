@@ -83,6 +83,20 @@ namespace UnitTests.Acheve.TestHost.Routing
         }
 
         [Fact]
+        public void create_valid_request_for_string_as_primitive_parameter_tokenizer_action_with_case()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var request = server.CreateHttpApiRequest<ValuesController>(
+                controller => controller.GetStringAsParameter("Uppercase"));
+
+            request.GetConfiguredAddress()
+                .Should().Be("api/values/stringasprimitive?value=Uppercase");
+        }
+
+        [Fact]
         public void create_valid_request_for_string_as_decimal_parameter_tokenizer_action()
         {
             var server = new TestServerBuilder()
