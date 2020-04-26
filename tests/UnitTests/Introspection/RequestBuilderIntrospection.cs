@@ -13,5 +13,12 @@ namespace Microsoft.AspNetCore.TestHost
 
             return message.RequestUri.ToString();
         }
+
+        public static HttpRequestMessage GetRequest(this RequestBuilder requestBuilder)
+        {
+            var req = typeof(RequestBuilder).GetField("_req", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic);
+
+            return (HttpRequestMessage)req.GetValue(requestBuilder);
+        }
     }
 }
