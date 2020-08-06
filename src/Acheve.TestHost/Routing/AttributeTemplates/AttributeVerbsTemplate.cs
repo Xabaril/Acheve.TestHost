@@ -20,12 +20,16 @@ namespace Acheve.TestHost.Routing.AttributeTemplates
             var putAttributes = action.MethodInfo.GetCustomAttributes<HttpPutAttribute>()
                 .OfType<HttpMethodAttribute>();
 
+            var patchAttributes = action.MethodInfo.GetCustomAttributes<HttpPatchAttribute>()
+                .OfType<HttpMethodAttribute>();
+
             var deleteAttributes = action.MethodInfo.GetCustomAttributes<HttpDeleteAttribute>()
                 .OfType<HttpMethodAttribute>();
 
             var verbAttribute = getAttributes
                 .Union(postAttributes)
                 .Union(putAttributes)
+                .Union(patchAttributes)
                 .Union(deleteAttributes)
                 .SingleOrDefault();
 

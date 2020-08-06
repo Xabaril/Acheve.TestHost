@@ -20,11 +20,17 @@ namespace Acheve.TestHost.Routing
             ArgumentValues = new Dictionary<int, TestServerArgument>();
         }
 
-        public void AddArgument(int order, Expression expression)
+        public void AddArgument(int order, Expression expression, bool activeBodyApiController)
         {
             var argument = MethodInfo.GetParameters()[order];
             var isFromBody = argument.GetCustomAttributes<FromBodyAttribute>().Any();
             var isFromForm = argument.GetCustomAttributes<FromFormAttribute>().Any();
+            bool isPrimitive = argument.ParameterType.IsPrimitive || argument.ParameterType.Name.Equals(typeof(string));
+
+            if (activeBodyApiController && !isFromBody && !isPrimitive)
+            {
+                isFromBody = true;
+            }
 
             if (!ArgumentValues.ContainsKey(order))
             {
