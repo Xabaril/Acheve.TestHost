@@ -1,5 +1,6 @@
 ﻿using Acheve.TestHost.Routing.Tokenizers;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace Acheve.TestHost.Routing.AttributeTemplates
@@ -11,7 +12,7 @@ namespace Acheve.TestHost.Routing.AttributeTemplates
 
         public virtual string SubstituteTokens(string template, TestServerTokenCollection tokens)
         {
-            const string regex_pattern = "{[a-zA-Z0-9]*:??[a-zA-Z0-9]*}";
+            var regex_pattern = "{[a-zA-Z0-9?]*:??[a-zA-Z0-9]*}";
 
             template = template.ToLowerInvariant();
 
@@ -33,17 +34,12 @@ namespace Acheve.TestHost.Routing.AttributeTemplates
             {
                 string parameter = null;
 
-                if (match.Value.Contains(":"))
-                {
-                    //has constraints
-                    parameter = match.Value.Split(':')[0]
-                        .Remove(0, 1); // remove first bracket
-                }
-                else
-                {
-                    parameter = match.Value.Replace("{", string.Empty)
-                        .Replace("}", string.Empty);
-                }
+                regex_pattern = @"{([^\?:}]*)";
+                parameter = Regex.Match(match.Value, regex_pattern)
+                    .Groups
+                    .Values
+                    .LastOrDefault()?
+                    .Value;
 
                 var token = tokens.Find(parameter);
 
@@ -54,6 +50,9 @@ namespace Acheve.TestHost.Routing.AttributeTemplates
                     token.SetAsUsed();
                 }
             }
+
+            regex_pattern = @"\/{[^{}]*\?}";
+            template = Regex.Replace(template, regex_pattern, string.Empty);
 
             return template.ToLowerInvariant();
         }

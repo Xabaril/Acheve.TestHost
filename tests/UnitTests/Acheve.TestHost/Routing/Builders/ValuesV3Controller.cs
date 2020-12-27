@@ -13,7 +13,7 @@ namespace UnitTests.Acheve.TestHost.Builders
             return Ok();
         }
 
-        [HttpGet("get2/{pageindex}/{pagecount}")]
+        [HttpGet("get2/{pageindex}/{pagecount?}")]
         public IActionResult Get2([FromQuery]Pagination pagination)
         {
             return Ok();
@@ -25,7 +25,7 @@ namespace UnitTests.Acheve.TestHost.Builders
             return Ok();
         }
 
-        [Route("get4/{pageindex}/{pagecount}"), HttpGet]
+        [Route("get4/{pageindex}/{pagecount?}"), HttpGet]
         public IActionResult Get4([FromQuery]Pagination pagination)
         {
             return Ok();
@@ -82,6 +82,6 @@ namespace UnitTests.Acheve.TestHost.Builders
     {
         public int PageIndex { get; set; }
 
-        public int PageCount { get; set; }
+        public int? PageCount { get; set; }
     }
 }
