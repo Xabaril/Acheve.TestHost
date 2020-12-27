@@ -35,8 +35,7 @@ namespace Acheve.TestHost.Routing.AttributeTemplates
                 string parameter = null;
 
                 regex_pattern = @"{([^\?:}]*)";
-                parameter = Regex.Matches(match.Value, regex_pattern)
-                    .FirstOrDefault()?
+                parameter = Regex.Match(match.Value, regex_pattern)
                     .Groups
                     .Values
                     .LastOrDefault()?
