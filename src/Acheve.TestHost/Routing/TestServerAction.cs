@@ -32,7 +32,7 @@ namespace Acheve.TestHost.Routing
                 {
                     case ConstantExpression constant:
                         {
-                            ArgumentValues.Add(order, new TestServerArgument(constant.Value.ToString(), isFromBody, isFromForm));
+                            ArgumentValues.Add(order, new TestServerArgument(constant.Value?.ToString(), isFromBody, isFromForm));
                         }
                         break;
                     case MemberExpression member when member.NodeType == ExpressionType.MemberAccess:
