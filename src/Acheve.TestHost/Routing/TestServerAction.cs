@@ -44,6 +44,12 @@ namespace Acheve.TestHost.Routing
                             ArgumentValues.Add(order, new TestServerArgument(instance, isFromBody, isFromForm));
                         }
                         break;
+                    case MethodCallExpression method:
+                        {
+                            var instance = Expression.Lambda(method).Compile().DynamicInvoke();
+                            ArgumentValues.Add(order, new TestServerArgument(instance, isFromBody, isFromForm));
+                        }
+                        break;
                     default: return;
                 }
             }
