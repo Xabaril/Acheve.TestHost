@@ -5,7 +5,7 @@ using System.Reflection;
 
 namespace Acheve.TestHost.Routing.Tokenizers
 {
-    class PrimitiveParameterActionTokenizer
+    internal class PrimitiveParameterActionTokenizer
         : ITokenizer
     {
         public void AddTokens<TController>(TestServerAction action, TestServerTokenCollection tokens)
@@ -29,10 +29,19 @@ namespace Acheve.TestHost.Routing.Tokenizers
 
                     tokens.AddToken(tokenName, tokenValue.ToString(), isConventional: false);
                 }
+                else if (parameters[i].ParameterType == typeof(Guid[])
+                   && !IgnoreHeader(parameters[i]))
+                {
+                    var tokenName = parameters[i].Name.ToLowerInvariant();
+                    Guid[] tokenValue = (Guid[])action.ArgumentValues[i].Instance;
+                    var value = string.Join($"&{tokenName}=", tokenValue);
+
+                    tokens.AddToken(tokenName, value, isConventional: false);
+                }
             }
         }
 
-        bool IgnoreHeader(ParameterInfo parameter)
+        private bool IgnoreHeader(ParameterInfo parameter)
         {
             var attributes = parameter.GetCustomAttributes(false);
 
