@@ -1310,7 +1310,7 @@ namespace UnitTests.Acheve.TestHost.Routing
             };
 
             var request = server.CreateHttpApiRequest<BugsController>(
-                actionSelector: controller => controller.GuidArraySupport(guidList.ToArray()),
+                actionSelector: controller => controller.GuidArraySupport(guidList.GetArray()),
                 tokenValues: null,
                 contentOptions: new NotIncludeContent());
 
