@@ -19,11 +19,5 @@ namespace UnitTests.Acheve.TestHost.Builders
         {
             return Ok(param1);
         }
-
-        [HttpGet("array")]
-        public ActionResult<Tuple<Guid[], Guid[]>> TwoGuidArraySupport([FromQuery] Guid[] param1, Guid[] param2)
-        {
-            return Ok(new Tuple<Guid[], Guid[]>(param1, param2));
-        }
     }
 }
