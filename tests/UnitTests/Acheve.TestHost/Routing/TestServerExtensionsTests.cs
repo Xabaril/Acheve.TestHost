@@ -2,6 +2,7 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.TestHost;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -234,8 +235,6 @@ namespace UnitTests.Acheve.TestHost.Routing
             requestGet.GetConfiguredAddress()
                 .Should().Be("api/values/overridemethodname/v1/0");
         }
-
-
 
         [Fact]
         public void create_valid_request_using_route_templates()
@@ -725,7 +724,6 @@ namespace UnitTests.Acheve.TestHost.Routing
             var server = new TestServerBuilder()
            .UseDefaultStartup()
            .Build();
-
 
             var complexParameter = new Pagination()
             {
@@ -1267,6 +1265,75 @@ namespace UnitTests.Acheve.TestHost.Routing
 
             request.GetConfiguredAddress()
                 .Should().Be($"api/bugs/prm1/{guidValue}");
+        }
+
+        [Fact]
+        public async Task create_request_supporting_guid_array_types_on_parameters()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var guidList = new List<Guid> { 
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            };
+
+            var guidArray = guidList.ToArray();
+
+            var request = server.CreateHttpApiRequest<BugsController>(
+                actionSelector: controller => controller.GuidArraySupport(guidArray),
+                tokenValues: null,
+                contentOptions: new NotIncludeContent());
+
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            var response = await responseMessage.GetToAsync<Guid[]>();
+
+            response.Should().NotBeNull();
+            response.Count().Should().Be(3);
+        }
+
+        [Fact]
+        public async Task create_request_supporting_guid_array_types_on_parameters_seding_method()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var guidList = new List<Guid> {
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            };
+
+            var request = server.CreateHttpApiRequest<BugsController>(
+                actionSelector: controller => controller.GuidArraySupport(guidList.ToArray()),
+                tokenValues: null,
+                contentOptions: new NotIncludeContent());
+
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            var response = await responseMessage.GetToAsync<Guid[]>();
+
+            response.Should().NotBeNull();
+            response.Count().Should().Be(3);
+        }
+
+        [Fact]
+        public void create_request_supporting_send_method_on_client_http()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var request = server.CreateHttpApiRequest<BugsController>(
+                actionSelector: controller => controller.GuidSupport("prm1", Guid.NewGuid()),
+                tokenValues: null,
+                contentOptions: new NotIncludeContent());
         }
 
         private class PrivateNonControllerClass
