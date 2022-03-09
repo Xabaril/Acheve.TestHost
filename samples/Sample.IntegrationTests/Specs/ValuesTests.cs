@@ -70,5 +70,23 @@ namespace Sample.IntegrationTests.Specs
 
             await response.IsSuccessStatusCodeOrThrow();
         }
+
+        [Fact]
+        public async Task WithRequestBuilderAndNullParameter()
+        {
+            var response = await _fixture.Server.CreateHttpApiRequest<ValuesController>(controller => controller.ModelValues(null))
+                .GetAsync();
+
+            await response.IsSuccessStatusCodeOrThrow();
+        }
+
+        [Fact]
+        public async Task WithRequestBuilderAndNullPrimitiveParameter()
+        {
+            var response = await _fixture.Server.CreateHttpApiRequest<ValuesController>(controller => controller.PrimitiveValues(null))
+                .GetAsync();
+
+            await response.IsSuccessStatusCodeOrThrow();
+        }
     }
 }
