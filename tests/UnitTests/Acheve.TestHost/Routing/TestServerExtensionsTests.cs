@@ -585,7 +585,7 @@ namespace UnitTests.Acheve.TestHost.Routing
         }
 
         [Fact]
-        public void create_valid_request_using_from_header_primirive_arguments_and_from_body_complex_arguments()
+        public void create_valid_request_using_from_header_primitive_arguments_and_from_body_complex_arguments()
         {
             var server = new TestServerBuilder()
            .UseDefaultStartup()
