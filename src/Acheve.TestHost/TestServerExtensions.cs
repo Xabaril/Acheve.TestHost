@@ -64,6 +64,8 @@ namespace Microsoft.AspNetCore.TestHost
                 AddFromFormArgumentsToRequestForm(requestBuilder, action, contentOptions);
             }
 
+            AddFromHeaderArgumentsToRequestForm(requestBuilder, action);
+
             return requestBuilder;
         }
 
@@ -148,7 +150,7 @@ namespace Microsoft.AspNetCore.TestHost
             bool isGetOrDelete  = action.MethodInfo.GetCustomAttributes().FirstOrDefault(attr => attr.GetType() == typeof(HttpGetAttribute)
                                                                                                  || attr.GetType() == typeof(HttpDeleteAttribute)) != null;
 
-            int index = 0;
+            var index = 0;
 
             foreach (var item in methodCall.Arguments)
             {
@@ -185,6 +187,18 @@ namespace Microsoft.AspNetCore.TestHost
             {
                 requestBuilder.And(x => x.Content =
                     contentOptions.ContentBuilder(fromFormArgument.Instance));
+            }
+        }
+
+        private static void AddFromHeaderArgumentsToRequestForm(
+           RequestBuilder requestBuilder,
+           TestServerAction action)
+        {
+            var fromHeaderArguments = action.ArgumentValues.Values.Where(x => x.IsFromHeader);
+
+            foreach (var fromHeaderArgument in fromHeaderArguments)
+            {
+                requestBuilder.And(x => x.Headers.Add(fromHeaderArgument.HeaderName, fromHeaderArgument.Instance.ToString()));
             }
         }
     }

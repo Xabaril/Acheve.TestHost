@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.TestHost;
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -425,6 +426,45 @@ namespace UnitTests.Acheve.TestHost.Routing
         }
 
         [Fact]
+        public void create_valid_request_using_verbs_query_string_and_from_header()
+        {
+            var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+            var complexParameter = new Pagination()
+            {
+                PageCount = 10,
+                PageIndex = 1
+            };
+
+            var header = "HeaderCustom";
+            var numberHeader = 1;
+
+            var request = server.CreateHttpApiRequest<ValuesV3Controller>(
+                controller => controller.Get5(header, complexParameter));
+
+            var requestMultipleHeader = server.CreateHttpApiRequest<ValuesV3Controller>(
+                controller => controller.Get6(header, numberHeader, complexParameter));
+
+            var requestOnlyHeader = server.CreateHttpApiRequest<ValuesV3Controller>(
+                controller => controller.Get7(header));
+
+            request.GetRequest().Headers.GetValues("custom").First().Should().Be(header);
+            request.GetConfiguredAddress()
+                .Should().Be("api/values/get5?pageindex=1&pagecount=10");
+
+            requestMultipleHeader.GetRequest().Headers.GetValues("custom1").First().Should().Be(header);
+            requestMultipleHeader.GetRequest().Headers.GetValues("custom2").First().Should().Be(numberHeader.ToString());
+            requestMultipleHeader.GetConfiguredAddress()
+                .Should().Be("api/values/get6?pageindex=1&pagecount=10");
+
+            requestOnlyHeader.GetRequest().Headers.GetValues("custom").First().Should().Be(header);
+            requestOnlyHeader.GetConfiguredAddress()
+                .Should().Be("api/values/get7");
+        }
+
+        [Fact]
         public void create_valid_request_using_route_and_query_string_when_parameters_are_not_primitives()
         {
             var server = new TestServerBuilder()
@@ -526,6 +566,44 @@ namespace UnitTests.Acheve.TestHost.Routing
 
             requestPost.GetConfiguredAddress()
                 .Should().Be("api/values/post4/2");
+        }
+
+        [Fact]
+        public void create_valid_request_using_from_header_primitive_arguments()
+        {
+            var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+            var header = "HeaderCustom";
+
+            var requestPost = server.CreateHttpApiRequest<ValuesV3Controller>(
+                controller => controller.Post5(header));
+            requestPost.GetRequest().Headers.GetValues("custom").First().Should().Be(header);
+            requestPost.GetConfiguredAddress()
+               .Should().Be("api/values/post5");
+        }
+
+        [Fact]
+        public void create_valid_request_using_from_header_primitive_arguments_and_from_body_complex_arguments()
+        {
+            var server = new TestServerBuilder()
+           .UseDefaultStartup()
+           .Build();
+
+
+            var complexParameter = new Pagination()
+            {
+                PageCount = 10,
+                PageIndex = 1
+            };
+            var header = "HeaderCustom";
+
+            var requestPost2 = server.CreateHttpApiRequest<ValuesV3Controller>(
+               controller => controller.Post6(header, complexParameter));
+            requestPost2.GetRequest().Headers.GetValues("custom").First().Should().Be(header);
+            requestPost2.GetConfiguredAddress()
+                .Should().Be("api/values/post6");
         }
 
         //[Fact]
