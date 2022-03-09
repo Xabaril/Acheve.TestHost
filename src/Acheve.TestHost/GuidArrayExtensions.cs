@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 
-namespace Acheve.TestHost;
-
-public static class GuidArrayExtensions
+namespace Acheve.TestHost
 {
-    public static Guid[] GetArray(this IEnumerable<Guid> list)
+    public static class GuidArrayExtensions
     {
-        return list != null
-       ? list.ToArray()
-       : Array.Empty<Guid>();
+        public static Guid[] GetArray(this IEnumerable<Guid> list)
+        {
+            return list != null
+           ? list.ToArray()
+           : Array.Empty<Guid>();
+        }
     }
 }
