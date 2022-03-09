@@ -1,9 +1,9 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Microsoft.AspNetCore.Mvc;
 
 namespace Acheve.TestHost.Routing
 {
@@ -25,6 +25,7 @@ namespace Acheve.TestHost.Routing
             var argument = MethodInfo.GetParameters()[order];
             var isFromBody = argument.GetCustomAttributes<FromBodyAttribute>().Any();
             var isFromForm = argument.GetCustomAttributes<FromFormAttribute>().Any();
+            var isFromHeader = argument.GetCustomAttributes<FromHeaderAttribute>().Any();
 
             if (!ArgumentValues.ContainsKey(order))
             {
@@ -32,7 +33,7 @@ namespace Acheve.TestHost.Routing
                 {
                     case ConstantExpression constant:
                         {
-                            ArgumentValues.Add(order, new TestServerArgument(constant.Value?.ToString(), isFromBody, isFromForm));
+                            ArgumentValues.Add(order, new TestServerArgument(constant.Value.ToString(), isFromBody, isFromForm, isFromHeader, argument.Name));
                         }
                         break;
                     case MemberExpression member when member.NodeType == ExpressionType.MemberAccess:
@@ -41,7 +42,7 @@ namespace Acheve.TestHost.Routing
                                 .Compile()
                                 .DynamicInvoke();
 
-                            ArgumentValues.Add(order, new TestServerArgument(instance, isFromBody, isFromForm));
+                            ArgumentValues.Add(order, new TestServerArgument(instance, isFromBody, isFromForm, isFromHeader, argument.Name));
                         }
                         break;
                     default: return;
