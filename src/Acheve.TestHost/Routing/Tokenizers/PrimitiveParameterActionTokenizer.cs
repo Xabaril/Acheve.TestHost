@@ -27,7 +27,10 @@ namespace Acheve.TestHost.Routing.Tokenizers
                     var tokenName = parameters[i].Name.ToLowerInvariant();
                     var tokenValue = action.ArgumentValues[i].Instance;
 
-                    tokens.AddToken(tokenName, tokenValue.ToString(), isConventional: false);
+                    if (tokenValue != null)
+                    {
+                        tokens.AddToken(tokenName, tokenValue.ToString(), isConventional: false);
+                    }
                 }
             }
         }

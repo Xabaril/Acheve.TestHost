@@ -15,18 +15,21 @@ namespace Acheve.TestHost.Routing.Tokenizers
             for (int i = 0; i < parameters.Length; i++)
             {
                 var type = parameters[i].ParameterType;
+                var instance = action.ArgumentValues[i].Instance;
 
-                if (!(type.IsPrimitive || type == typeof(String) || type == typeof(Decimal) || type == typeof(Guid)))
+                if (instance != null && !(type.IsPrimitive || type == typeof(String) || type == typeof(Decimal) || type == typeof(Guid)))
                 {
                     if (!IgnoreBind(parameters[i]))
                     {
                         foreach (var property in type.GetProperties())
                         {
                             var tokenName = property.Name.ToLowerInvariant();
-                            var value = property.GetValue(action.ArgumentValues[i].Instance);
+                            var value = property.GetValue(instance);
 
                             if (value != null)
+                            {
                                 tokens.AddToken(tokenName, value.ToString(), isConventional: false);
+                            }
                         }
                     }
                 }
