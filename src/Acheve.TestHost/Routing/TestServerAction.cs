@@ -26,10 +26,11 @@ namespace Acheve.TestHost.Routing
             var isFromBody = argument.GetCustomAttributes<FromBodyAttribute>().Any();
             var isFromForm = argument.GetCustomAttributes<FromFormAttribute>().Any();
             var isFromHeader = argument.GetCustomAttributes<FromHeaderAttribute>().Any();
-          
-            bool isPrimitive = argument.ParameterType.IsPrimitive || argument.ParameterType.Name.Equals(typeof(string));
 
-            if (activeBodyApiController && !isFromBody && !isPrimitive)
+            bool isPrimitive = argument.ParameterType.IsPrimitive || argument.ParameterType.Name.Equals(typeof(string));
+            bool hasNoAttributes = !isFromBody && !isFromForm && !isFromHeader;
+
+            if (activeBodyApiController && hasNoAttributes && !isPrimitive)
             {
                 isFromBody = true;
             }

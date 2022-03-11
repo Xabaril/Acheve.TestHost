@@ -148,7 +148,7 @@ namespace Microsoft.AspNetCore.TestHost
             var action = new TestServerAction(methodCall.Method);
             bool haveAttributeApiController = typeof(TController).GetTypeInfo().GetCustomAttribute(typeof(ApiControllerAttribute)) != null;
             bool isGetOrDelete  = action.MethodInfo.GetCustomAttributes().FirstOrDefault(attr => attr.GetType() == typeof(HttpGetAttribute)
-                                                                                                 || attr.GetType() == typeof(HttpDeleteAttribute)) != null;
+                                                                                         || attr.GetType() == typeof(HttpDeleteAttribute)) != null;
 
             var index = 0;
 
