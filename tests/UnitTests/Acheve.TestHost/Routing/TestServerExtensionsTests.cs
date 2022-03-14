@@ -1,9 +1,11 @@
-﻿using FluentAssertions;
+using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.TestHost;
 using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading.Tasks;
 using UnitTests.Acheve.TestHost.Builders;
 using Xunit;
@@ -385,6 +387,25 @@ namespace UnitTests.Acheve.TestHost.Routing
         }
 
         [Fact]
+        public void create_valid_request_using_verbs_when_parameters_are_not_primitives_with_null_properties()
+        {
+            var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+            var complexParameter = new Pagination()
+            {
+                PageIndex = 1
+            };
+
+            var requestGet = server.CreateHttpApiRequest<ValuesV3Controller>(
+                controller => controller.Get2(complexParameter));
+
+            requestGet.GetConfiguredAddress()
+                .Should().Be("api/values/get2/1");
+        }
+
+        [Fact]
         public void create_valid_request_using_verbs_and_query_string_when_parameters_are_not_primitives()
         {
             var server = new TestServerBuilder()
@@ -402,6 +423,25 @@ namespace UnitTests.Acheve.TestHost.Routing
 
             requestGet.GetConfiguredAddress()
                 .Should().Be("api/values/get1?pageindex=1&pagecount=10");
+        }
+
+        [Fact]
+        public void create_valid_request_using_verbs_and_query_string_when_parameters_are_not_primitives_with_null_properties()
+        {
+            var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+            var complexParameter = new Pagination()
+            {
+                PageIndex = 1
+            };
+
+            var requestGet = server.CreateHttpApiRequest<ValuesV3Controller>(
+                controller => controller.Get1(complexParameter));
+
+            requestGet.GetConfiguredAddress()
+                .Should().Be("api/values/get1?pageindex=1");
         }
 
         [Fact]
@@ -425,6 +465,64 @@ namespace UnitTests.Acheve.TestHost.Routing
         }
 
         [Fact]
+        public void create_valid_request_using_verbs_query_string_and_from_header()
+        {
+            var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+            var complexParameter = new Pagination()
+            {
+                PageCount = 10,
+                PageIndex = 1
+            };
+
+            var header = "HeaderCustom";
+            var numberHeader = 1;
+
+            var request = server.CreateHttpApiRequest<ValuesV3Controller>(
+                controller => controller.Get5(header, complexParameter));
+
+            var requestMultipleHeader = server.CreateHttpApiRequest<ValuesV3Controller>(
+                controller => controller.Get6(header, numberHeader, complexParameter));
+
+            var requestOnlyHeader = server.CreateHttpApiRequest<ValuesV3Controller>(
+                controller => controller.Get7(header));
+
+            request.GetRequest().Headers.GetValues("custom").First().Should().Be(header);
+            request.GetConfiguredAddress()
+                .Should().Be("api/values/get5?pageindex=1&pagecount=10");
+
+            requestMultipleHeader.GetRequest().Headers.GetValues("custom1").First().Should().Be(header);
+            requestMultipleHeader.GetRequest().Headers.GetValues("custom2").First().Should().Be(numberHeader.ToString());
+            requestMultipleHeader.GetConfiguredAddress()
+                .Should().Be("api/values/get6?pageindex=1&pagecount=10");
+
+            requestOnlyHeader.GetRequest().Headers.GetValues("custom").First().Should().Be(header);
+            requestOnlyHeader.GetConfiguredAddress()
+                .Should().Be("api/values/get7");
+        }
+
+        [Fact]
+        public void create_valid_request_using_route_when_parameters_are_not_primitives_with_null_properties()
+        {
+            var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+            var complexParameter = new Pagination()
+            {
+                PageIndex = 1
+            };
+
+            var requestGet = server.CreateHttpApiRequest<ValuesV3Controller>(
+                controller => controller.Get4(complexParameter));
+
+            requestGet.GetConfiguredAddress()
+                .Should().Be("api/values/get4/1");
+        }
+
+        [Fact]
         public void create_valid_request_using_route_and_query_string_when_parameters_are_not_primitives()
         {
             var server = new TestServerBuilder()
@@ -445,6 +543,25 @@ namespace UnitTests.Acheve.TestHost.Routing
         }
 
         [Fact]
+        public void create_valid_request_using_route_and_query_string_when_parameters_are_not_primitives_with_null_properties()
+        {
+            var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+            var complexParameter = new Pagination()
+            {
+                PageIndex = 1
+            };
+
+            var requestGet = server.CreateHttpApiRequest<ValuesV3Controller>(
+                controller => controller.Get3(complexParameter));
+
+            requestGet.GetConfiguredAddress()
+                .Should().Be("api/values/get3?pageindex=1");
+        }
+
+        [Fact]
         public void create_valid_request_using_from_body_complex_arguments()
         {
             var server = new TestServerBuilder()
@@ -454,6 +571,25 @@ namespace UnitTests.Acheve.TestHost.Routing
             var complexParameter = new Pagination()
             {
                 PageCount = 10,
+                PageIndex = 1
+            };
+
+            var requestPost = server.CreateHttpApiRequest<ValuesV3Controller>(
+                controller => controller.Post1(complexParameter));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("api/values/");
+        }
+
+        [Fact]
+        public void create_valid_request_using_from_body_complex_arguments_with_null_properties()
+        {
+            var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+            var complexParameter = new Pagination()
+            {
                 PageIndex = 1
             };
 
@@ -487,6 +623,27 @@ namespace UnitTests.Acheve.TestHost.Routing
         }
 
         [Fact]
+        public void create_valid_request_using_from_form_complex_arguments_with_null_properties()
+        {
+            var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+            var complexParameter = new Pagination()
+            {
+                PageIndex = 1
+            };
+
+            var requestPost = server.CreateHttpApiRequest<ValuesV3Controller>(
+                controller => controller.Post3(complexParameter),
+                tokenValues: null,
+                new IncludeContentAsFormUrlEncoded());
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("api/values/post3");
+        }
+
+        [Fact]
         public void create_valid_request_using_from_body_complex_arguments_and_primitive_query_parameters()
         {
             var server = new TestServerBuilder()
@@ -507,6 +664,25 @@ namespace UnitTests.Acheve.TestHost.Routing
         }
 
         [Fact]
+        public void create_valid_request_using_from_body_complex_arguments_and_primitive_query_parameters_with_null_properties()
+        {
+            var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+            var complexParameter = new Pagination()
+            {
+                PageIndex = 1
+            };
+
+            var requestPost = server.CreateHttpApiRequest<ValuesV3Controller>(
+                controller => controller.Post2(2, complexParameter));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("api/values/post/2");
+        }
+
+        [Fact]
         public void create_valid_request_using_from_form_complex_arguments_and_primitive_query_parameters()
         {
             var server = new TestServerBuilder()
@@ -516,6 +692,65 @@ namespace UnitTests.Acheve.TestHost.Routing
             var complexParameter = new Pagination()
             {
                 PageCount = 10,
+                PageIndex = 1
+            };
+
+            var requestPost = server.CreateHttpApiRequest<ValuesV3Controller>(
+                controller => controller.Post4(2, complexParameter),
+                tokenValues: null,
+                new IncludeContentAsFormUrlEncoded());
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("api/values/post4/2");
+        }
+
+        [Fact]
+        public void create_valid_request_using_from_header_primitive_arguments()
+        {
+            var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+            var header = "HeaderCustom";
+
+            var requestPost = server.CreateHttpApiRequest<ValuesV3Controller>(
+                controller => controller.Post5(header));
+            requestPost.GetRequest().Headers.GetValues("custom").First().Should().Be(header);
+            requestPost.GetConfiguredAddress()
+               .Should().Be("api/values/post5");
+        }
+
+        [Fact]
+        public void create_valid_request_using_from_header_primitive_arguments_and_from_body_complex_arguments()
+        {
+            var server = new TestServerBuilder()
+           .UseDefaultStartup()
+           .Build();
+
+
+            var complexParameter = new Pagination()
+            {
+                PageCount = 10,
+                PageIndex = 1
+            };
+            var header = "HeaderCustom";
+
+            var requestPost2 = server.CreateHttpApiRequest<ValuesV3Controller>(
+               controller => controller.Post6(header, complexParameter));
+
+            requestPost2.GetRequest().Headers.GetValues("custom").First().Should().Be(header);
+            requestPost2.GetConfiguredAddress().Should().Be("api/values/post6");
+        }
+
+        [Fact]
+        public void create_valid_request_using_from_form_complex_arguments_and_primitive_query_parameters_wit_null_properties()
+        {
+            var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+            var complexParameter = new Pagination()
+            {
                 PageIndex = 1
             };
 
@@ -635,6 +870,91 @@ namespace UnitTests.Acheve.TestHost.Routing
         }
 
         [Fact]
+        public void create_valid_request_when_action_use_tilde_to_override_controller_route_with_null_properties()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+               controller => controller.Get1(1));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("get1/1");
+
+            requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+               controller => controller.Post1(2));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("post1/2");
+
+            requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+              controller => controller.Put1(3));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("put1/3");
+
+            requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+              controller => controller.Delete1(4));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("delete1/4");
+
+            var pagination = new Pagination()
+            {
+                PageIndex = 1
+            };
+
+            requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+               controller => controller.Get2(1, pagination));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("get2/1?pageindex=1");
+
+            requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+               controller => controller.Post2(1, pagination));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("post2/1?pageindex=1");
+
+            requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+               controller => controller.Put2(1, pagination));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("put2/1?pageindex=1");
+
+            requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+                controller => controller.Delete2(1, pagination));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("delete2/1?pageindex=1");
+
+            requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+               controller => controller.Get3(1, pagination));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("get3/1?pageindex=1");
+
+            requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+               controller => controller.Post3(1, pagination));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("post3/1?pageindex=1");
+
+            requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+               controller => controller.Put3(1, pagination));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("put3/1?pageindex=1");
+
+            requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
+                controller => controller.Delete3(1, pagination));
+
+            requestPost.GetConfiguredAddress()
+                .Should().Be("delete3/1?pageindex=1");
+        }
+
+        [Fact]
         public async Task create_request_including_fromBody_argument_as_content_as_default_behavior()
         {
             var server = new TestServerBuilder()
@@ -644,6 +964,28 @@ namespace UnitTests.Acheve.TestHost.Routing
             var complexParameter = new Pagination()
             {
                 PageCount = 10,
+                PageIndex = 1
+            };
+
+            var request = server.CreateHttpApiRequest<ValuesV3Controller>(
+                controller => controller.Post2(2, complexParameter),
+                tokenValues: null,
+                new IncludeContentAsJson());
+
+            var response = await request.PostAsync();
+
+            await response.IsSuccessStatusCodeOrThrow();
+        }
+
+        [Fact]
+        public async Task create_request_including_fromBody_argument_as_content_as_default_behavior_with_null_properties()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var complexParameter = new Pagination()
+            {
                 PageIndex = 1
             };
 
@@ -681,6 +1023,28 @@ namespace UnitTests.Acheve.TestHost.Routing
         }
 
         [Fact]
+        public async Task create_request_including_fromBody_argument_as_content_configured_explicitly_with_null_properties()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var complexParameter = new Pagination()
+            {
+                PageIndex = 1
+            };
+
+            var request = server.CreateHttpApiRequest<ValuesV3Controller>(
+                actionSelector: controller => controller.Post2(2, complexParameter),
+                tokenValues: null,
+                contentOptions: new IncludeContentAsJson());
+
+            var response = await request.PostAsync();
+
+            await response.IsSuccessStatusCodeOrThrow();
+        }
+
+        [Fact]
         public async Task create_request_including_fromForm_argument_as_content_as_default_behavior()
         {
             var server = new TestServerBuilder()
@@ -704,6 +1068,28 @@ namespace UnitTests.Acheve.TestHost.Routing
         }
 
         [Fact]
+        public async Task create_request_including_fromForm_argument_as_content_as_default_behavior_with_null_properties()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var complexParameter = new Pagination()
+            {
+                PageIndex = 1
+            };
+
+            var request = server.CreateHttpApiRequest<ValuesV3Controller>(
+                controller => controller.Post4(2, complexParameter),
+                tokenValues: null,
+                new IncludeContentAsFormUrlEncoded());
+
+            var response = await request.PostAsync();
+
+            await response.IsSuccessStatusCodeOrThrow();
+        }
+
+        [Fact]
         public async Task create_request_including_fromForm_argument_as_content_configured_explicitly()
         {
             var server = new TestServerBuilder()
@@ -713,6 +1099,28 @@ namespace UnitTests.Acheve.TestHost.Routing
             var complexParameter = new Pagination()
             {
                 PageCount = 10,
+                PageIndex = 1
+            };
+
+            var request = server.CreateHttpApiRequest<ValuesV3Controller>(
+                actionSelector: controller => controller.Post4(2, complexParameter),
+                tokenValues: null,
+                contentOptions: new IncludeContentAsFormUrlEncoded());
+
+            var response = await request.PostAsync();
+
+            await response.IsSuccessStatusCodeOrThrow();
+        }
+
+        [Fact]
+        public async Task create_request_including_fromForm_argument_as_content_configured_explicitly_with_null_properties()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var complexParameter = new Pagination()
+            {
                 PageIndex = 1
             };
 
@@ -764,6 +1172,42 @@ namespace UnitTests.Acheve.TestHost.Routing
         }
 
         [Fact]
+        public async Task create_request_including_fromForm_argument_as_content_with_complex_object_with_null_properties()
+        {
+            var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+            var complexObject = new ComplexObject()
+            {
+                BoolNullableParameter = true,
+                BoolParameter = true,
+                ComplexParameter = new Complex()
+                {
+                    Pagination = new Pagination()
+                    {
+                        PageIndex = 1
+                    },
+                    LongNullableParameter = 1,
+                    LongParameter = 1
+                },
+                IntNullableParameter = 1,
+                IntParameter = 1,
+                StringParameter = "Test",
+                DateTimeParameter = DateTime.Now
+            };
+
+            var request = server.CreateHttpApiRequest<RequestContentController>(
+                controller => controller.Post(complexObject),
+                tokenValues: null,
+                new IncludeContentAsFormUrlEncoded());
+
+            var response = await request.PostAsync();
+
+            await response.IsSuccessStatusCodeOrThrow();
+        }
+
+        [Fact]
         public async Task create_request_not_adding_fromBody_argument_as_content()
         {
             var server = new TestServerBuilder()
@@ -773,6 +1217,28 @@ namespace UnitTests.Acheve.TestHost.Routing
             var complexParameter = new Pagination()
             {
                 PageCount = 10,
+                PageIndex = 1
+            };
+
+            var request = server.CreateHttpApiRequest<ValuesV3Controller>(
+                actionSelector: controller => controller.Post2(2, complexParameter),
+                tokenValues: null,
+                contentOptions: new NotIncludeContent());
+
+            var response = await request.PostAsync();
+
+            response.StatusCode.Should().Be(HttpStatusCode.UnsupportedMediaType);
+        }
+
+        [Fact]
+        public async Task create_request_not_adding_fromBody_argument_as_content_with_null_properties()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var complexParameter = new Pagination()
+            {
                 PageIndex = 1
             };
 
@@ -802,6 +1268,65 @@ namespace UnitTests.Acheve.TestHost.Routing
 
             request.GetConfiguredAddress()
                 .Should().Be($"api/bugs/prm1/{guidValue}");
+        }
+
+        [Fact]
+        public void create_valid_request_without_using_frombody_with_apicontroller_attribute()
+        {
+            var server = new TestServerBuilder().UseDefaultStartup()
+                                                .Build();
+
+            var complexParameter = new Pagination()
+            {
+                PageCount = 10,
+                PageIndex = 1
+            };
+
+            var requestPost1 = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.Post1(complexParameter));
+
+            string body = requestPost1.GetRequest().Content.ReadAsStringAsync().Result;
+            JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
+            JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
+        }
+
+        [Fact]
+        public void create_valid_request_without_using_frombody_with_apicontroller_attribute_and_route_parameter()
+        {
+            var server = new TestServerBuilder().UseDefaultStartup()
+                                                .Build();
+
+            var complexParameter = new Pagination()
+            {
+                PageCount = 10,
+                PageIndex = 1
+            };
+
+            var requestPost2 = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.Post2(1, complexParameter));
+
+            string body = requestPost2.GetRequest().Content.ReadAsStringAsync().Result;
+            JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
+            JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
+            requestPost2.GetConfiguredAddress().StartsWith("api/values/1").Should().Be(true);
+        }
+
+        [Fact]
+        public void create_valid_request_of_patch_without_using_frombody_with_apicontroller_attribute_and_route_parameter()
+        {
+            var server = new TestServerBuilder().UseDefaultStartup()
+                                                .Build();
+
+            var complexParameter = new Pagination()
+            {
+                PageCount = 10,
+                PageIndex = 1
+            };
+
+            var requestPost2 = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.Patch1(1, complexParameter));
+
+            string body = requestPost2.GetRequest().Content.ReadAsStringAsync().Result;
+            JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
+            JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
+            requestPost2.GetConfiguredAddress().StartsWith("api/values/1").Should().Be(true);
         }
 
         private class PrivateNonControllerClass
