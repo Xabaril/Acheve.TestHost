@@ -1,0 +1,30 @@
+name: Acheve.TestHost Continous Integration
+on:
+  push:
+    branches:
+      - master
+      - develop
+  pull_request:
+    branches:
+      - master
+      - develop
+
+jobs:
+  build:
+    env:
+      BUILD_CONFIG: Release
+
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup .NET Core SDK 3.1
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.417
+      - name: Restore dependencies
+        run: dotnet restore
+      - name: Build .NET 3.1
+        run: dotnet build -c $BUILD_CONFIG --framework netcoreapp3.1 --no-restore
+      - name: Test
+        run: dotnet test -c $BUILD_CONFIG --no-build
