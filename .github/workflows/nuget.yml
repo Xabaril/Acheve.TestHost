@@ -17,10 +17,8 @@ jobs:
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.1.417
-      - name: Restore dependencies
-        run: dotnet restore
       - name: Build
-        run: dotnet build -c $BUILD_CONFIG --no-restore
+        run: dotnet build -c $BUILD_CONFIG
       - name: Test
         run: dotnet test -c $BUILD_CONFIG --no-build
       - name: Pack
