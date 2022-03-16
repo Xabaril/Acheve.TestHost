@@ -1,13 +1,13 @@
 <Project>
   <PropertyGroup Label="SDK Versions">
-    <NetCoreTargetVersion>netcoreapp3.0</NetCoreTargetVersion>
-    <MicrosoftNETTestSdkPackageVersion>16.3.0</MicrosoftNETTestSdkPackageVersion>
+    <NetCoreTargetVersion>net6.0</NetCoreTargetVersion>
+    <MicrosoftNETTestSdkPackageVersion>17.0.0</MicrosoftNETTestSdkPackageVersion>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
   
   <PropertyGroup Label="Package Versions">
-    <MicrosoftAspNetCoreTestHostVersion>3.0.0</MicrosoftAspNetCoreTestHostVersion>
-    <FluentAssertionsVersion>5.9.0</FluentAssertionsVersion>
+    <MicrosoftAspNetCoreTestHostVersion>6.0.1</MicrosoftAspNetCoreTestHostVersion>
+    <FluentAssertionsVersion>6.3.0</FluentAssertionsVersion>
   </PropertyGroup>
 
   <PropertyGroup Label="CLI Tools Versions">
