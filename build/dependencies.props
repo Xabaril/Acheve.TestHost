@@ -10,22 +10,11 @@
     <JwtBearerVersion>3.1.23</JwtBearerVersion>
     <FluentAssertionsVersion>6.5.1</FluentAssertionsVersion>
     <NewtonsoftJson>13.0.1</NewtonsoftJson>
+    <MicrosoftSourceLinkGithub>1.1.1</MicrosoftSourceLinkGithub>
   </PropertyGroup>
 
-  <PropertyGroup Label="CLI Tools Versions">
+  <PropertyGroup Label="Testing Dependencies">
     <DotnetXUnitPackageVersion>2.4.1</DotnetXUnitPackageVersion>
     <DotnetXUnitRunnerPackageVersion>2.4.3</DotnetXUnitRunnerPackageVersion>
-  </PropertyGroup>
-
-  <PropertyGroup Label="Package information">
-    <PackageLicenseUrl>https://github.com/Xabaril/Acheve.TestHost/blob/master/LICENSE</PackageLicenseUrl>
-    <PackageProjectUrl>http://github.com/xabaril/Acheve.TestHost</PackageProjectUrl>
-    <RepositoryUrl>http://github.com/xabaril/Acheve.TestHost</RepositoryUrl>    
-    <Authors>Xabaril Contributors</Authors>
-    <Company>Xabaril</Company>
-    <Version>3.1.0</Version>
-    <Description>Achve.TestHost is a nuget package to improve TestServer experiences.
-    For more information see http://github.com/Xabaril/Acheve.TestHost</Description>
-    <Tags>TestHost;TestServer</Tags>
   </PropertyGroup>
 </Project>
