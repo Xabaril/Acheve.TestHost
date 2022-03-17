@@ -12,7 +12,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="$(DotnetXUnitPackageVersion)" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="$(DotnetXUnitRunnerPackageVersion)" />
     <PackageReference Include="FluentAssertions" Version="$(FluentAssertionsVersion)" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="$(MicrosoftAspNetCoreTestHostVersion)" />
     <PackageReference Include="xunit" Version="$(DotnetXUnitPackageVersion)" />
