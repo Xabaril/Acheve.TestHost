@@ -1,4 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Linq;
+using System.Reflection;
 
 namespace Acheve.TestHost.Routing.Tokenizers
 {
@@ -10,22 +13,38 @@ namespace Acheve.TestHost.Routing.Tokenizers
         {
             var parameters = action.MethodInfo.GetParameters();
 
-            for (int i = 0; i < parameters.Length; i++)
+            for (var i = 0; i < parameters.Length; i++)
             {
-                if (parameters[i].ParameterType.IsPrimitive 
+                if ((parameters[i].ParameterType.IsPrimitive
                     ||
-                    parameters[i].ParameterType == typeof(String)
+                    parameters[i].ParameterType == typeof(string)
                     ||
-                    parameters[i].ParameterType == typeof(Decimal)
+                    parameters[i].ParameterType == typeof(decimal)
                     ||
                     parameters[i].ParameterType == typeof(Guid))
+                    && !IgnoreHeader(parameters[i]))
                 {
                     var tokenName = parameters[i].Name.ToLowerInvariant();
                     var tokenValue = action.ArgumentValues[i].Instance;
 
-                    tokens.AddToken(tokenName, tokenValue.ToString(), isConventional: false);
+                    if (tokenValue != null)
+                    {
+                        tokens.AddToken(tokenName, tokenValue.ToString(), isConventional: false);
+                    }
                 }
             }
+        }
+
+        bool IgnoreHeader(ParameterInfo parameter)
+        {
+            var attributes = parameter.GetCustomAttributes(false);
+
+            if (attributes.Any(a => a.GetType() == typeof(FromHeaderAttribute)))
+            {
+                return true;
+            }
+
+            return false;
         }
     }
 }
