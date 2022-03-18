@@ -1,7 +1,8 @@
-﻿namespace UnitTests.Acheve.TestHost.Routing.Helpers;
-
-public class Person
+﻿namespace UnitTests.Acheve.TestHost.Routing.Helpers
 {
-    public string FirstName { get; set; }
-    public string LastName { get; set; }
+    public class Person
+    {
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+    }
 }
