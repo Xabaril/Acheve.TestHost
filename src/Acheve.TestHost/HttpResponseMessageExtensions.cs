@@ -22,7 +22,7 @@ namespace System.Net.Http
             throw new Exception($"Response status does not indicate success: {response.StatusCode:D} ({response.StatusCode}); \r\n{content}");
         }
 
-        public static async Task<T> GetToAsync<T>(this HttpResponseMessage responseMessage)
+        public static async Task<T> ReadContentAsAsync<T>(this HttpResponseMessage responseMessage)
         {
             var json = await responseMessage.Content.ReadAsStringAsync();
 

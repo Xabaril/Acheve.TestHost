@@ -1,4 +1,3 @@
-using Acheve.TestHost;
 using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.TestHost;
@@ -1335,7 +1334,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 .UseDefaultStartup()
                 .Build();
 
-            var guidList = new List<Guid> { 
+            var guidList = new List<Guid> {
             Guid.NewGuid(),
             Guid.NewGuid(),
             Guid.NewGuid(),
@@ -1351,7 +1350,7 @@ namespace UnitTests.Acheve.TestHost.Routing
             var responseMessage = await request.GetAsync();
 
             responseMessage.EnsureSuccessStatusCode();
-            var response = await responseMessage.GetToAsync<Guid[]>();
+            var response = await responseMessage.ReadContentAsAsync<Guid[]>();
 
             response.Should().NotBeNull();
             response.Count().Should().Be(3);
@@ -1371,14 +1370,14 @@ namespace UnitTests.Acheve.TestHost.Routing
             };
 
             var request = server.CreateHttpApiRequest<BugsController>(
-                actionSelector: controller => controller.GuidArraySupport(guidList.GetArray()),
+                actionSelector: controller => controller.GuidArraySupport(guidList.ToArray()),
                 tokenValues: null,
                 contentOptions: new NotIncludeContent());
 
             var responseMessage = await request.GetAsync();
 
             responseMessage.EnsureSuccessStatusCode();
-            var response = await responseMessage.GetToAsync<Guid[]>();
+            var response = await responseMessage.ReadContentAsAsync<Guid[]>();
 
             response.Should().NotBeNull();
             response.Count().Should().Be(3);
@@ -1391,68 +1390,15 @@ namespace UnitTests.Acheve.TestHost.Routing
                 .UseDefaultStartup()
                 .Build();
 
+            var guid = Guid.NewGuid().ToString();
+
             var request = server.CreateHttpApiRequest<BugsController>(
-                actionSelector: controller => controller.GuidSupport("prm1", Guid.NewGuid()),
+                actionSelector: controller => controller.GuidSupport("prm1", Guid.Parse(guid)),
                 tokenValues: null,
                 contentOptions: new NotIncludeContent());
-        }
-      
-        public void create_valid_request_without_using_frombody_with_apicontroller_attribute()
-        {
-            var server = new TestServerBuilder().UseDefaultStartup()
-                                                .Build();
 
-            var complexParameter = new Pagination()
-            {
-                PageCount = 10,
-                PageIndex = 1
-            };
-
-            var requestPost1 = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.Post1(complexParameter));
-
-            string body = requestPost1.GetRequest().Content.ReadAsStringAsync().Result;
-            JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
-            JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
-        }
-
-        [Fact]
-        public void create_valid_request_without_using_frombody_with_apicontroller_attribute_and_route_parameter()
-        {
-            var server = new TestServerBuilder().UseDefaultStartup()
-                                                .Build();
-
-            var complexParameter = new Pagination()
-            {
-                PageCount = 10,
-                PageIndex = 1
-            };
-
-            var requestPost2 = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.Post2(1, complexParameter));
-
-            string body = requestPost2.GetRequest().Content.ReadAsStringAsync().Result;
-            JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
-            JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
-            requestPost2.GetConfiguredAddress().StartsWith("api/values/1").Should().Be(true);
-        }
-
-        [Fact]
-        public void create_valid_request_of_patch_without_using_frombody_with_apicontroller_attribute_and_route_parameter()
-        {
-            var server = new TestServerBuilder().UseDefaultStartup()
-                                                .Build();
-
-            var complexParameter = new Pagination()
-            {
-                PageCount = 10,
-                PageIndex = 1
-            };
-
-            var requestPost2 = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.Patch1(1, complexParameter));
-
-            string body = requestPost2.GetRequest().Content.ReadAsStringAsync().Result;
-            JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
-            JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
-            requestPost2.GetConfiguredAddress().StartsWith("api/values/1").Should().Be(true);
+            request.GetConfiguredAddress()
+                .Should().Be($"api/bugs/prm1/{guid}");
         }
 
         private class PrivateNonControllerClass
