@@ -15,6 +15,12 @@ namespace UnitTests.Acheve.TestHost.Builders
             return Ok();
         }
 
+        [HttpGet("{param_1:guid}/{param_2:int}")]
+        public IActionResult UnderDashSupport(Guid param_1, int param_2)
+        {
+            return Ok();
+        }
+
         [HttpGet("nullableQueryParams")]
         public ActionResult<NullableQueryParamsResponse> NullableQueryParams(bool? param1, Guid? param2)
         {
