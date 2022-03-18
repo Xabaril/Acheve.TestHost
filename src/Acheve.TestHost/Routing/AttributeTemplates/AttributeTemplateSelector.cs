@@ -12,7 +12,7 @@ namespace Acheve.TestHost.Routing.AttributeTemplates
 
         public virtual string SubstituteTokens(string template, TestServerTokenCollection tokens)
         {
-            var regex_pattern = @"{[a-zA-Z0-9\_\-?]*:??[a-zA-Z0-9]*}";
+            var regex_pattern = @"{[a-zA-Z0-9_?]*:??[a-zA-Z0-9]*}";
 
             template = template.ToLowerInvariant();
 

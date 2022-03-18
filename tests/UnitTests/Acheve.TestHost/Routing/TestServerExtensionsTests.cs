@@ -236,8 +236,6 @@ namespace UnitTests.Acheve.TestHost.Routing
                 .Should().Be("api/values/overridemethodname/v1/0");
         }
 
-
-
         [Fact]
         public void create_valid_request_using_route_templates()
         {
@@ -726,7 +724,6 @@ namespace UnitTests.Acheve.TestHost.Routing
             var server = new TestServerBuilder()
            .UseDefaultStartup()
            .Build();
-
 
             var complexParameter = new Pagination()
             {
@@ -1327,6 +1324,24 @@ namespace UnitTests.Acheve.TestHost.Routing
             JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
             JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
             requestPost2.GetConfiguredAddress().StartsWith("api/values/1").Should().Be(true);
+        }
+
+        [Fact]
+        public void create_valid_request_supporting_underdash_on_router_params()
+        {
+            var server = new TestServerBuilder()
+           .UseDefaultStartup()
+           .Build();
+
+            var guid = Guid.NewGuid();
+
+            var request = server.CreateHttpApiRequest<BugsController>(
+                actionSelector: controller => controller.UnderDashSupport(guid, 10),
+                tokenValues: null,
+                contentOptions: new NotIncludeContent());
+
+            request.GetConfiguredAddress()
+                .Should().Be($"api/bugs/{guid}/10");
         }
 
         private class PrivateNonControllerClass
