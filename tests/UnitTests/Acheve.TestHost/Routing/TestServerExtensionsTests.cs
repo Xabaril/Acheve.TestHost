@@ -1340,10 +1340,10 @@ namespace UnitTests.Acheve.TestHost.Routing
             Guid.NewGuid(),
             };
 
-            var guidArray = guidList.ToArray();
+            var array = guidList.ToArray();
 
             var request = server.CreateHttpApiRequest<BugsController>(
-                actionSelector: controller => controller.GuidArraySupport(guidArray),
+                actionSelector: controller => controller.GuidArraySupport(array),
                 tokenValues: null,
                 contentOptions: new NotIncludeContent());
 
@@ -1351,6 +1351,53 @@ namespace UnitTests.Acheve.TestHost.Routing
 
             responseMessage.EnsureSuccessStatusCode();
             var response = await responseMessage.ReadContentAsAsync<Guid[]>();
+
+            response.Should().NotBeNull();
+            response.Count().Should().Be(3);
+        }
+
+        [Fact]
+        public async Task create_request_supporting_int_array_types_on_parameters()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            int[] array = { 1, 3, 5, 7, 9 };
+
+            var request = server.CreateHttpApiRequest<BugsController>(
+                actionSelector: controller => controller.IntArraySupport(array),
+                tokenValues: null,
+                contentOptions: new NotIncludeContent());
+
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            var response = await responseMessage.ReadContentAsAsync<int[]>();
+
+            response.Should().NotBeNull();
+            response.Count().Should().Be(5);
+        }
+
+
+        [Fact]
+         public async Task create_request_supporting_string_array_types_on_parameters()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            string[] array = { "one", "two", "three"};
+
+            var request = server.CreateHttpApiRequest<BugsController>(
+                actionSelector: controller => controller.StringArraySupport(array),
+                tokenValues: null,
+                contentOptions: new NotIncludeContent());
+
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            var response = await responseMessage.ReadContentAsAsync<string[]>();
 
             response.Should().NotBeNull();
             response.Count().Should().Be(3);

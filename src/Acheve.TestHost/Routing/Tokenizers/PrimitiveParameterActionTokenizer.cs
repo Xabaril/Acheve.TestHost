@@ -32,11 +32,11 @@ namespace Acheve.TestHost.Routing.Tokenizers
                         tokens.AddToken(tokenName, tokenValue.ToString(), isConventional: false);
                     }
                 }
-                else if (parameters[i].ParameterType == typeof(Guid[])
+                else if (parameters[i].ParameterType.IsArray
                    && !IgnoreHeader(parameters[i]))
                 {
                     var tokenName = parameters[i].Name.ToLowerInvariant();
-                    Guid[] tokenValue = (Guid[])action.ArgumentValues[i].Instance;
+                    dynamic tokenValue = action.ArgumentValues[i].Instance;
 
                     if (tokenValue != null && tokenValue.Length != 0)
                     {
