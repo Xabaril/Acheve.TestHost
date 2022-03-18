@@ -1329,6 +1329,24 @@ namespace UnitTests.Acheve.TestHost.Routing
         }
 
         [Fact]
+        public void create_valid_request_supporting_underdash_on_router_params()
+        {
+            var server = new TestServerBuilder()
+           .UseDefaultStartup()
+           .Build();
+
+            var guid = Guid.NewGuid();
+
+            var request = server.CreateHttpApiRequest<BugsController>(
+                actionSelector: controller => controller.UnderDashSupport(guid, 10),
+                tokenValues: null,
+                contentOptions: new NotIncludeContent());
+
+            request.GetConfiguredAddress()
+                .Should().Be($"api/bugs/{guid}/10");
+        }
+
+        [Fact]
         public async Task create_request_supporting_guid_array_types_on_parameters()
         {
             var server = new TestServerBuilder()
