@@ -27,7 +27,5 @@ jobs:
         uses: NuGet/setup-nuget@v1.0.5
         with:
           nuget-version: latest
-          nuget-api-key: ${{secrets.NUGET_API_KEY}}
-          nuget-api-key-source: https://api.nuget.org/v3/index.json
       - name: Nuget push
-        run: dotnet nuget push ./artifacts/*.nupkg --skip-duplicate
+        run: dotnet nuget push ./artifacts/*.nupkg -k ${{secrets.NUGET_API_KEY}} -s https://api.nuget.org/v3/index.json --skip-duplicate
