@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using UnitTests.Acheve.TestHost.Routing.Helpers;
 
 namespace UnitTests.Acheve.TestHost.Builders
 {
@@ -28,6 +29,12 @@ namespace UnitTests.Acheve.TestHost.Builders
 
         [HttpGet("arrayString")]
         public ActionResult<string[]> StringArraySupport([FromQuery] string[] param1)
+        {
+            return Ok(param1);
+        }
+
+        [HttpGet("arrayPerson")]
+        public ActionResult<int[]> PersonArraySupport([FromQuery] Person[] param1)
         {
             return Ok(param1);
         }

@@ -35,11 +35,20 @@ namespace Acheve.TestHost.Routing.Tokenizers
                 else if (parameters[i].ParameterType.IsArray
                    && !IgnoreHeader(parameters[i]))
                 {
-                    var tokenName = parameters[i].Name.ToLowerInvariant();
                     dynamic tokenValue = action.ArgumentValues[i].Instance;
 
-                    if (tokenValue != null && tokenValue.Length != 0)
+                    if (tokenValue != null 
+                        && tokenValue.Length != 0 
+                        && (tokenValue[0].GetType().IsPrimitive
+                            ||
+                            tokenValue[0].GetType() == typeof(string)
+                            ||
+                            tokenValue[0].GetType() == typeof(decimal)
+                            ||
+                            tokenValue[0].GetType() == typeof(Guid))
+                        )
                     {
+                        var tokenName = parameters[i].Name.ToLowerInvariant();
                         var value = string.Join($"&{tokenName}=", tokenValue);
                         tokens.AddToken(tokenName, value, isConventional: false);
                     }

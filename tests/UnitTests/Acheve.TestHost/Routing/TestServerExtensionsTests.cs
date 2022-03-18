@@ -9,6 +9,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using UnitTests.Acheve.TestHost.Builders;
+using UnitTests.Acheve.TestHost.Routing.Helpers;
 using Xunit;
 
 namespace UnitTests.Acheve.TestHost.Routing
@@ -1379,15 +1380,40 @@ namespace UnitTests.Acheve.TestHost.Routing
             response.Count().Should().Be(5);
         }
 
-
         [Fact]
-         public async Task create_request_supporting_string_array_types_on_parameters()
+        public async Task create_request_not_supporting_class_array_types_on_parameters()
         {
             var server = new TestServerBuilder()
                 .UseDefaultStartup()
                 .Build();
 
-            string[] array = { "one", "two", "three"};
+            var array = new Person[] {
+                new Person { FirstName = "john", LastName = "walter" },
+                new Person { FirstName = "john2", LastName = "walter2" }
+            };
+
+            var request = server.CreateHttpApiRequest<BugsController>(
+                actionSelector: controller => controller.PersonArraySupport(array),
+                tokenValues: null,
+                contentOptions: new NotIncludeContent());
+
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            var response = await responseMessage.ReadContentAsAsync<Person[]>();
+
+            response.Should().NotBeNull();
+            response.Count().Should().Be(0);
+        }
+
+        [Fact]
+        public async Task create_request_supporting_string_array_types_on_parameters()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            string[] array = { "one", "two", "three" };
 
             var request = server.CreateHttpApiRequest<BugsController>(
                 actionSelector: controller => controller.StringArraySupport(array),
