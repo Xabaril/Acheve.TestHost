@@ -1270,6 +1270,65 @@ namespace UnitTests.Acheve.TestHost.Routing
         }
 
         [Fact]
+        public void create_valid_request_without_using_frombody_with_apicontroller_attribute()
+        {
+            var server = new TestServerBuilder().UseDefaultStartup()
+                                                .Build();
+
+            var complexParameter = new Pagination()
+            {
+                PageCount = 10,
+                PageIndex = 1
+            };
+
+            var requestPost1 = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.Post1(complexParameter));
+
+            string body = requestPost1.GetRequest().Content.ReadAsStringAsync().Result;
+            JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
+            JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
+        }
+
+        [Fact]
+        public void create_valid_request_without_using_frombody_with_apicontroller_attribute_and_route_parameter()
+        {
+            var server = new TestServerBuilder().UseDefaultStartup()
+                                                .Build();
+
+            var complexParameter = new Pagination()
+            {
+                PageCount = 10,
+                PageIndex = 1
+            };
+
+            var requestPost2 = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.Post2(1, complexParameter));
+
+            string body = requestPost2.GetRequest().Content.ReadAsStringAsync().Result;
+            JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
+            JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
+            requestPost2.GetConfiguredAddress().StartsWith("api/values/1").Should().Be(true);
+        }
+
+        [Fact]
+        public void create_valid_request_of_patch_without_using_frombody_with_apicontroller_attribute_and_route_parameter()
+        {
+            var server = new TestServerBuilder().UseDefaultStartup()
+                                                .Build();
+
+            var complexParameter = new Pagination()
+            {
+                PageCount = 10,
+                PageIndex = 1
+            };
+
+            var requestPost2 = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.Patch1(1, complexParameter));
+
+            string body = requestPost2.GetRequest().Content.ReadAsStringAsync().Result;
+            JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
+            JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
+            requestPost2.GetConfiguredAddress().StartsWith("api/values/1").Should().Be(true);
+        }
+
+        [Fact]
         public async Task create_request_supporting_guid_array_types_on_parameters()
         {
             var server = new TestServerBuilder()

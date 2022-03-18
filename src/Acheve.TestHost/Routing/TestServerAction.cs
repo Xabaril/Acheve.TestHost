@@ -36,6 +36,14 @@ namespace Acheve.TestHost.Routing
                 isFromBody = true;
             }
 
+            bool isPrimitive = argument.ParameterType.IsPrimitive || argument.ParameterType.Name.Equals(typeof(string));
+            bool hasNoAttributes = !isFromBody && !isFromForm && !isFromHeader;
+
+            if (activeBodyApiController && hasNoAttributes && !isPrimitive)
+            {
+                isFromBody = true;
+            }
+
             if (!ArgumentValues.ContainsKey(order))
             {
                 switch (expression)

@@ -2,12 +2,15 @@
 
   <PropertyGroup>
     <TargetFramework>$(NetCoreTargetVersion)</TargetFramework>
+
+    <Version>$(Version)</Version>
     <PackageLicenseUrl>$(PackageLicenseUrl)</PackageLicenseUrl>
     <PackageProjectUrl>$(PackageProjectUrl)</PackageProjectUrl>
+    <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
+    <Authors>$(Authors)</Authors>
+    <Company>$(Company)</Company>
     <Description>$(Description)</Description>
     <PackageTags>$(Tags)</PackageTags>
-    <Version>$(Version)</Version>
-    <RepositoryUrl>$(RepositoryUrl)</RepositoryUrl>
   </PropertyGroup>
   
   <ItemGroup>
@@ -21,7 +24,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="$(MicrosoftAspNetCoreTestHostVersion)" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="$(NewtonsoftJson)" />
   </ItemGroup>
 
 </Project>
