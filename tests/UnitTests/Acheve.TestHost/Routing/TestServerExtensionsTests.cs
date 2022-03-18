@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using UnitTests.Acheve.TestHost.Builders;
+using UnitTests.Acheve.TestHost.Routing.Helpers;
 using Xunit;
 
 namespace UnitTests.Acheve.TestHost.Routing
@@ -1327,6 +1328,29 @@ namespace UnitTests.Acheve.TestHost.Routing
             JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
             JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
             requestPost2.GetConfiguredAddress().StartsWith("api/values/1").Should().Be(true);
+        }
+
+        [Fact]
+        public async Task create_valid_request_supporting_nullable_params_on_query()
+        {
+            var server = new TestServerBuilder()
+           .UseDefaultStartup()
+           .Build();
+
+            var guid = Guid.NewGuid();
+
+            var request = server.CreateHttpApiRequest<BugsController>(
+                actionSelector: controller => controller.NullableQueryParams(null,guid),
+                tokenValues: null,
+                contentOptions: new NotIncludeContent());           
+
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            var response = await responseMessage.ReadContentAsAsync<NullableQueryParamsResponse>();
+
+            response.Param1.Should().Be(null);
+            response.Param2.Should().Be(guid);
         }
 
         private class PrivateNonControllerClass

@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using UnitTests.Acheve.TestHost.Routing.Helpers;
 
 namespace UnitTests.Acheve.TestHost.Builders
 {
@@ -9,9 +10,15 @@ namespace UnitTests.Acheve.TestHost.Builders
         : ControllerBase
     {
         [HttpGet("{param1}/{param2}")]
-        public IActionResult GuidSupport(string param1,Guid param2)
+        public IActionResult GuidSupport(string param1, Guid param2)
         {
             return Ok();
+        }
+
+        [HttpGet("nullableQueryParams")]
+        public ActionResult<NullableQueryParamsResponse> NullableQueryParams(bool? param1, Guid? param2)
+        {
+            return Ok(new NullableQueryParamsResponse { Param1 = param1, Param2 = param2 });
         }
     }
 }
