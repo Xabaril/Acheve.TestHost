@@ -9,7 +9,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using UnitTests.Acheve.TestHost.Builders;
-using UnitTests.Acheve.TestHost.Routing.Helpers;
+using UnitTests.Acheve.TestHost.Routing.Models;
 using Xunit;
 
 namespace UnitTests.Acheve.TestHost.Routing

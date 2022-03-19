@@ -1,4 +1,4 @@
-﻿namespace UnitTests.Acheve.TestHost.Routing.Helpers
+﻿namespace UnitTests.Acheve.TestHost.Routing.Models
 {
     public class Person
     {

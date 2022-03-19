@@ -15,42 +15,31 @@ namespace Acheve.TestHost.Routing.Tokenizers
 
             for (var i = 0; i < parameters.Length; i++)
             {
-                if ((parameters[i].ParameterType.IsPrimitive
-                    ||
-                    parameters[i].ParameterType == typeof(string)
-                    ||
-                    parameters[i].ParameterType == typeof(decimal)
-                    ||
-                    parameters[i].ParameterType == typeof(Guid))
-                    && !IgnoreHeader(parameters[i]))
-                {
-                    var tokenName = parameters[i].Name.ToLowerInvariant();
-                    var tokenValue = action.ArgumentValues[i].Instance;
+                if (!IgnoreHeader(parameters[i])) {
 
-                    if (tokenValue != null)
-                    {
-                        tokens.AddToken(tokenName, tokenValue.ToString(), isConventional: false);
-                    }
-                }
-                else if (parameters[i].ParameterType.IsArray
-                   && !IgnoreHeader(parameters[i]))
-                {
-                    dynamic tokenValue = action.ArgumentValues[i].Instance;
-
-                    if (tokenValue != null 
-                        && tokenValue.Length != 0 
-                        && (tokenValue[0].GetType().IsPrimitive
-                            ||
-                            tokenValue[0].GetType() == typeof(string)
-                            ||
-                            tokenValue[0].GetType() == typeof(decimal)
-                            ||
-                            tokenValue[0].GetType() == typeof(Guid))
-                        )
+                    if (IsPrimitiveType(parameters[i].ParameterType))
                     {
                         var tokenName = parameters[i].Name.ToLowerInvariant();
-                        var value = string.Join($"&{tokenName}=", tokenValue);
-                        tokens.AddToken(tokenName, value, isConventional: false);
+                        var tokenValue = action.ArgumentValues[i].Instance;
+
+                        if (tokenValue != null)
+                        {
+                            tokens.AddToken(tokenName, tokenValue.ToString(), isConventional: false);
+                        }
+                    }
+                    else if (parameters[i].ParameterType.IsArray
+                       && IsPrimitiveType(parameters[i].ParameterType.GetElementType()))
+                    {
+                        dynamic tokenValue = action.ArgumentValues[i].Instance;
+
+                        if (tokenValue != null
+                            && tokenValue.Length != 0
+                            )
+                        {
+                            var tokenName = parameters[i].Name.ToLowerInvariant();
+                            var value = string.Join($"&{tokenName}=", tokenValue);
+                            tokens.AddToken(tokenName, value, isConventional: false);
+                        }
                     }
                 }
             }
@@ -66,6 +55,14 @@ namespace Acheve.TestHost.Routing.Tokenizers
             }
 
             return false;
+        }
+
+        private bool IsPrimitiveType(Type type)
+        {
+            return type.IsPrimitive
+                || type == typeof(string)
+                || type == typeof(decimal)
+                || type == typeof(Guid);
         }
     }
 }
