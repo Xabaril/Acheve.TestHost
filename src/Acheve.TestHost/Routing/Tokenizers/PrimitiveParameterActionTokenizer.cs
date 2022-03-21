@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
@@ -15,8 +16,8 @@ namespace Acheve.TestHost.Routing.Tokenizers
 
             for (var i = 0; i < parameters.Length; i++)
             {
-                if (!IgnoreHeader(parameters[i])) {
-
+                if (!IgnoreHeader(parameters[i]))
+                {
                     if (IsPrimitiveType(parameters[i].ParameterType))
                     {
                         var tokenName = parameters[i].Name.ToLowerInvariant();
@@ -30,14 +31,14 @@ namespace Acheve.TestHost.Routing.Tokenizers
                     else if (parameters[i].ParameterType.IsArray
                        && IsPrimitiveType(parameters[i].ParameterType.GetElementType()))
                     {
-                        dynamic tokenValue = action.ArgumentValues[i].Instance;
+                        var tokenValue = (Array)action.ArgumentValues[i].Instance;
 
                         if (tokenValue != null
                             && tokenValue.Length != 0
                             )
                         {
                             var tokenName = parameters[i].Name.ToLowerInvariant();
-                            var value = string.Join($"&{tokenName}=", tokenValue);
+                            var value = GetArrayValue(tokenValue, tokenName);
                             tokens.AddToken(tokenName, value, isConventional: false);
                         }
                     }
@@ -63,6 +64,18 @@ namespace Acheve.TestHost.Routing.Tokenizers
                 || type == typeof(string)
                 || type == typeof(decimal)
                 || type == typeof(Guid);
+        }
+
+        private string GetArrayValue(Array array, string tokenName)
+        {
+            var list = new List<string>();
+
+            foreach (var element in array)
+            {
+                list.Add(element.ToString());
+            }
+
+            return string.Join($"&{tokenName}=", list);
         }
     }
 }
