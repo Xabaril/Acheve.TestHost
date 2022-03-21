@@ -8,7 +8,7 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using UnitTests.Acheve.TestHost.Builders;
-using UnitTests.Acheve.TestHost.Routing.Helpers;
+using UnitTests.Acheve.TestHost.Routing.Models;
 using Xunit;
 
 namespace UnitTests.Acheve.TestHost.Routing
@@ -1355,9 +1355,9 @@ namespace UnitTests.Acheve.TestHost.Routing
             var guid = Guid.NewGuid();
 
             var request = server.CreateHttpApiRequest<BugsController>(
-                actionSelector: controller => controller.NullableQueryParams(null,guid),
+                actionSelector: controller => controller.NullableQueryParams(null, guid),
                 tokenValues: null,
-                contentOptions: new NotIncludeContent());           
+                contentOptions: new NotIncludeContent());
 
             var responseMessage = await request.GetAsync();
 

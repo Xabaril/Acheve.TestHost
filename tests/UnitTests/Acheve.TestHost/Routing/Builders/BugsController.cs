@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
-using UnitTests.Acheve.TestHost.Routing.Helpers;
+using UnitTests.Acheve.TestHost.Routing.Models;
 
 namespace UnitTests.Acheve.TestHost.Builders
 {
