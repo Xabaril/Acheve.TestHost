@@ -31,15 +31,15 @@ namespace Acheve.TestHost.Routing.Tokenizers
                     else if (parameters[i].ParameterType.IsArray
                        && IsPrimitiveType(parameters[i].ParameterType.GetElementType()))
                     {
-                        var tokenValue = (Array)action.ArgumentValues[i].Instance;
+                        var arrayValues = (Array)action.ArgumentValues[i].Instance;
 
-                        if (tokenValue != null
-                            && tokenValue.Length != 0
+                        if (arrayValues != null
+                            && arrayValues.Length != 0
                             )
                         {
                             var tokenName = parameters[i].Name.ToLowerInvariant();
-                            var value = GetArrayValue(tokenValue, tokenName);
-                            tokens.AddToken(tokenName, value, isConventional: false);
+                            var tokenValue = GetTokenValue(arrayValues, tokenName);
+                            tokens.AddToken(tokenName, tokenValue, isConventional: false);
                         }
                     }
                 }
@@ -66,7 +66,7 @@ namespace Acheve.TestHost.Routing.Tokenizers
                 || type == typeof(Guid);
         }
 
-        private string GetArrayValue(Array array, string tokenName)
+        private string GetTokenValue(Array array, string tokenName)
         {
             var list = new List<string>();
 
