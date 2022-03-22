@@ -15,6 +15,7 @@
   
   <ItemGroup>
     <Folder Include="Routing\AttributeTemplates\" />
+	<Folder Include="Routing\Tokenizers\" />
   </ItemGroup>
 
   <ItemGroup>
