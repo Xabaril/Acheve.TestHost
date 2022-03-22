@@ -2,12 +2,14 @@ using FluentAssertions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.TestHost;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using UnitTests.Acheve.TestHost.Builders;
+using UnitTests.Acheve.TestHost.Routing.Models;
 using Xunit;
 
 namespace UnitTests.Acheve.TestHost.Routing
@@ -1342,6 +1344,152 @@ namespace UnitTests.Acheve.TestHost.Routing
 
             request.GetConfiguredAddress()
                 .Should().Be($"api/bugs/{guid}/10");
+        }
+
+        [Fact]
+        public async Task create_request_supporting_guid_array_types_on_parameters()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var guidList = new List<Guid> {
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            };
+
+            var array = guidList.ToArray();
+
+            var request = server.CreateHttpApiRequest<BugsController>(
+                actionSelector: controller => controller.GuidArraySupport(array),
+                tokenValues: null,
+                contentOptions: new NotIncludeContent());
+
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            var response = await responseMessage.ReadContentAsAsync<Guid[]>();
+
+            response.Should().NotBeNull();
+            response.Count().Should().Be(3);
+        }
+
+        [Fact]
+        public async Task create_request_supporting_int_array_types_on_parameters()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            int[] array = { 1, 3, 5, 7, 9 };
+
+            var request = server.CreateHttpApiRequest<BugsController>(
+                actionSelector: controller => controller.IntArraySupport(array),
+                tokenValues: null,
+                contentOptions: new NotIncludeContent());
+
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            var response = await responseMessage.ReadContentAsAsync<int[]>();
+
+            response.Should().NotBeNull();
+            response.Count().Should().Be(5);
+        }
+
+        [Fact]
+        public async Task create_request_not_supporting_class_array_types_on_parameters()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var array = new Person[] {
+                new Person { FirstName = "john", LastName = "walter" },
+                new Person { FirstName = "john2", LastName = "walter2" }
+            };
+
+            var request = server.CreateHttpApiRequest<BugsController>(
+                actionSelector: controller => controller.PersonArraySupport(array),
+                tokenValues: null,
+                contentOptions: new NotIncludeContent());
+
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            var response = await responseMessage.ReadContentAsAsync<Person[]>();
+
+            response.Should().NotBeNull();
+            response.Count().Should().Be(0);
+        }
+
+        [Fact]
+        public async Task create_request_supporting_string_array_types_on_parameters()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            string[] array = { "one", "two", "three" };
+
+            var request = server.CreateHttpApiRequest<BugsController>(
+                actionSelector: controller => controller.StringArraySupport(array),
+                tokenValues: null,
+                contentOptions: new NotIncludeContent());
+
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            var response = await responseMessage.ReadContentAsAsync<string[]>();
+
+            response.Should().NotBeNull();
+            response.Count().Should().Be(3);
+        }
+
+        [Fact]
+        public async Task create_request_supporting_guid_array_types_on_parameters_seding_method()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var guidList = new List<Guid> {
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            };
+
+            var request = server.CreateHttpApiRequest<BugsController>(
+                actionSelector: controller => controller.GuidArraySupport(guidList.ToArray()),
+                tokenValues: null,
+                contentOptions: new NotIncludeContent());
+
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            var response = await responseMessage.ReadContentAsAsync<Guid[]>();
+
+            response.Should().NotBeNull();
+            response.Count().Should().Be(3);
+        }
+
+        [Fact]
+        public void create_request_supporting_send_method_on_client_http()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var guid = Guid.NewGuid().ToString();
+
+            var request = server.CreateHttpApiRequest<BugsController>(
+                actionSelector: controller => controller.GuidSupport("prm1", Guid.Parse(guid)),
+                tokenValues: null,
+                contentOptions: new NotIncludeContent());
+
+            request.GetConfiguredAddress()
+                .Should().Be($"api/bugs/prm1/{guid}");
         }
 
         private class PrivateNonControllerClass

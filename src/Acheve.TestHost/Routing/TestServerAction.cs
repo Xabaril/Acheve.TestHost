@@ -13,7 +13,6 @@ namespace Acheve.TestHost.Routing
 
         public Dictionary<int, TestServerArgument> ArgumentValues { get; private set; }
 
-
         public TestServerAction(MethodInfo methodInfo)
         {
             MethodInfo = methodInfo ?? throw new ArgumentNullException(nameof(methodInfo));
@@ -44,6 +43,7 @@ namespace Acheve.TestHost.Routing
                             ArgumentValues.Add(order, new TestServerArgument(constant.Value?.ToString(), isFromBody, isFromForm, isFromHeader, argument.Name));
                         }
                         break;
+
                     case MemberExpression member when member.NodeType == ExpressionType.MemberAccess:
                         {
                             var instance = Expression.Lambda(member)
@@ -53,6 +53,14 @@ namespace Acheve.TestHost.Routing
                             ArgumentValues.Add(order, new TestServerArgument(instance, isFromBody, isFromForm, isFromHeader, argument.Name));
                         }
                         break;
+
+                    case MethodCallExpression method:
+                        {
+                            var instance = Expression.Lambda(method).Compile().DynamicInvoke();
+                            ArgumentValues.Add(order, new TestServerArgument(instance, isFromBody, isFromForm, isFromHeader, argument.Name));
+                        }
+                        break;
+
                     default: return;
                 }
             }
