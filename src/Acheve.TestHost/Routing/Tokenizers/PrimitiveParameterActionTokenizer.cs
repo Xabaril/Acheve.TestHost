@@ -22,24 +22,23 @@ namespace Acheve.TestHost.Routing.Tokenizers
                     var tokenName = parameters[i].Name.ToLowerInvariant();
                     var tokenValue = action.ArgumentValues.Any(x => x.Key == i) ? action.ArgumentValues[i].Instance : null;
 
-                        if (tokenValue != null)
-                        {
-                            tokens.AddToken(tokenName, tokenValue.ToString(), isConventional: false);
-                        }
-                    }
-                    else if (parameters[i].ParameterType.IsArray
-                       && IsPrimitiveType(parameters[i].ParameterType.GetElementType()))
+                    if (tokenValue != null)
                     {
-                        var arrayValues = (Array)action.ArgumentValues[i].Instance;
+                        tokens.AddToken(tokenName, tokenValue.ToString(), isConventional: false);
+                    }
+                }
+                else if (parameters[i].ParameterType.IsArray
+                   && IsPrimitiveType(parameters[i].ParameterType.GetElementType()))
+                {
+                    var arrayValues = (Array)action.ArgumentValues[i].Instance;
 
-                        if (arrayValues != null
-                            && arrayValues.Length != 0
-                            )
-                        {
-                            var tokenName = parameters[i].Name.ToLowerInvariant();
-                            var tokenValue = GetTokenValue(arrayValues, tokenName);
-                            tokens.AddToken(tokenName, tokenValue, isConventional: false);
-                        }
+                    if (arrayValues != null
+                        && arrayValues.Length != 0
+                        )
+                    {
+                        var tokenName = parameters[i].Name.ToLowerInvariant();
+                        var tokenValue = GetTokenValue(arrayValues, tokenName);
+                        tokens.AddToken(tokenName, tokenValue, isConventional: false);
                     }
                 }
             }
