@@ -13,7 +13,6 @@ namespace Acheve.TestHost.Routing
 
         public Dictionary<int, TestServerArgument> ArgumentValues { get; private set; }
 
-
         public TestServerAction(MethodInfo methodInfo)
         {
             MethodInfo = methodInfo ?? throw new ArgumentNullException(nameof(methodInfo));

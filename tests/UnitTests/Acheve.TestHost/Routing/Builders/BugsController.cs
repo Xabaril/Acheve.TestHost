@@ -26,5 +26,29 @@ namespace UnitTests.Acheve.TestHost.Builders
         {
             return Ok(new NullableQueryParamsResponse { Param1 = param1, Param2 = param2 });
         }
+
+        [HttpGet("arrayGuid")]
+        public ActionResult<Guid[]> GuidArraySupport([FromQuery] Guid[] param1)
+        {
+            return Ok(param1);
+        }
+
+        [HttpGet("arrayInt")]
+        public ActionResult<int[]> IntArraySupport([FromQuery] int[] param1)
+        {
+            return Ok(param1);
+        }
+
+        [HttpGet("arrayString")]
+        public ActionResult<string[]> StringArraySupport([FromQuery] string[] param1)
+        {
+            return Ok(param1);
+        }
+
+        [HttpGet("arrayPerson")]
+        public ActionResult<int[]> PersonArraySupport([FromQuery] Person[] param1)
+        {
+            return Ok(param1);
+        }
     }
 }
