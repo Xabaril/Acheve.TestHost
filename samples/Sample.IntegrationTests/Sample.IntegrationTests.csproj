@@ -1,21 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>$(NetCoreTargetVersion)</TargetFramework>
+    <TargetFrameworks>$(NetCoreTargetVersion)</TargetFrameworks>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Acheve.TestHost\Acheve.TestHost.csproj" />
-    <ProjectReference Include="..\Sample.Api\Sample.Api.csproj" />
+    <PackageReference Include="FluentAssertions" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.runner.visualstudio" />
+    <PackageReference Include="coverlet.collector" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkPackageVersion)" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="$(DotnetXUnitRunnerPackageVersion)" />
-    <PackageReference Include="FluentAssertions" Version="$(FluentAssertionsVersion)" />
-    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="$(MicrosoftAspNetCoreTestHostVersion)" />
-    <PackageReference Include="xunit" Version="$(DotnetXUnitPackageVersion)" />
+    <ProjectReference Include="..\..\src\Acheve.TestHost\Acheve.TestHost.csproj" />
+    <ProjectReference Include="..\Sample.Api\Sample.Api.csproj" />
   </ItemGroup>
 
 </Project>

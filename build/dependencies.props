@@ -1,20 +1,14 @@
 <Project>
   <PropertyGroup Label="SDK Versions">
-    <NetCoreTargetVersion>netcoreapp3.1</NetCoreTargetVersion>
-    <MicrosoftNETTestSdkPackageVersion>17.1.0</MicrosoftNETTestSdkPackageVersion>
+    <NetCoreTargetVersion>netcoreapp3.1;net5.0;net6.0</NetCoreTargetVersion>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
-  
-  <PropertyGroup Label="Package Versions">
-    <MicrosoftAspNetCoreTestHostVersion>3.1.23</MicrosoftAspNetCoreTestHostVersion>
-    <JwtBearerVersion>3.1.23</JwtBearerVersion>
-    <FluentAssertionsVersion>6.5.1</FluentAssertionsVersion>
-    <NewtonsoftJson>13.0.1</NewtonsoftJson>
-    <MicrosoftSourceLinkGithub>1.1.1</MicrosoftSourceLinkGithub>
-  </PropertyGroup>
 
-  <PropertyGroup Label="Testing Dependencies">
-    <DotnetXUnitPackageVersion>2.4.1</DotnetXUnitPackageVersion>
-    <DotnetXUnitRunnerPackageVersion>2.4.3</DotnetXUnitRunnerPackageVersion>
+  <PropertyGroup Label="Package Versions">
+    <NetCoreVersion3>3.1.23</NetCoreVersion3>
+    <NetCoreVersion5>5.0.15</NetCoreVersion5>
+    <NetCoreVersion6>6.0.3</NetCoreVersion6>
+
+    <MicrosoftSourceLinkGithub>1.1.1</MicrosoftSourceLinkGithub>
   </PropertyGroup>
 </Project>

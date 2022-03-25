@@ -1,0 +1,34 @@
+﻿<Project>
+	<ItemGroup Label="General Dependencies">
+		<PackageReference Update="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
+	
+	<ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
+		<PackageReference Update="Microsoft.AspNetCore.TestHost" Version="$(NetCoreVersion3)" />
+		<PackageReference Update="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(NetCoreVersion3)" />
+	</ItemGroup>
+	
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
+		<PackageReference Update="Microsoft.AspNetCore.TestHost" Version="$(NetCoreVersion5)" />
+		<PackageReference Update="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(NetCoreVersion5)" />
+	</ItemGroup>
+	
+	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+		<PackageReference Update="Microsoft.AspNetCore.TestHost" Version="$(NetCoreVersion6)" />
+		<PackageReference Update="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(NetCoreVersion6)" />
+	</ItemGroup>
+	
+	<ItemGroup Label="Testing Dependencies">
+		<PackageReference Update="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+		<PackageReference Update="FluentAssertions" Version="6.5.1" />
+		<PackageReference Update="xunit" Version="2.4.1" />
+		<PackageReference Update="xunit.runner.visualstudio" Version="2.4.3">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+		<PackageReference Update="coverlet.collector" Version="3.0.0">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
+</Project>
