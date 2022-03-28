@@ -13,6 +13,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Setup .NET SDK 6.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.200
+      - name: Setup .NET SDK 5.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.101
       - name: Setup .NET Core SDK 3.1
         uses: actions/setup-dotnet@v1
         with:

@@ -18,10 +18,11 @@ namespace Acheve.TestHost.Routing.Tokenizers
             {
                 if (!IgnoreHeader(parameters[i]))
                 {
-                    if (IsPrimitiveType(parameters[i].ParameterType))
+                    var tokenName = parameters[i].Name.ToLowerInvariant();
+
+                    if (parameters[i].ParameterType.IsPrimitiveType())
                     {
-                        var tokenName = parameters[i].Name.ToLowerInvariant();
-                        var tokenValue = action.ArgumentValues[i].Instance;
+                        var tokenValue = action.ArgumentValues.Any(x => x.Key == i) ? action.ArgumentValues[i].Instance : null;
 
                         if (tokenValue != null)
                         {
@@ -37,7 +38,6 @@ namespace Acheve.TestHost.Routing.Tokenizers
                             && arrayValues.Length != 0
                             )
                         {
-                            var tokenName = parameters[i].Name.ToLowerInvariant();
                             var tokenValue = GetTokenValue(arrayValues, tokenName);
                             tokens.AddToken(tokenName, tokenValue, isConventional: false);
                         }

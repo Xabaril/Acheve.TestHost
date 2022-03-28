@@ -18,11 +18,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - name: Setup .NET SDK 6.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 6.0.200
+      - name: Setup .NET SDK 5.0
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 5.0.101
       - name: Setup .NET Core SDK 3.1
         uses: actions/setup-dotnet@v1
         with:
           dotnet-version: 3.1.417
       - name: Build .NET 3.1
-        run: dotnet build -c $BUILD_CONFIG
+        run: dotnet build -c $BUILD_CONFIG --framework netcoreapp3.1
+      - name: Build .NET 5.0
+        run: dotnet build -c $BUILD_CONFIG --framework net5.0
+      - name: Build .NET 6.0
+        run: dotnet build -c $BUILD_CONFIG --framework net6.0
       - name: Test
         run: dotnet test -c $BUILD_CONFIG --no-build
