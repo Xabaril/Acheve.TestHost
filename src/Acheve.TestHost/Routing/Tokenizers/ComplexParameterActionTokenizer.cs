@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
+using System.Linq;
 using System.Reflection;
 
 namespace Acheve.TestHost.Routing.Tokenizers
@@ -15,9 +16,9 @@ namespace Acheve.TestHost.Routing.Tokenizers
             for (int i = 0; i < parameters.Length; i++)
             {
                 var type = parameters[i].ParameterType;
-                var instance = action.ArgumentValues[i].Instance;
+                var instance = action.ArgumentValues.Any(x => x.Key == i) ? action.ArgumentValues[i].Instance : null;
 
-                if (instance != null && !(type.IsPrimitive || type == typeof(String) || type == typeof(Decimal) || type == typeof(Guid)))
+                if (instance != null && !type.IsPrimitiveType())
                 {
                     if (!IgnoreBind(parameters[i]))
                     {

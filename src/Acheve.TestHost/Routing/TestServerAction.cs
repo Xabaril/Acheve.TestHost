@@ -36,34 +36,48 @@ namespace Acheve.TestHost.Routing
 
             if (!ArgumentValues.ContainsKey(order))
             {
-                switch (expression)
+                if (IsNullable(argument.ParameterType))
                 {
-                    case ConstantExpression constant:
-                        {
-                            ArgumentValues.Add(order, new TestServerArgument(constant.Value?.ToString(), isFromBody, isFromForm, isFromHeader, argument.Name));
-                        }
-                        break;
+                    var expressionValue = Expression.Lambda(expression).Compile().DynamicInvoke();
 
-                    case MemberExpression member when member.NodeType == ExpressionType.MemberAccess:
-                        {
-                            var instance = Expression.Lambda(member)
-                                .Compile()
-                                .DynamicInvoke();
+                    if (expressionValue != null)
+                    {
+                        ArgumentValues.Add(order, new TestServerArgument(expressionValue.ToString(), isFromBody, isFromForm, isFromHeader, argument.Name));
+                    }
+                }
+                else
+                {
+                    switch (expression)
+                    {
+                        case ConstantExpression constant:
+                            {
+                                ArgumentValues.Add(order, new TestServerArgument(constant.Value?.ToString(), isFromBody, isFromForm, isFromHeader, argument.Name));
+                            }
+                            break;
 
-                            ArgumentValues.Add(order, new TestServerArgument(instance, isFromBody, isFromForm, isFromHeader, argument.Name));
-                        }
-                        break;
+                        case MemberExpression member when member.NodeType == ExpressionType.MemberAccess:
+                            {
+                                var instance = Expression.Lambda(member)
+                                    .Compile()
+                                    .DynamicInvoke();
 
-                    case MethodCallExpression method:
-                        {
-                            var instance = Expression.Lambda(method).Compile().DynamicInvoke();
-                            ArgumentValues.Add(order, new TestServerArgument(instance, isFromBody, isFromForm, isFromHeader, argument.Name));
-                        }
-                        break;
+                                ArgumentValues.Add(order, new TestServerArgument(instance, isFromBody, isFromForm, isFromHeader, argument.Name));
+                            }
+                            break;
 
-                    default: return;
+                        case MethodCallExpression method:
+                            {
+                                var instance = Expression.Lambda(method).Compile().DynamicInvoke();
+                                ArgumentValues.Add(order, new TestServerArgument(instance, isFromBody, isFromForm, isFromHeader, argument.Name));
+                            }
+                            break;
+
+                        default: return;
+                    }
                 }
             }
         }
+
+        bool IsNullable(Type type) => Nullable.GetUnderlyingType(type) != null;
     }
 }

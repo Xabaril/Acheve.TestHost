@@ -1347,6 +1347,29 @@ namespace UnitTests.Acheve.TestHost.Routing
         }
 
         [Fact]
+        public async Task create_valid_request_supporting_nullable_params_on_query()
+        {
+            var server = new TestServerBuilder()
+           .UseDefaultStartup()
+           .Build();
+
+            var guid = Guid.NewGuid();
+
+            var request = server.CreateHttpApiRequest<BugsController>(
+                actionSelector: controller => controller.NullableQueryParams(null, guid),
+                tokenValues: null,
+                contentOptions: new NotIncludeContent());
+
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            var response = await responseMessage.ReadContentAsAsync<NullableQueryParamsResponse>();
+
+            response.Param1.Should().Be(null);
+            response.Param2.Should().Be(guid);
+        }
+
+        [Fact]
         public async Task create_request_supporting_guid_array_types_on_parameters()
         {
             var server = new TestServerBuilder()
