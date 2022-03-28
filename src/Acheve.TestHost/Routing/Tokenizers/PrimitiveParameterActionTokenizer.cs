@@ -16,31 +16,31 @@ namespace Acheve.TestHost.Routing.Tokenizers
 
             for (var i = 0; i < parameters.Length; i++)
             {
-                var tokenName = parameters[i].Name.ToLowerInvariant();
-
-                if (parameters[i].ParameterType.IsPrimitiveType()
-                    && !IgnoreHeader(parameters[i]))
+                if (!IgnoreHeader(parameters[i]))
                 {
-                   
-                    var tokenValue = action.ArgumentValues.Any(x => x.Key == i) ? action.ArgumentValues[i].Instance : null;
+                    var tokenName = parameters[i].Name.ToLowerInvariant();
 
-                    if (tokenValue != null)
+                    if (parameters[i].ParameterType.IsPrimitiveType())
                     {
-                        tokens.AddToken(tokenName, tokenValue.ToString(), isConventional: false);
+                        var tokenValue = action.ArgumentValues.Any(x => x.Key == i) ? action.ArgumentValues[i].Instance : null;
+
+                        if (tokenValue != null)
+                        {
+                            tokens.AddToken(tokenName, tokenValue.ToString(), isConventional: false);
+                        }
                     }
-                }
-                else if (parameters[i].ParameterType.IsArray
-                   && IsPrimitiveType(parameters[i].ParameterType.GetElementType())
-                   && !IgnoreHeader(parameters[i]))
-                {
-                    var arrayValues = (Array)action.ArgumentValues[i].Instance;
-
-                    if (arrayValues != null
-                        && arrayValues.Length != 0
-                        )
+                    else if (parameters[i].ParameterType.IsArray
+                       && IsPrimitiveType(parameters[i].ParameterType.GetElementType()))
                     {
-                        var tokenValue = GetTokenValue(arrayValues, tokenName);
-                        tokens.AddToken(tokenName, tokenValue, isConventional: false);
+                        var arrayValues = (Array)action.ArgumentValues[i].Instance;
+
+                        if (arrayValues != null
+                            && arrayValues.Length != 0
+                            )
+                        {
+                            var tokenValue = GetTokenValue(arrayValues, tokenName);
+                            tokens.AddToken(tokenName, tokenValue, isConventional: false);
+                        }
                     }
                 }
             }
