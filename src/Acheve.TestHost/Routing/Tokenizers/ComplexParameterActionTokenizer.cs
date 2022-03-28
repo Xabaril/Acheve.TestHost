@@ -18,7 +18,6 @@ namespace Acheve.TestHost.Routing.Tokenizers
                 var type = parameters[i].ParameterType;
                 var instance = action.ArgumentValues.Any(x => x.Key == i) ? action.ArgumentValues[i].Instance : null;
 
-
                 if (instance != null && !type.IsPrimitiveType())
                 {
                     if (!IgnoreBind(parameters[i]))

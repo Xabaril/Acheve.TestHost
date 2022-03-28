@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Acheve.TestHost.Routing.Tokenizers
+﻿namespace System
 {
     internal static class TypeExtensions
     {
