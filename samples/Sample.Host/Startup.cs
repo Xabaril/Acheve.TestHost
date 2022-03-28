@@ -17,7 +17,6 @@ namespace Sample.Host
                 .AddJwtBearer();
 
             services.AddControllers()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddApplicationPart(Assembly.Load(new AssemblyName("Sample.Api")));
 
             ApiConfiguration.Configure(services);

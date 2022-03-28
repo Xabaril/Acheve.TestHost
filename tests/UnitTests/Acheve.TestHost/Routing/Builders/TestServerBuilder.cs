@@ -35,7 +35,6 @@ namespace UnitTests.Acheve.TestHost.Builders
             public void ConfigureServices(IServiceCollection services)
             {
                 services.AddControllers()
-                    .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                     .AddApplicationPart(Assembly.Load(new AssemblyName("UnitTests")));
             }
 
