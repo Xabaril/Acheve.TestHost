@@ -2,9 +2,9 @@
 
 namespace Acheve.TestHost.Routing.Tokenizers
 {
-    public static class PrimitiveTypeHelper
+    internal static class TypeExtensions
     {
-        public static bool IsPrimitiveType(this Type typeToInspect)
+        internal static bool IsPrimitiveType(this Type typeToInspect)
         {
             var type = Nullable.GetUnderlyingType(typeToInspect) ?? typeToInspect;
 
