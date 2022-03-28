@@ -27,7 +27,7 @@ namespace System.Net.Http
         /// </summary>
         /// <typeparam name="T">Class</typeparam>
         /// <param name="responseMessage">The httpResponseMessage instance</param>
-        /// <returns></returns>
+        /// <returns>T class object</returns>
         public static async Task<T> ReadContentAsAsync<T>(this HttpResponseMessage responseMessage)
         {
             var json = await responseMessage.Content.ReadAsStringAsync();
