@@ -4,7 +4,7 @@
   <PropertyGroup Label="Package information">
     <Version>3.2.0</Version>
 
-    <PackageLicenseUrl>https://github.com/Xabaril/Acheve.TestHost/blob/master/LICENSE</PackageLicenseUrl>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>http://github.com/xabaril/Acheve.TestHost</PackageProjectUrl>
     <RepositoryUrl>http://github.com/xabaril/Acheve.TestHost</RepositoryUrl>
     <Authors>Xabaril Contributors</Authors>
