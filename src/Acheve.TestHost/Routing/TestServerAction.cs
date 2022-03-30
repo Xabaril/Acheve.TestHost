@@ -25,9 +25,10 @@ namespace Acheve.TestHost.Routing
             var isFromBody = argument.GetCustomAttributes<FromBodyAttribute>().Any();
             var isFromForm = argument.GetCustomAttributes<FromFormAttribute>().Any();
             var isFromHeader = argument.GetCustomAttributes<FromHeaderAttribute>().Any();
+            var isFromRoute = argument.GetCustomAttributes<FromRouteAttribute>().Any();
 
             bool isPrimitive = argument.ParameterType.IsPrimitive || argument.ParameterType.Name.Equals(typeof(string));
-            bool hasNoAttributes = !isFromBody && !isFromForm && !isFromHeader;
+            bool hasNoAttributes = !isFromBody && !isFromForm && !isFromHeader && !isFromRoute;
 
             if (activeBodyApiController && hasNoAttributes && !isPrimitive)
             {
@@ -78,6 +79,6 @@ namespace Acheve.TestHost.Routing
             }
         }
 
-        bool IsNullable(Type type) => Nullable.GetUnderlyingType(type) != null;
+        private bool IsNullable(Type type) => Nullable.GetUnderlyingType(type) != null;
     }
 }
