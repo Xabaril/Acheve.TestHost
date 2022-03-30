@@ -8,6 +8,53 @@ Unit testing your Mvc controllers is not enough to verify the correctness of you
 
 The NuGet package [Microsoft.AspNetCore.TestHost](https://www.nuget.org/packages/Microsoft.AspNetCore.TestHost/) allows you to create an in memory server that exposes an HttpClient to be able to send request to the server. All in memory, all in the same process. Fast. It's the best way to create integration tests in your Mvc application. But at this moment this library has some gaps that *Acheve* try to fill.
 
+## Get started
+
+To get started, we need to add a dependency to the API project as a refernce in the Test project.
+Now, we can choose whether to use IWebHost or WebApplicationFactory.
+
+### IWebHost
+
+We create the WebHost:
+
+```csharp
+_host = new WebHostBuilder()
+    .UseTestServer()
+    .UseStartup<TestStartup>()
+    .Build();
+
+await _host.StartAsync();
+```
+
+### WebApplicationFactory
+
+Firstly, we must add, in the API project, one of these options (only in Net 6 or later with current template):
+
+- In ".csproj":
+
+```xml
+<ItemGroup>
+    <InternalsVisibleTo Include="MyTestProjectName" />
+</ItemGroup>
+```
+
+- In "Program.cs":
+
+```csharp
+public partial class Program { }
+```
+
+We create the WebApplicationFactory:
+
+```csharp
+var application = new WebApplicationFactory<Program>()
+    .WithWebHostBuilder(builder =>
+    {
+        builder.UseStartup<TestStartup>()
+            .UseTestServer();
+    });
+```
+
 ## About Security
 
 But when your Mvc application requires an authenticated request it could be a little more dificult...
@@ -167,6 +214,92 @@ With *Acheve* you can create the uri dynamically using the attribute routing dir
 var response = await _server.CreateHttpApiRequest<ValuesController>(controller=>controller.PublicValues())
                 .GetAsync();
 
+```
+
+## Using xunit
+
+### ICollectionFixture with IWebHost
+
+Firstly, we create our own Fixture:
+
+```csharp
+public class TestHostFixture : IDisposable, IAsyncLifetime
+{
+    private IWebHost _host;
+
+    public TestServer Server => _host.GetTestServer();
+
+    public async Task InitializeAsync()
+    {
+        _host = new WebHostBuilder()
+            .UseTestServer()
+            .UseStartup<TestStartup>()
+            .Build();
+
+        await _host.StartAsync();
+    }
+
+    public void Dispose()
+    {
+        Server.Dispose();
+        _host.Dispose();
+    }
+
+    public Task DisposeAsync()
+    {
+        // Nothing here
+        return Task.CompletedTask;
+    }
+}
+```
+
+### ICollectionFixture with WebApplicationFactory
+
+```csharp
+public class TestHostFixture : WebApplicationFactory<TestStartup>
+{
+    protected override IWebHostBuilder CreateWebHostBuilder()
+    {
+        return WebHost.CreateDefaultBuilder();
+    }
+
+    protected override void ConfigureWebHost(IWebHostBuilder builder)
+    {
+        builder.UseStartup<TestStartup>()
+            .UseSolutionRelativeContentRoot("samples")
+            .UseTestServer();
+    }
+}
+```
+
+### Then
+
+After that, we can create a Collection to envelope this Fixture:
+
+```csharp
+[CollectionDefinition(nameof(ApiCollection))]
+public class ApiCollection : ICollectionFixture<TestHostFixture> { }
+```
+
+Now, we already have everything to start our tests:
+
+```csharp
+[Collection(nameof(ApiCollection))]
+public class MyTestsClass
+{
+    private readonly TestHostFixture _fixture;
+
+    public MyTestsClass(TestHostFixture fixture)
+    {
+        _fixture = fixture;
+    }
+
+    [Fact]
+    public async Task MyFirstTest()
+    {
+        //var response = await _fixture.Server.CreateHttpApiRequest...
+    }
+}
 ```
 
 ## License
