@@ -1515,6 +1515,32 @@ namespace UnitTests.Acheve.TestHost.Routing
                 .Should().Be($"api/bugs/prm1/{guid}");
         }
 
+        [Fact]
+        public async Task create_request_supporting_router_and_body_params()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var guid = Guid.NewGuid();
+            var person = new Person { FirstName = "john", LastName = "walter" };
+
+            var request = server.CreateHttpApiRequest<BugsController>(
+                actionSelector: controller => controller.AllowRouterAndBodyParams(guid, person),
+                tokenValues: null);
+
+            var responseMessage = await request.PostAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            var response = await responseMessage.ReadContentAsAsync<RouterAndBodyParamsResponse>();
+
+            response.Should().NotBeNull();
+            response.TestId.Should().Be(guid);
+            response.Person.Should().NotBeNull();
+            response.Person.FirstName.Should().Be(person.FirstName);
+            response.Person.LastName.Should().Be(person.LastName);
+        }
+
         private class PrivateNonControllerClass
         {
             public int SomeAction()

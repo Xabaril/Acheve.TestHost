@@ -50,5 +50,11 @@ namespace UnitTests.Acheve.TestHost.Builders
         {
             return Ok(param1);
         }
+
+        [HttpPost("{test_id:guid}")]
+        public ActionResult<RouterAndBodyParamsResponse> AllowRouterAndBodyParams([FromRoute] Guid test_id, [FromBody] Person person)
+        {
+            return Ok(new RouterAndBodyParamsResponse { TestId = test_id, Person = person });
+        }
     }
 }
