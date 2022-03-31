@@ -56,5 +56,11 @@ namespace UnitTests.Acheve.TestHost.Builders
         {
             return Ok(new RouterAndBodyParamsResponse { TestId = test_id, Person = person });
         }
+
+        [HttpGet("{param1:int:min(1)}/params/{param2:int:min(1)}")]
+        public ActionResult<string> GetWithSeveralColon(int param1, int param2)
+        {
+            return Ok($"{param1}/{param2}");
+        }
     }
 }

@@ -1541,6 +1541,25 @@ namespace UnitTests.Acheve.TestHost.Routing
             response.Person.LastName.Should().Be(person.LastName);
         }
 
+        [Fact]
+        public async Task create_request_supporting_template_with_serveral_colon()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+            const int param1 = 1;
+            const int param2 = 2;
+
+            var request = server.CreateHttpApiRequest<BugsController>(controller => controller.GetWithSeveralColon(param1, param2));
+
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            var response = await responseMessage.Content.ReadAsStringAsync();
+
+            response.Should().NotBeNull().And.Be($"{param1}/{param2}");
+        }
+
         private class PrivateNonControllerClass
         {
             public int SomeAction()
