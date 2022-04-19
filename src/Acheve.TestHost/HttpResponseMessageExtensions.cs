@@ -1,3 +1,4 @@
+using Newtonsoft.Json;
 using System.Threading.Tasks;
 
 namespace System.Net.Http
@@ -19,6 +20,19 @@ namespace System.Net.Http
             var content = await response.Content.ReadAsStringAsync();
 
             throw new Exception($"Response status does not indicate success: {response.StatusCode:D} ({response.StatusCode}); \r\n{content}");
+        }
+
+        /// <summary>
+        /// Read HttpResponseMessage and convert to T Class
+        /// </summary>
+        /// <typeparam name="T">Class</typeparam>
+        /// <param name="responseMessage">The httpResponseMessage instance</param>
+        /// <returns>T class object</returns>
+        public static async Task<T> ReadContentAsAsync<T>(this HttpResponseMessage responseMessage)
+        {
+            var json = await responseMessage.Content.ReadAsStringAsync();
+
+            return JsonConvert.DeserializeObject<T>(json);
         }
     }
 }

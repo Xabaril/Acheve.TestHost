@@ -13,7 +13,6 @@ namespace Acheve.TestHost.Routing
 
         public Dictionary<int, TestServerArgument> ArgumentValues { get; private set; }
 
-
         public TestServerAction(MethodInfo methodInfo)
         {
             MethodInfo = methodInfo ?? throw new ArgumentNullException(nameof(methodInfo));
@@ -26,9 +25,10 @@ namespace Acheve.TestHost.Routing
             var isFromBody = argument.GetCustomAttributes<FromBodyAttribute>().Any();
             var isFromForm = argument.GetCustomAttributes<FromFormAttribute>().Any();
             var isFromHeader = argument.GetCustomAttributes<FromHeaderAttribute>().Any();
+            var isFromRoute = argument.GetCustomAttributes<FromRouteAttribute>().Any();
 
             bool isPrimitive = argument.ParameterType.IsPrimitive || argument.ParameterType.Name.Equals(typeof(string));
-            bool hasNoAttributes = !isFromBody && !isFromForm && !isFromHeader;
+            bool hasNoAttributes = !isFromBody && !isFromForm && !isFromHeader && !isFromRoute;
 
             if (activeBodyApiController && hasNoAttributes && !isPrimitive)
             {
@@ -37,25 +37,48 @@ namespace Acheve.TestHost.Routing
 
             if (!ArgumentValues.ContainsKey(order))
             {
-                switch (expression)
+                if (IsNullable(argument.ParameterType))
                 {
-                    case ConstantExpression constant:
-                        {
-                            ArgumentValues.Add(order, new TestServerArgument(constant.Value?.ToString(), isFromBody, isFromForm, isFromHeader, argument.Name));
-                        }
-                        break;
-                    case MemberExpression member when member.NodeType == ExpressionType.MemberAccess:
-                        {
-                            var instance = Expression.Lambda(member)
-                                .Compile()
-                                .DynamicInvoke();
+                    var expressionValue = Expression.Lambda(expression).Compile().DynamicInvoke();
 
-                            ArgumentValues.Add(order, new TestServerArgument(instance, isFromBody, isFromForm, isFromHeader, argument.Name));
-                        }
-                        break;
-                    default: return;
+                    if (expressionValue != null)
+                    {
+                        ArgumentValues.Add(order, new TestServerArgument(expressionValue.ToString(), isFromBody, isFromForm, isFromHeader, argument.Name));
+                    }
+                }
+                else
+                {
+                    switch (expression)
+                    {
+                        case ConstantExpression constant:
+                            {
+                                ArgumentValues.Add(order, new TestServerArgument(constant.Value?.ToString(), isFromBody, isFromForm, isFromHeader, argument.Name));
+                            }
+                            break;
+
+                        case MemberExpression member when member.NodeType == ExpressionType.MemberAccess:
+                            {
+                                var instance = Expression.Lambda(member)
+                                    .Compile()
+                                    .DynamicInvoke();
+
+                                ArgumentValues.Add(order, new TestServerArgument(instance, isFromBody, isFromForm, isFromHeader, argument.Name));
+                            }
+                            break;
+
+                        case MethodCallExpression method:
+                            {
+                                var instance = Expression.Lambda(method).Compile().DynamicInvoke();
+                                ArgumentValues.Add(order, new TestServerArgument(instance, isFromBody, isFromForm, isFromHeader, argument.Name));
+                            }
+                            break;
+
+                        default: return;
+                    }
                 }
             }
         }
+
+        private bool IsNullable(Type type) => Nullable.GetUnderlyingType(type) != null;
     }
 }

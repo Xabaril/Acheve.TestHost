@@ -5,14 +5,14 @@ using System.Text.RegularExpressions;
 
 namespace Acheve.TestHost.Routing.AttributeTemplates
 {
-    abstract class AttributeTemplateSelector
+    internal abstract class AttributeTemplateSelector
     {
         public abstract IEnumerable<string> GetTemplates<TController>(TestServerAction action,
             TestServerTokenCollection tokens) where TController : class;
 
         public virtual string SubstituteTokens(string template, TestServerTokenCollection tokens)
         {
-            var regex_pattern = "{[a-zA-Z0-9?]*:??[a-zA-Z0-9]*}";
+            var regex_pattern = @"{[a-zA-Z0-9_?]*:??[a-zA-Z0-9]*:??[a-zA-Z0-9()]*}";
 
             template = template.ToLowerInvariant();
 

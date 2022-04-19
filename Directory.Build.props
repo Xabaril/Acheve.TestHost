@@ -2,15 +2,16 @@
   <Import Project="build/dependencies.props" />
 
   <PropertyGroup Label="Package information">
-    <Version>3.1.0</Version>
-    <PackageLicenseUrl>https://github.com/Xabaril/Acheve.TestHost/blob/master/LICENSE</PackageLicenseUrl>
+    <Version>3.2.0</Version>
+
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>http://github.com/xabaril/Acheve.TestHost</PackageProjectUrl>
     <RepositoryUrl>http://github.com/xabaril/Acheve.TestHost</RepositoryUrl>
     <Authors>Xabaril Contributors</Authors>
     <Company>Xabaril</Company>
     <Description>Achve.TestHost is a nuget package to improve TestServer experiences.
     For more information see http://github.com/Xabaril/Acheve.TestHost</Description>
-    <Tags>TestHost;TestServer</Tags>
+    <PackageTags>TestHost;TestServer</PackageTags>
 
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <IncludeSymbols>true</IncludeSymbols>

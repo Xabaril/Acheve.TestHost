@@ -1,11 +1,10 @@
-﻿using System.Reflection;
-using System.Threading.Tasks;
-using Acheve.AspNetCore.TestHost.Security;
+﻿using Acheve.AspNetCore.TestHost.Security;
 using Acheve.TestHost;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Sample.Api;
+using System.Reflection;
+using System.Threading.Tasks;
 
 namespace Sample.IntegrationTests
 {
@@ -38,9 +37,8 @@ namespace Sample.IntegrationTests
                  });
 
             services.AddControllers()
-                .SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
                 .AddApplicationPart(Assembly.Load(new AssemblyName("Sample.Api")));
-            
+
             ApiConfiguration.Configure(services);
         }
 

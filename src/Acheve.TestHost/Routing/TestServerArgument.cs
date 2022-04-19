@@ -9,9 +9,9 @@
              bool isFromHeader = false,
              string headerName = null)
         {
-            Instance = instance; Instance = instance;
-            IsFromBody = isFromBody; IsFromBody = isFromBody;
-            IsFromForm = isFromForm; IsFromForm = isFromForm;
+            Instance = instance;
+            IsFromBody = isFromBody;
+            IsFromForm = isFromForm;
             IsFromHeader = isFromHeader;
             HeaderName = isFromHeader ? headerName : null;
         }

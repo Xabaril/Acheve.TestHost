@@ -1,11 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 
 namespace Acheve.TestHost.Routing.Tokenizers
 {
-    class PrimitiveParameterActionTokenizer
+    internal class PrimitiveParameterActionTokenizer
         : ITokenizer
     {
         public void AddTokens<TController>(TestServerAction action, TestServerTokenCollection tokens)
@@ -15,27 +16,37 @@ namespace Acheve.TestHost.Routing.Tokenizers
 
             for (var i = 0; i < parameters.Length; i++)
             {
-                if ((parameters[i].ParameterType.IsPrimitive
-                    ||
-                    parameters[i].ParameterType == typeof(string)
-                    ||
-                    parameters[i].ParameterType == typeof(decimal)
-                    ||
-                    parameters[i].ParameterType == typeof(Guid))
-                    && !IgnoreHeader(parameters[i]))
+                if (!IgnoreHeader(parameters[i]))
                 {
                     var tokenName = parameters[i].Name.ToLowerInvariant();
-                    var tokenValue = action.ArgumentValues[i].Instance;
 
-                    if (tokenValue != null)
+                    if (parameters[i].ParameterType.IsPrimitiveType())
                     {
-                        tokens.AddToken(tokenName, tokenValue.ToString(), isConventional: false);
+                        var tokenValue = action.ArgumentValues.Any(x => x.Key == i) ? action.ArgumentValues[i].Instance : null;
+
+                        if (tokenValue != null)
+                        {
+                            tokens.AddToken(tokenName, tokenValue.ToString(), isConventional: false);
+                        }
+                    }
+                    else if (parameters[i].ParameterType.IsArray
+                       && IsPrimitiveType(parameters[i].ParameterType.GetElementType()))
+                    {
+                        var arrayValues = (Array)action.ArgumentValues[i].Instance;
+
+                        if (arrayValues != null
+                            && arrayValues.Length != 0
+                            )
+                        {
+                            var tokenValue = GetTokenValue(arrayValues, tokenName);
+                            tokens.AddToken(tokenName, tokenValue, isConventional: false);
+                        }
                     }
                 }
             }
         }
 
-        bool IgnoreHeader(ParameterInfo parameter)
+        private bool IgnoreHeader(ParameterInfo parameter)
         {
             var attributes = parameter.GetCustomAttributes(false);
 
@@ -45,6 +56,26 @@ namespace Acheve.TestHost.Routing.Tokenizers
             }
 
             return false;
+        }
+
+        private bool IsPrimitiveType(Type type)
+        {
+            return type.IsPrimitive
+                || type == typeof(string)
+                || type == typeof(decimal)
+                || type == typeof(Guid);
+        }
+
+        private string GetTokenValue(Array array, string tokenName)
+        {
+            var list = new List<string>();
+
+            foreach (var element in array)
+            {
+                list.Add(element.ToString());
+            }
+
+            return string.Join($"&{tokenName}=", list);
         }
     }
 }
