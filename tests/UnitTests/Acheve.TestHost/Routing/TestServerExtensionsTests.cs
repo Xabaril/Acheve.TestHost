@@ -16,6 +16,12 @@ namespace UnitTests.Acheve.TestHost.Routing
 {
     public class create_api_request_should
     {
+        public const string BASE_PATH = "api/";
+        public const string BASE_PATH_BUGS = BASE_PATH + "bugs";
+        public const string BASE_PATH_BUGS_CONTROLLER_NAME = BASE_PATH + "Bugs";
+        public const string BASE_PATH_VALUES = BASE_PATH + "values";
+        public const string BASE_PATH_VALUES_CONTROLLER_NAME = BASE_PATH + "Values";
+
         [Fact]
         public void throw_when_controller_is_not_a_valid_controller()
         {
@@ -69,7 +75,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Get(0));
 
             request.GetConfiguredAddress()
-                .Should().Be("api/values?id=0");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}?id=0");
         }
 
         [Fact]
@@ -83,7 +89,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.GetStringAsParameter("unai"));
 
             request.GetConfiguredAddress()
-                .Should().Be("api/values/stringasprimitive?value=unai");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/stringasprimitive?value=unai");
         }
 
         [Fact]
@@ -97,7 +103,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.GetStringAsParameter("Uppercase"));
 
             request.GetConfiguredAddress()
-                .Should().Be("api/values/stringasprimitive?value=Uppercase");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/stringasprimitive?value=Uppercase");
         }
 
         [Fact]
@@ -111,7 +117,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.GetDecimalAsParameter(2m));
 
             request.GetConfiguredAddress()
-                .Should().Be("api/values/decimalasprimitive?value=2");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/decimalasprimitive?value=2");
         }
 
         [Fact]
@@ -148,16 +154,16 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Delete2(3));
 
             requestGet.GetConfiguredAddress()
-                .Should().Be("api/values/overridemethodname?id=0");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname?id=0");
 
             requestPut.GetConfiguredAddress()
-                .Should().Be("api/values/overridemethodname?id=1");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname?id=1");
 
             requestPost.GetConfiguredAddress()
-                .Should().Be("api/values/overridemethodname?id=2");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname?id=2");
 
             requestDelete.GetConfiguredAddress()
-                .Should().Be("api/values/overridemethodname?id=3");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname?id=3");
         }
 
         [Fact]
@@ -180,16 +186,16 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Delete3(3));
 
             requestGet.GetConfiguredAddress()
-                .Should().Be("api/values/overridemethodname/0");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/0");
 
             requestPut.GetConfiguredAddress()
-                .Should().Be("api/values/overridemethodname/1");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/1");
 
             requestPost.GetConfiguredAddress()
-                .Should().Be("api/values/overridemethodname/2");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/2");
 
             requestDelete.GetConfiguredAddress()
-                .Should().Be("api/values/overridemethodname/3");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/3");
         }
 
         [Fact]
@@ -212,16 +218,16 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Delete4(3), new { version = "v1" });
 
             requestGet.GetConfiguredAddress()
-                .Should().Be("api/values/overridemethodname/v1/0");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/v1/0");
 
             requestPut.GetConfiguredAddress()
-                .Should().Be("api/values/overridemethodname/v1/1");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/v1/1");
 
             requestPost.GetConfiguredAddress()
-                .Should().Be("api/values/overridemethodname/v1/2");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/v1/2");
 
             requestDelete.GetConfiguredAddress()
-                .Should().Be("api/values/overridemethodname/v1/3");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/v1/3");
         }
 
         [Fact]
@@ -235,7 +241,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Get4(0), new { Version = "v1" });
 
             requestGet.GetConfiguredAddress()
-                .Should().Be("api/values/overridemethodname/v1/0");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/v1/0");
         }
 
         [Fact]
@@ -258,16 +264,16 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Delete5(0));
 
             requestGet.GetConfiguredAddress()
-                .Should().Be("api/values/overrideroutetemplatemethodname?id=0");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname?id=0");
 
             requestPut.GetConfiguredAddress()
-                .Should().Be("api/values/overrideroutetemplatemethodname?id=0");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname?id=0");
 
             requestPost.GetConfiguredAddress()
-                .Should().Be("api/values/overrideroutetemplatemethodname?id=0");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname?id=0");
 
             requestDelete.GetConfiguredAddress()
-                .Should().Be("api/values/overrideroutetemplatemethodname?id=0");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname?id=0");
         }
 
         [Fact]
@@ -290,16 +296,16 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Delete6(3), new { version = "v1" });
 
             requestGet.GetConfiguredAddress()
-                .Should().Be("api/values/overrideroutetemplatemethodname/v1/0");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname/v1/0");
 
             requestPut.GetConfiguredAddress()
-                .Should().Be("api/values/overrideroutetemplatemethodname/v1/1");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname/v1/1");
 
             requestPost.GetConfiguredAddress()
-                .Should().Be("api/values/overrideroutetemplatemethodname/v1/2");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname/v1/2");
 
             requestDelete.GetConfiguredAddress()
-                .Should().Be("api/values/overrideroutetemplatemethodname/v1/3");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname/v1/3");
         }
 
         [Fact]
@@ -322,16 +328,16 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Delete7(3));
 
             requestGet.GetConfiguredAddress()
-                .Should().Be("api/values/overrideroutetemplatemethodname/0");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname/0");
 
             requestPut.GetConfiguredAddress()
-                .Should().Be("api/values/overrideroutetemplatemethodname/1");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname/1");
 
             requestPost.GetConfiguredAddress()
-                .Should().Be("api/values/overrideroutetemplatemethodname/2");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname/2");
 
             requestDelete.GetConfiguredAddress()
-                .Should().Be("api/values/overrideroutetemplatemethodname/3");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname/3");
         }
 
         [Fact]
@@ -354,16 +360,16 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Delete8(3));
 
             requestGet.GetConfiguredAddress()
-                .Should().Be("api/values/overridemethodname/0");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/0");
 
             requestPut.GetConfiguredAddress()
-                .Should().Be("api/values/overridemethodname/1");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/1");
 
             requestPost.GetConfiguredAddress()
-                .Should().Be("api/values/overridemethodname/2");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/2");
 
             requestDelete.GetConfiguredAddress()
-                .Should().Be("api/values/overridemethodname/3");
+                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/3");
         }
 
         [Fact]
@@ -383,7 +389,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Get2(complexParameter));
 
             requestGet.GetConfiguredAddress()
-                .Should().Be("api/values/get2/1/10");
+                .Should().Be($"{BASE_PATH_VALUES}/get2/1/10");
         }
 
         [Fact]
@@ -402,7 +408,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Get2(complexParameter));
 
             requestGet.GetConfiguredAddress()
-                .Should().Be("api/values/get2/1");
+                .Should().Be($"{BASE_PATH_VALUES}/get2/1");
         }
 
         [Fact]
@@ -422,7 +428,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Get1(complexParameter));
 
             requestGet.GetConfiguredAddress()
-                .Should().Be("api/values/get1?pageindex=1&pagecount=10");
+                .Should().Be($"{BASE_PATH_VALUES}/get1?pageindex=1&pagecount=10");
         }
 
         [Fact]
@@ -441,7 +447,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Get1(complexParameter));
 
             requestGet.GetConfiguredAddress()
-                .Should().Be("api/values/get1?pageindex=1");
+                .Should().Be($"{BASE_PATH_VALUES}/get1?pageindex=1");
         }
 
         [Fact]
@@ -461,7 +467,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Get4(complexParameter));
 
             requestGet.GetConfiguredAddress()
-                .Should().Be("api/values/get4/1/10");
+                .Should().Be($"{BASE_PATH_VALUES}/get4/1/10");
         }
 
         [Fact]
@@ -491,16 +497,16 @@ namespace UnitTests.Acheve.TestHost.Routing
 
             request.GetRequest().Headers.GetValues("custom").First().Should().Be(header);
             request.GetConfiguredAddress()
-                .Should().Be("api/values/get5?pageindex=1&pagecount=10");
+                .Should().Be($"{BASE_PATH_VALUES}/get5?pageindex=1&pagecount=10");
 
             requestMultipleHeader.GetRequest().Headers.GetValues("custom1").First().Should().Be(header);
             requestMultipleHeader.GetRequest().Headers.GetValues("custom2").First().Should().Be(numberHeader.ToString());
             requestMultipleHeader.GetConfiguredAddress()
-                .Should().Be("api/values/get6?pageindex=1&pagecount=10");
+                .Should().Be($"{BASE_PATH_VALUES}/get6?pageindex=1&pagecount=10");
 
             requestOnlyHeader.GetRequest().Headers.GetValues("custom").First().Should().Be(header);
             requestOnlyHeader.GetConfiguredAddress()
-                .Should().Be("api/values/get7");
+                .Should().Be($"{BASE_PATH_VALUES}/get7");
         }
 
         [Fact]
@@ -519,7 +525,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Get4(complexParameter));
 
             requestGet.GetConfiguredAddress()
-                .Should().Be("api/values/get4/1");
+                .Should().Be($"{BASE_PATH_VALUES}/get4/1");
         }
 
         [Fact]
@@ -539,7 +545,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Get3(complexParameter));
 
             requestGet.GetConfiguredAddress()
-                .Should().Be("api/values/get3?pageindex=1&pagecount=10");
+                .Should().Be($"{BASE_PATH_VALUES}/get3?pageindex=1&pagecount=10");
         }
 
         [Fact]
@@ -558,7 +564,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Get3(complexParameter));
 
             requestGet.GetConfiguredAddress()
-                .Should().Be("api/values/get3?pageindex=1");
+                .Should().Be($"{BASE_PATH_VALUES}/get3?pageindex=1");
         }
 
         [Fact]
@@ -578,7 +584,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Post1(complexParameter));
 
             requestPost.GetConfiguredAddress()
-                .Should().Be("api/values/");
+                .Should().Be($"{BASE_PATH_VALUES}/");
         }
 
         [Fact]
@@ -597,7 +603,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Post1(complexParameter));
 
             requestPost.GetConfiguredAddress()
-                .Should().Be("api/values/");
+                .Should().Be($"{BASE_PATH_VALUES}/");
         }
 
         [Fact]
@@ -619,7 +625,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 new IncludeContentAsFormUrlEncoded());
 
             requestPost.GetConfiguredAddress()
-                .Should().Be("api/values/post3");
+                .Should().Be($"{BASE_PATH_VALUES}/post3");
         }
 
         [Fact]
@@ -640,7 +646,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 new IncludeContentAsFormUrlEncoded());
 
             requestPost.GetConfiguredAddress()
-                .Should().Be("api/values/post3");
+                .Should().Be($"{BASE_PATH_VALUES}/post3");
         }
 
         [Fact]
@@ -660,7 +666,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Post2(2, complexParameter));
 
             requestPost.GetConfiguredAddress()
-                .Should().Be("api/values/post/2");
+                .Should().Be($"{BASE_PATH_VALUES}/post/2");
         }
 
         [Fact]
@@ -679,7 +685,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Post2(2, complexParameter));
 
             requestPost.GetConfiguredAddress()
-                .Should().Be("api/values/post/2");
+                .Should().Be($"{BASE_PATH_VALUES}/post/2");
         }
 
         [Fact]
@@ -701,7 +707,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 new IncludeContentAsFormUrlEncoded());
 
             requestPost.GetConfiguredAddress()
-                .Should().Be("api/values/post4/2");
+                .Should().Be($"{BASE_PATH_VALUES}/post4/2");
         }
 
         [Fact]
@@ -717,7 +723,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Post5(header));
             requestPost.GetRequest().Headers.GetValues("custom").First().Should().Be(header);
             requestPost.GetConfiguredAddress()
-               .Should().Be("api/values/post5");
+               .Should().Be($"{BASE_PATH_VALUES}/post5");
         }
 
         [Fact]
@@ -738,7 +744,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                controller => controller.Post6(header, complexParameter));
 
             requestPost2.GetRequest().Headers.GetValues("custom").First().Should().Be(header);
-            requestPost2.GetConfiguredAddress().Should().Be("api/values/post6");
+            requestPost2.GetConfiguredAddress().Should().Be($"{BASE_PATH_VALUES}/post6");
         }
 
         [Fact]
@@ -759,7 +765,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 new IncludeContentAsFormUrlEncoded());
 
             requestPost.GetConfiguredAddress()
-                .Should().Be("api/values/post4/2");
+                .Should().Be($"{BASE_PATH_VALUES}/post4/2");
         }
 
         //[Fact]
@@ -779,7 +785,7 @@ namespace UnitTests.Acheve.TestHost.Routing
         //        controller => controller.Post3(2, complexParameter, complexParameter));
 
         //    requestPost.GetConfiguredAddress()
-        //        .Should().Be("api/values/post/2/1/10");
+        //        .Should().Be($"{BASE_PATH_VALUES}/post/2/1/10");
         //}
 
         [Fact]
@@ -1266,7 +1272,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 contentOptions: new NotIncludeContent());
 
             request.GetConfiguredAddress()
-                .Should().Be($"api/bugs/prm1/{guidValue}");
+                .Should().Be($"{BASE_PATH_BUGS_CONTROLLER_NAME}/prm1/{guidValue}");
         }
 
         [Fact]
@@ -1305,7 +1311,52 @@ namespace UnitTests.Acheve.TestHost.Routing
             string body = requestPost2.GetRequest().Content.ReadAsStringAsync().Result;
             JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
             JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
-            requestPost2.GetConfiguredAddress().StartsWith("api/values/1").Should().Be(true);
+            requestPost2.GetConfiguredAddress().StartsWith($"{BASE_PATH_VALUES}/1").Should().Be(true);
+        }
+
+        [Fact]
+        public void create_valid_request_without_using_frombody_with_apicontroller_and_string_parameter_in_route()
+        {
+            var server = new TestServerBuilder().UseDefaultStartup()
+                                                .Build();
+
+            var complexParameter = new Pagination()
+            {
+                PageCount = 10,
+                PageIndex = 1
+            };
+
+            string id = "A1";
+
+            var requestPost3 = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.Post3($"{id}", complexParameter));
+
+            string body = requestPost3.GetRequest().Content.ReadAsStringAsync().Result;
+            JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
+            JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
+            requestPost3.GetConfiguredAddress().StartsWith($"{BASE_PATH_VALUES}/{id}").Should().Be(true);
+        }
+
+        [Theory]
+        [InlineData(null)]
+        [InlineData("")]
+        [InlineData(" ")]
+        public void create_valid_request_without_using_frombody_with_apicontroller_and_string_parameter_with_invalid_value(string id)
+        {
+            var server = new TestServerBuilder().UseDefaultStartup()
+                                                .Build();
+
+            var complexParameter = new Pagination()
+            {
+                PageCount = 10,
+                PageIndex = 1
+            };
+
+            var requestPost3 = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.Post3($"{id}", complexParameter));
+
+            string body = requestPost3.GetRequest().Content.ReadAsStringAsync().Result;
+            JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
+            JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
+            requestPost3.GetConfiguredAddress().StartsWith($"{BASE_PATH_VALUES}/").Should().Be(true);
         }
 
         [Fact]
@@ -1325,7 +1376,7 @@ namespace UnitTests.Acheve.TestHost.Routing
             string body = requestPost2.GetRequest().Content.ReadAsStringAsync().Result;
             JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
             JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
-            requestPost2.GetConfiguredAddress().StartsWith("api/values/1").Should().Be(true);
+            requestPost2.GetConfiguredAddress().StartsWith($"{BASE_PATH_VALUES}/1").Should().Be(true);
         }
 
         [Fact]
@@ -1343,7 +1394,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 contentOptions: new NotIncludeContent());
 
             request.GetConfiguredAddress()
-                .Should().Be($"api/bugs/{guid}/10");
+                .Should().Be($"{BASE_PATH_BUGS_CONTROLLER_NAME}/{guid}/10");
         }
 
         [Fact]
@@ -1512,7 +1563,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 contentOptions: new NotIncludeContent());
 
             request.GetConfiguredAddress()
-                .Should().Be($"api/bugs/prm1/{guid}");
+                .Should().Be($"{BASE_PATH_BUGS_CONTROLLER_NAME}/prm1/{guid}");
         }
 
         [Fact]
