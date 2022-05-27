@@ -1611,6 +1611,68 @@ namespace UnitTests.Acheve.TestHost.Routing
             response.Should().NotBeNull().And.Be($"{param1}/{param2}");
         }
 
+        [Fact]
+        public async Task create_request_and_add_parameter()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var id = new Random().Next(1, 100);
+
+            var request = server.CreateHttpApiRequest<ValuesController>(controller => controller.GetParameterFromRequestQuery())
+                .AddQueryParameter(nameof(id), id);
+            
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            var response = await responseMessage.Content.ReadAsStringAsync();
+
+            response.Should().Be(id.ToString());
+        }
+
+        [Fact]
+        public async Task create_request_and_add_additional_parameter()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var id1 = new Random().Next(1, 100);
+            var id2 = new Random().Next(1, 100);
+
+            var request = server.CreateHttpApiRequest<ValuesController>(controller => controller.GetAdditionalParameterFromRequestQuery(id1))
+                .AddQueryParameter(nameof(id2), id2);
+
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            var response = await responseMessage.Content.ReadAsStringAsync();
+
+            response.Should().Be(JsonSerializer.Serialize(new { id1 = id1.ToString(), id2 = id2.ToString() }));
+        }
+
+        [Fact]
+        public async Task create_request_and_add_parameter_when_you_have_path_parameter()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var id1 = new Random().Next(1, 100);
+            var id2 = new Random().Next(1, 100);
+
+            var request = server.CreateHttpApiRequest<ValuesController>(controller => controller.GetAdditionalParameterFromRequestQueryAndPath(id1))
+                .AddQueryParameter(nameof(id2), id2);
+
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            var response = await responseMessage.Content.ReadAsStringAsync();
+
+            response.Should().Be(JsonSerializer.Serialize(new { id1 = id1.ToString(), id2 = id2.ToString() }));
+        }
+
         private class PrivateNonControllerClass
         {
             public int SomeAction()

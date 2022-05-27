@@ -81,5 +81,27 @@ namespace Microsoft.AspNetCore.TestHost
 
             return header.ToString();
         }
+
+        /// <summary>
+        /// Add the given parameter and value to the request
+        /// </summary>
+        /// <typeparam name="T">Type of the value to be casted to string</typeparam>
+        /// <param name="requestBuilder">The requestBuilder instance</param>
+        /// <param name="name">Parameter name</param>
+        /// <param name="value">Parameter value</param>
+        /// <returns>RequestBuilder instance</returns>
+        public static RequestBuilder AddQueryParameter<T>(this RequestBuilder requestBuilder, string name, T value)
+        {
+            requestBuilder.And(configure =>
+            {
+                var separatoChar = '?';
+                if (configure.RequestUri.ToString().Contains(separatoChar))
+                    separatoChar = '&';
+                
+                configure.RequestUri = new Uri($"{configure.RequestUri}{separatoChar}{Uri.EscapeDataString(name)}={Uri.EscapeDataString(value.ToString())}", UriKind.Relative);
+            });
+
+            return requestBuilder;
+        }
     }
 }
