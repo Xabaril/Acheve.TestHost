@@ -65,6 +65,30 @@ namespace UnitTests.Acheve.TestHost.Builders
             return Ok();
         }
 
+        [HttpGet(nameof(GetParameterFromRequestQuery))]
+        public ActionResult<string> GetParameterFromRequestQuery()
+        {
+            this.HttpContext.Request.Query.TryGetValue("id", out var id);
+            
+            return Ok(id.ToString());
+        }
+
+        [HttpGet(nameof(GetAdditionalParameterFromRequestQuery))]
+        public ActionResult<string> GetAdditionalParameterFromRequestQuery(int id1)
+        {
+            this.HttpContext.Request.Query.TryGetValue("id2", out var id2);
+
+            return Ok(new { id1 = id1.ToString(), id2 = id2.ToString() });
+        }
+
+        [HttpGet(nameof(GetAdditionalParameterFromRequestQueryAndPath) + "/{id1:int}")]
+        public ActionResult<string> GetAdditionalParameterFromRequestQueryAndPath(int id1)
+        {
+            this.HttpContext.Request.Query.TryGetValue("id2", out var id2);
+
+            return Ok(new { id1 = id1.ToString(), id2 = id2.ToString() });
+        }
+
         [HttpPost("OverrideMethodName")]
         public IActionResult Post2(int id = 0)
         {
