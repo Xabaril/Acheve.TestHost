@@ -1,44 +1,44 @@
 ﻿<Project>
-	<PropertyGroup Label="Package Versions">
-		<NetCoreVersion3>3.1.23</NetCoreVersion3>
-		<NetCoreVersion5>5.0.15</NetCoreVersion5>
-		<NetCoreVersion6>6.0.3</NetCoreVersion6>
-	</PropertyGroup>
-	
-	<ItemGroup Label="General Dependencies">
-		<PackageVersion Include="Newtonsoft.Json" Version="13.0.1" />
-	</ItemGroup>
-	
-	<ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
-		<PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="$(NetCoreVersion3)" />
-		<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(NetCoreVersion3)" />
+    <PropertyGroup Label="Package Versions">
+        <NetCoreVersion3>3.1.23</NetCoreVersion3>
+        <NetCoreVersion5>5.0.15</NetCoreVersion5>
+        <NetCoreVersion6>6.0.3</NetCoreVersion6>
+    </PropertyGroup>
 
-		<PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(NetCoreVersion3)" />
-	</ItemGroup>
-	
-	<ItemGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
-		<PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="$(NetCoreVersion5)" />
-		<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(NetCoreVersion5)" />
+    <ItemGroup Label="General Dependencies">
+        <PackageVersion Include="Newtonsoft.Json" Version="13.0.1" />
+    </ItemGroup>
 
-		<PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(NetCoreVersion5)" />
-	</ItemGroup>
-	
-	<ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
-		<PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="$(NetCoreVersion6)" />
-		<PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(NetCoreVersion6)" />
+    <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
+        <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="$(NetCoreVersion3)" />
+        <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(NetCoreVersion3)" />
 
-		<PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(NetCoreVersion6)" />
-	</ItemGroup>
-	
-	<ItemGroup Label="Testing Dependencies">
-		<PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
-		<PackageVersion Include="FluentAssertions" Version="6.5.1" />
-		<PackageVersion Include="xunit" Version="2.4.1" />
-		<PackageVersion Include="xunit.runner.visualstudio" Version="2.4.3" />
-		<PackageVersion Include="coverlet.collector" Version="3.0.0" />
-	</ItemGroup>
+        <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(NetCoreVersion3)" />
+    </ItemGroup>
 
-	<ItemGroup Label="Github">
-		<PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
-	</ItemGroup>
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
+        <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="$(NetCoreVersion5)" />
+        <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(NetCoreVersion5)" />
+
+        <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(NetCoreVersion5)" />
+    </ItemGroup>
+
+    <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+        <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="$(NetCoreVersion6)" />
+        <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(NetCoreVersion6)" />
+
+        <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(NetCoreVersion6)" />
+    </ItemGroup>
+
+    <ItemGroup Label="Testing Dependencies">
+        <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+        <PackageVersion Include="FluentAssertions" Version="6.5.1" />
+        <PackageVersion Include="xunit" Version="2.4.1" />
+        <PackageVersion Include="xunit.runner.visualstudio" Version="2.4.3" />
+        <PackageVersion Include="coverlet.collector" Version="3.0.0" />
+    </ItemGroup>
+
+    <ItemGroup Label="Github">
+        <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
+    </ItemGroup>
 </Project>
