@@ -98,7 +98,7 @@ namespace Microsoft.AspNetCore.TestHost
                 if (configure.RequestUri.ToString().Contains(separatoChar))
                     separatoChar = '&';
                 
-                configure.RequestUri = new Uri($"{configure.RequestUri}{separatoChar}{name}={value}", UriKind.Relative);
+                configure.RequestUri = new Uri($"{configure.RequestUri}{separatoChar}{Uri.EscapeDataString(name)}={Uri.EscapeDataString(value.ToString())}", UriKind.Relative);
             });
 
             return requestBuilder;
