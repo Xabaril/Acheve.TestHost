@@ -1,33 +1,39 @@
 ﻿<Project>
-  <Import Project="build/dependencies.props" />
+	<PropertyGroup Label="SDK Versions">
+		<NetCoreTargetVersion>netcoreapp3.1;net5.0;net6.0</NetCoreTargetVersion>
+		<LangVersion>latest</LangVersion>
+		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+	</PropertyGroup>
 
-  <PropertyGroup Label="Package information">
-    <Version>3.2.0</Version>
+	<PropertyGroup Label="Package information">
+		<Version>3.2.0</Version>
 
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageProjectUrl>http://github.com/xabaril/Acheve.TestHost</PackageProjectUrl>
-    <RepositoryUrl>http://github.com/xabaril/Acheve.TestHost</RepositoryUrl>
-    <Authors>Xabaril Contributors</Authors>
-    <Company>Xabaril</Company>
-    <Description>Achve.TestHost is a nuget package to improve TestServer experiences.
-    For more information see http://github.com/Xabaril/Acheve.TestHost</Description>
-    <PackageTags>TestHost;TestServer</PackageTags>
+		<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+		<PackageProjectUrl>http://github.com/xabaril/Acheve.TestHost</PackageProjectUrl>
+		<RepositoryUrl>http://github.com/xabaril/Acheve.TestHost</RepositoryUrl>
+		<Authors>Xabaril Contributors</Authors>
+		<Company>Xabaril</Company>
+		<Description>
+			Achve.TestHost is a nuget package to improve TestServer experiences.
+			For more information see http://github.com/Xabaril/Acheve.TestHost
+		</Description>
+		<PackageTags>TestHost;TestServer</PackageTags>
 
-    <PublishRepositoryUrl>true</PublishRepositoryUrl>
-    <IncludeSymbols>true</IncludeSymbols>
-    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
-    <EmbedUntrackedSources>true</EmbedUntrackedSources>
-  </PropertyGroup>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+	</PropertyGroup>
 
-  <PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
-    <ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-  </PropertyGroup>
+	<PropertyGroup Condition="'$(GITHUB_ACTIONS)' == 'true'">
+		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <SourceRoot Include="$(MSBuildThisFileDirectory)/"/>
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="$(MicrosoftSourceLinkGithub)">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
-    </PackageReference>
-  </ItemGroup>
+	<ItemGroup>
+		<SourceRoot Include="$(MSBuildThisFileDirectory)/"/>
+		<PackageReference Include="Microsoft.SourceLink.GitHub">
+			<PrivateAssets>all</PrivateAssets>
+			<IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+		</PackageReference>
+	</ItemGroup>
 </Project>
