@@ -67,7 +67,6 @@ the claims for authenticated calls to the WebApi.
 In the TestServer startup class you shoud incude the authentication service and add the .Net Core new AUthentication middleware:
 
  ```csharp
-
      public class TestStartup
     {
         public void ConfigureServices(IServiceCollection services)
@@ -96,7 +95,6 @@ And in your tests you can use an HttpClient with default credentials or build
 the request with the server RequestBuilder and the desired claims:
 
 ```csharp
-
     public class ValuesWithDefaultUserTests : IDisposable
     {
         private readonly TestServer _server;
@@ -154,7 +152,6 @@ the request with the server RequestBuilder and the desired claims:
 Both methods (`WithDefaultIdentity` and `WithIdentity`) accept as the only parameter an IEnumerabe&lt;Claim&gt; that should include the desired user claims for the request.
 
 ```csharp
-
     public static class Identities
     {
         public static readonly IEnumerable<Claim> User = new[]
@@ -165,7 +162,6 @@ Both methods (`WithDefaultIdentity` and `WithIdentity`) accept as the only param
 
         public static readonly IEnumerable<Claim> Empty = new Claim[0];
     }
-
 ```
 
 You can find a complete example in the [samples](https://github.com/hbiarge/Acheve.AspNetCore.TestHost.Security/tree/master/Acheve.AspNet.TestHost.Security/samples) directory.
@@ -175,16 +171,13 @@ You can find a complete example in the [samples](https://github.com/hbiarge/Ache
 Well, when you try to create any test using Test Server you need to know the uri of the action to be invoked.
 
 ```csharp
-
 var response = await _server.CreateRequest("api/values/public")
                 .GetAsync();
-
 ```
 
 In general, in our tests a new simple API class is created to hide this uri and improve the code.
 
 ```csharp
- 
  // some code on tests 
 
 var response = await _server.CreateRequest(Api.Values.Public)
@@ -199,7 +192,6 @@ public static class API
         public static string Public = "api/values/public";
     }
 }
-
 ```
 
 The main problems on this approach are:
@@ -210,10 +202,43 @@ The main problems on this approach are:
 With *Acheve* you can create the uri dynamically using the attribute routing directly from your controllers.
 
 ```csharp
-
 var response = await _server.CreateHttpApiRequest<ValuesController>(controller=>controller.PublicValues())
                 .GetAsync();
+```
 
+## About adding extra query parameters
+
+The package has a *RequestBuilder* extension to add a new query parameter: *AddQueryParameter*.
+
+```csharp
+[Fact]
+public async Task MyFirstTest()
+{
+    ...
+    var request = server.CreateHttpApiRequest<MyController>(controller => controller.MyMethod(myFirstParameter))
+        .AddQueryParameter(nameof(mySecondParameter), mySecondParameter);
+    ...
+}
+```
+
+## Improving assertions in API responses
+
+The package has HttpResponseMessage extension to help us assert the response.
+
+- *IsSuccessStatusCodeOrThrow*: Throw exception with the response content in the message.
+- *ReadContentAsAsync*: Read the response content and cast it.
+
+```csharp
+[Fact]
+public async Task MyFirstTest()
+{
+    ...
+    var responseMessage = await request.GetAsync();
+
+    await responseMessage.IsSuccessStatusCodeOrThrow();
+    var response = await responseMessage.ReadContentAsAsync<MyResponse>();
+    ...
+}
 ```
 
 ## Using xunit
