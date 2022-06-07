@@ -54,7 +54,7 @@ namespace Acheve.TestHost.Routing.AttributeTemplates
             regex_pattern = @"\/{[^{}]*\?}";
             template = Regex.Replace(template, regex_pattern, string.Empty);
 
-            return template.ToLowerInvariant();
+            return template;
         }
     }
 }

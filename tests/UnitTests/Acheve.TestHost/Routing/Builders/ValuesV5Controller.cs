@@ -23,6 +23,17 @@ namespace UnitTests.Acheve.TestHost.Builders
             return Ok();
         }
 
+        [HttpPost("{id}")]
+        public IActionResult Post3(string id, Pagination pagination1)
+        {
+            if (pagination1 == null || string.IsNullOrWhiteSpace(id))
+            {
+                return BadRequest();
+            }
+
+            return Ok();
+        }
+
         [HttpPatch("{id:int}")]
         public IActionResult Patch1(int id, Pagination pagination1)
         {
