@@ -1,0 +1,35 @@
+﻿<Project>
+    <PropertyGroup Label=".Net version" Condition=" '$(TargetFramework)' == 'netcoreapp3.1' ">
+        <NetCoreVersion>3.1.25</NetCoreVersion>
+    </PropertyGroup>
+
+    <PropertyGroup Label=".Net version" Condition=" '$(TargetFramework)' == 'net5.0' ">
+        <NetCoreVersion>5.0.17</NetCoreVersion>
+    </PropertyGroup>
+
+    <PropertyGroup Label=".Net version" Condition=" '$(TargetFramework)' == 'net6.0' ">
+        <NetCoreVersion>6.0.5</NetCoreVersion>
+    </PropertyGroup>
+
+    <ItemGroup Label="General Dependencies">
+        <PackageVersion Include="Newtonsoft.Json" Version="13.0.1" />
+        <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="$(NetCoreVersion)" />
+    </ItemGroup>
+
+    <ItemGroup Label="Sample Dependencies">
+        <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(NetCoreVersion)" />
+    </ItemGroup>
+
+    <ItemGroup Label="Testing Dependencies">
+        <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(NetCoreVersion)" />
+        <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+        <PackageVersion Include="FluentAssertions" Version="6.7.0" />
+        <PackageVersion Include="xunit" Version="2.4.1" />
+        <PackageVersion Include="xunit.runner.visualstudio" Version="2.4.5" />
+        <PackageVersion Include="coverlet.collector" Version="3.1.2" />
+    </ItemGroup>
+
+    <ItemGroup Label="Github Dependencies">
+        <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="1.1.1" />
+    </ItemGroup>
+</Project>
