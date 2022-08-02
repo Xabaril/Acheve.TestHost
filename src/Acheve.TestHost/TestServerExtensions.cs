@@ -122,7 +122,7 @@ namespace Microsoft.AspNetCore.TestHost
                 return false;
             }
 
-            if (methodInfo.IsAbstract)
+            if (methodInfo.IsAbstract && !methodInfo.IsVirtual)
             {
                 return false;
             }
