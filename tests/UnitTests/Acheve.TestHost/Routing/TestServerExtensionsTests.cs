@@ -1673,6 +1673,52 @@ namespace UnitTests.Acheve.TestHost.Routing
             response.Should().Be(JsonSerializer.Serialize(new { id1 = id1.ToString(), id2 = id2.ToString() }));
         }
 
+        [Fact]
+        public async Task create_request_from_implemented_abstract_method()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var request = server.CreateHttpApiRequest<ImplementationAbstractController>(controller => controller.AbstractMethod());
+
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            responseMessage.IsSuccessStatusCode.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task create_request_from_overrided_virtual_method()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var request = server.CreateHttpApiRequest<ImplementationAbstractController>(controller => controller.VirtualMethod());
+
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            var content = await responseMessage.Content.ReadAsStringAsync();
+            content.Should().Be(ImplementationAbstractController.VIRTUAL_METHOD_RESULT);
+        }
+
+        [Fact]
+        public async Task create_request_from_not_overrided_virtual_method()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var request = server.CreateHttpApiRequest<ImplementationAbstractController>(controller => controller.Virtual2Method());
+
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            responseMessage.IsSuccessStatusCode.Should().BeTrue();
+        }
+
         private class PrivateNonControllerClass
         {
             public int SomeAction()
