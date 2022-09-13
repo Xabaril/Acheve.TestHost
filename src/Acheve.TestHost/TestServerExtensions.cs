@@ -47,10 +47,9 @@ namespace Microsoft.AspNetCore.TestHost
                 throw new InvalidOperationException($"The action selector is not a valid action for MVC Controller.");
             }
 
-            //the uri discover use only attribute route conventions..
+            //the uri discover use only attribute route conventions.
 
-            var validUri = UriDiscover.Discover<TController>(
-                action, tokenValues);
+            var validUri = UriDiscover.Discover<TController>(action, tokenValues);
 
             var requestBuilder = server.CreateRequest(validUri);
 

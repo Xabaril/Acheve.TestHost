@@ -1719,6 +1719,25 @@ namespace UnitTests.Acheve.TestHost.Routing
             responseMessage.IsSuccessStatusCode.Should().BeTrue();
         }
 
+        [Fact]
+        public async Task Create_request_with_list_parameter()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var param = new string[] { "one", "two" };
+
+            var request = server.CreateHttpApiRequest<BugsController>(controller => controller.GetWithListParam(param));
+
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            var response = await responseMessage.ReadContentAsAsync<IEnumerable<string>>();
+
+            response.Should().BeEquivalentTo(param);
+        }
+
         private class PrivateNonControllerClass
         {
             public int SomeAction()
