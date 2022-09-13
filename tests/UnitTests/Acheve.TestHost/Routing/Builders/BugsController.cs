@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using UnitTests.Acheve.TestHost.Routing.Models;
 
 namespace UnitTests.Acheve.TestHost.Builders
@@ -61,6 +63,12 @@ namespace UnitTests.Acheve.TestHost.Builders
         public ActionResult<string> GetWithSeveralColon(int param1, int param2)
         {
             return Ok($"{param1}/{param2}");
+        }
+
+        [HttpGet(nameof(GetWithListParam))]
+        public ActionResult<IEnumerable<string>> GetWithListParam([FromQuery] IEnumerable<string> param)
+        {
+            return Ok(param);
         }
     }
 }

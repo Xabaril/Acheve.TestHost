@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -19,8 +20,9 @@ namespace Acheve.TestHost.Routing.Tokenizers
                 if (!IgnoreHeader(parameters[i]))
                 {
                     var tokenName = parameters[i].Name.ToLowerInvariant();
+                    var parameterType = parameters[i].ParameterType;
 
-                    if (parameters[i].ParameterType.IsPrimitiveType())
+                    if (parameterType.IsPrimitiveType())
                     {
                         var tokenValue = action.ArgumentValues.Any(x => x.Key == i) ? action.ArgumentValues[i].Instance : null;
 
@@ -29,14 +31,13 @@ namespace Acheve.TestHost.Routing.Tokenizers
                             tokens.AddToken(tokenName, tokenValue.ToString(), isConventional: false);
                         }
                     }
-                    else if (parameters[i].ParameterType.IsArray
-                       && IsPrimitiveType(parameters[i].ParameterType.GetElementType()))
+                    else if (parameterType.IsEnumerable()
+                        && parameterType.GetEnumerableElementType().IsPrimitiveType())
                     {
                         var arrayValues = (Array)action.ArgumentValues[i].Instance;
 
                         if (arrayValues != null
-                            && arrayValues.Length != 0
-                            )
+                            && arrayValues.Length != 0)
                         {
                             var tokenValue = GetTokenValue(arrayValues, tokenName);
                             tokens.AddToken(tokenName, tokenValue, isConventional: false);
@@ -56,14 +57,6 @@ namespace Acheve.TestHost.Routing.Tokenizers
             }
 
             return false;
-        }
-
-        private bool IsPrimitiveType(Type type)
-        {
-            return type.IsPrimitive
-                || type == typeof(string)
-                || type == typeof(decimal)
-                || type == typeof(Guid);
         }
 
         private string GetTokenValue(Array array, string tokenName)
