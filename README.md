@@ -221,6 +221,21 @@ public async Task MyFirstTest()
 }
 ```
 
+## About removin query parameters
+
+The package has a *RequestBuilder* extension to remove a query parameter: *RemoveQueryParameter*.
+
+```csharp
+[Fact]
+public async Task MyFirstTest()
+{
+    ...
+    var request = server.CreateHttpApiRequest<MyController>(controller => controller.MyMethod(myFirstParameter))
+        .RemoveQueryParameter(nameof(myFirstParameter));
+    ...
+}
+```
+
 ## Improving assertions in API responses
 
 The package has HttpResponseMessage extension to help us assert the response.
