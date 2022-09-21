@@ -6,7 +6,7 @@
     </PropertyGroup>
 
     <PropertyGroup Label="Package information">
-        <Version>3.3.0</Version>
+        <Version>3.4.0</Version>
 
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>http://github.com/xabaril/Acheve.TestHost</PackageProjectUrl>
