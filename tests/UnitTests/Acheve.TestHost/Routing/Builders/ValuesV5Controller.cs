@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Threading;
 
 namespace UnitTests.Acheve.TestHost.Builders
 {
@@ -43,6 +44,28 @@ namespace UnitTests.Acheve.TestHost.Builders
             }
 
             return Ok();
+        }
+        
+        [HttpGet(nameof(GetWithCancellationToken))]
+        public ActionResult<string> GetWithCancellationToken([FromQuery] string value, CancellationToken cancellationToken)
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return BadRequest();
+            }
+
+            return Ok(value);
+        }
+
+        [HttpPost(nameof(PostWithCancellationToken))]
+        public ActionResult<string> PostWithCancellationToken([FromBody] string value, CancellationToken cancellationToken)
+        {
+            if (cancellationToken.IsCancellationRequested)
+            {
+                return BadRequest();
+            }
+            
+            return Ok(value);
         }
     }
 }

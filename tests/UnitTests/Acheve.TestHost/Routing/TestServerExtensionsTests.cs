@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using UnitTests.Acheve.TestHost.Builders;
 using UnitTests.Acheve.TestHost.Routing.Models;
@@ -1674,6 +1675,44 @@ namespace UnitTests.Acheve.TestHost.Routing
             var response = await responseMessage.ReadContentAsAsync<IEnumerable<string>>();
 
             response.Should().BeEquivalentTo(param);
+        }
+
+        [Fact]
+        public async Task Create_get_request_with_cancellation_token_parameter()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var param = "one";
+            var source = new CancellationTokenSource();
+            var token = source.Token;
+            
+            var request = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.GetWithCancellationToken(param, token));
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            var response = await responseMessage.Content.ReadAsStringAsync();
+            response.Should().Be(param);
+        }
+
+        [Fact]
+        public async Task Create_post_request_with_cancellation_token_parameter()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var param = "one";
+            var source = new CancellationTokenSource();
+            var token = source.Token;
+
+            var request = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.PostWithCancellationToken(param, token));
+            var responseMessage = await request.PostAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            var response = await responseMessage.Content.ReadAsStringAsync();
+            response.Should().Be(param);
         }
 
         private class PrivateNonControllerClass
