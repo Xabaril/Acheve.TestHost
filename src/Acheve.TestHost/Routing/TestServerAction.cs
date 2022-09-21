@@ -27,12 +27,18 @@ namespace Acheve.TestHost.Routing
             var isFromHeader = argument.GetCustomAttributes<FromHeaderAttribute>().Any();
             var isFromRoute = argument.GetCustomAttributes<FromRouteAttribute>().Any();
 
-            bool isPrimitive = argument.ParameterType.IsPrimitive || argument.ParameterType.Equals(typeof(string));
+            bool isPrimitive = argument.ParameterType.IsPrimitiveType();
             bool hasNoAttributes = !isFromBody && !isFromForm && !isFromHeader && !isFromRoute;
 
             if (activeBodyApiController && hasNoAttributes && !isPrimitive)
             {
                 isFromBody = true;
+            }
+
+            var isCancellationToken = argument.ParameterType == typeof(System.Threading.CancellationToken);
+            if (isCancellationToken)
+            {
+                isFromBody = isFromForm = isFromHeader = false;
             }
 
             if (!ArgumentValues.ContainsKey(order))
