@@ -70,5 +70,12 @@ namespace UnitTests.Acheve.TestHost.Builders
         {
             return Ok(param);
         }
+
+        [HttpGet]
+        [Route("[action]")]
+        public ActionResult<IEnumerable<string>> ActionNameInRoute()
+        {
+            return Ok();
+        }
     }
 }
