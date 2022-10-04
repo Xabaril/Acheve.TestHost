@@ -9,7 +9,7 @@
             const string ControllerTypeNameSuffix = "Controller";
 
             const string controller_key = "controller";
-            if (!tokens.ContainsToken($"[{controller_key}]"))
+            if (!tokens.ContainsToken(controller_key))
             {
                 var controllerName = typeof(TController).Name
                     .Replace(ControllerTypeNameSuffix, string.Empty)
@@ -19,7 +19,7 @@
             }
 
             const string action_key = "action";
-            if (!tokens.ContainsToken($"[{action_key}]"))
+            if (!tokens.ContainsToken(action_key))
             {
                 tokens.AddToken(action_key, action.MethodInfo.Name.ToLower(), isConventional: true);
             }
