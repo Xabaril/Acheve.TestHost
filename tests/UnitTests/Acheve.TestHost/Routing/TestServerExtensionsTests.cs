@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text.Json;
+using System.Threading;
 using System.Threading.Tasks;
 using UnitTests.Acheve.TestHost.Builders;
 using UnitTests.Acheve.TestHost.Routing.Models;
@@ -18,9 +19,7 @@ namespace UnitTests.Acheve.TestHost.Routing
     {
         public const string BASE_PATH = "api/";
         public const string BASE_PATH_BUGS = BASE_PATH + "bugs";
-        public const string BASE_PATH_BUGS_CONTROLLER_NAME = BASE_PATH + "Bugs";
         public const string BASE_PATH_VALUES = BASE_PATH + "values";
-        public const string BASE_PATH_VALUES_CONTROLLER_NAME = BASE_PATH + "Values";
 
         [Fact]
         public void throw_when_controller_is_not_a_valid_controller()
@@ -75,7 +74,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Get(0));
 
             request.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}?id=0");
+                .Should().Be($"{BASE_PATH_VALUES}?id=0");
         }
 
         [Fact]
@@ -89,7 +88,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.GetStringAsParameter("unai"));
 
             request.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/stringasprimitive?value=unai");
+                .Should().Be($"{BASE_PATH_VALUES}/stringasprimitive?value=unai");
         }
 
         [Fact]
@@ -103,7 +102,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.GetStringAsParameter("Uppercase"));
 
             request.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/stringasprimitive?value=Uppercase");
+                .Should().Be($"{BASE_PATH_VALUES}/stringasprimitive?value=Uppercase");
         }
 
         [Fact]
@@ -117,7 +116,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.GetDecimalAsParameter(2m));
 
             request.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/decimalasprimitive?value=2");
+                .Should().Be($"{BASE_PATH_VALUES}/decimalasprimitive?value=2");
         }
 
         [Fact]
@@ -154,16 +153,16 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Delete2(3));
 
             requestGet.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname?id=0");
+                .Should().Be($"{BASE_PATH_VALUES}/overridemethodname?id=0");
 
             requestPut.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname?id=1");
+                .Should().Be($"{BASE_PATH_VALUES}/overridemethodname?id=1");
 
             requestPost.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname?id=2");
+                .Should().Be($"{BASE_PATH_VALUES}/overridemethodname?id=2");
 
             requestDelete.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname?id=3");
+                .Should().Be($"{BASE_PATH_VALUES}/overridemethodname?id=3");
         }
 
         [Fact]
@@ -186,16 +185,16 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Delete3(3));
 
             requestGet.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/0");
+                .Should().Be($"{BASE_PATH_VALUES}/overridemethodname/0");
 
             requestPut.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/1");
+                .Should().Be($"{BASE_PATH_VALUES}/overridemethodname/1");
 
             requestPost.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/2");
+                .Should().Be($"{BASE_PATH_VALUES}/overridemethodname/2");
 
             requestDelete.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/3");
+                .Should().Be($"{BASE_PATH_VALUES}/overridemethodname/3");
         }
 
         [Fact]
@@ -218,16 +217,16 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Delete4(3), new { version = "v1" });
 
             requestGet.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/v1/0");
+                .Should().Be($"{BASE_PATH_VALUES}/overridemethodname/v1/0");
 
             requestPut.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/v1/1");
+                .Should().Be($"{BASE_PATH_VALUES}/overridemethodname/v1/1");
 
             requestPost.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/v1/2");
+                .Should().Be($"{BASE_PATH_VALUES}/overridemethodname/v1/2");
 
             requestDelete.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/v1/3");
+                .Should().Be($"{BASE_PATH_VALUES}/overridemethodname/v1/3");
         }
 
         [Fact]
@@ -241,7 +240,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Get4(0), new { Version = "v1" });
 
             requestGet.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/v1/0");
+                .Should().Be($"{BASE_PATH_VALUES}/overridemethodname/v1/0");
         }
 
         [Fact]
@@ -264,16 +263,16 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Delete5(0));
 
             requestGet.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname?id=0");
+                .Should().Be($"{BASE_PATH_VALUES}/overrideroutetemplatemethodname?id=0");
 
             requestPut.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname?id=0");
+                .Should().Be($"{BASE_PATH_VALUES}/overrideroutetemplatemethodname?id=0");
 
             requestPost.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname?id=0");
+                .Should().Be($"{BASE_PATH_VALUES}/overrideroutetemplatemethodname?id=0");
 
             requestDelete.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname?id=0");
+                .Should().Be($"{BASE_PATH_VALUES}/overrideroutetemplatemethodname?id=0");
         }
 
         [Fact]
@@ -296,16 +295,16 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Delete6(3), new { version = "v1" });
 
             requestGet.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname/v1/0");
+                .Should().Be($"{BASE_PATH_VALUES}/overrideroutetemplatemethodname/v1/0");
 
             requestPut.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname/v1/1");
+                .Should().Be($"{BASE_PATH_VALUES}/overrideroutetemplatemethodname/v1/1");
 
             requestPost.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname/v1/2");
+                .Should().Be($"{BASE_PATH_VALUES}/overrideroutetemplatemethodname/v1/2");
 
             requestDelete.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname/v1/3");
+                .Should().Be($"{BASE_PATH_VALUES}/overrideroutetemplatemethodname/v1/3");
         }
 
         [Fact]
@@ -328,16 +327,16 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Delete7(3));
 
             requestGet.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname/0");
+                .Should().Be($"{BASE_PATH_VALUES}/overrideroutetemplatemethodname/0");
 
             requestPut.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname/1");
+                .Should().Be($"{BASE_PATH_VALUES}/overrideroutetemplatemethodname/1");
 
             requestPost.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname/2");
+                .Should().Be($"{BASE_PATH_VALUES}/overrideroutetemplatemethodname/2");
 
             requestDelete.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overrideroutetemplatemethodname/3");
+                .Should().Be($"{BASE_PATH_VALUES}/overrideroutetemplatemethodname/3");
         }
 
         [Fact]
@@ -360,16 +359,16 @@ namespace UnitTests.Acheve.TestHost.Routing
                 controller => controller.Delete8(3));
 
             requestGet.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/0");
+                .Should().Be($"{BASE_PATH_VALUES}/overridemethodname/0");
 
             requestPut.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/1");
+                .Should().Be($"{BASE_PATH_VALUES}/overridemethodname/1");
 
             requestPost.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/2");
+                .Should().Be($"{BASE_PATH_VALUES}/overridemethodname/2");
 
             requestDelete.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_VALUES_CONTROLLER_NAME}/overridemethodname/3");
+                .Should().Be($"{BASE_PATH_VALUES}/overridemethodname/3");
         }
 
         [Fact]
@@ -1272,7 +1271,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 contentOptions: new NotIncludeContent());
 
             request.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_BUGS_CONTROLLER_NAME}/prm1/{guidValue}");
+                .Should().Be($"{BASE_PATH_BUGS}/prm1/{guidValue}");
         }
 
         [Fact]
@@ -1394,7 +1393,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 contentOptions: new NotIncludeContent());
 
             request.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_BUGS_CONTROLLER_NAME}/{guid}/10");
+                .Should().Be($"{BASE_PATH_BUGS}/{guid}/10");
         }
 
         [Fact]
@@ -1563,7 +1562,7 @@ namespace UnitTests.Acheve.TestHost.Routing
                 contentOptions: new NotIncludeContent());
 
             request.GetConfiguredAddress()
-                .Should().Be($"{BASE_PATH_BUGS_CONTROLLER_NAME}/prm1/{guid}");
+                .Should().Be($"{BASE_PATH_BUGS}/prm1/{guid}");
         }
 
         [Fact]
@@ -1612,65 +1611,121 @@ namespace UnitTests.Acheve.TestHost.Routing
         }
 
         [Fact]
-        public async Task create_request_and_add_parameter()
+        public async Task create_request_from_implemented_abstract_method()
         {
             var server = new TestServerBuilder()
                 .UseDefaultStartup()
                 .Build();
 
-            var id = new Random().Next(1, 100);
+            var request = server.CreateHttpApiRequest<ImplementationAbstractController>(controller => controller.AbstractMethod());
 
-            var request = server.CreateHttpApiRequest<ValuesController>(controller => controller.GetParameterFromRequestQuery())
-                .AddQueryParameter(nameof(id), id);
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            responseMessage.IsSuccessStatusCode.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task create_request_from_overrided_virtual_method()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var request = server.CreateHttpApiRequest<ImplementationAbstractController>(controller => controller.VirtualMethod());
+
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            var content = await responseMessage.Content.ReadAsStringAsync();
+            content.Should().Be(ImplementationAbstractController.VIRTUAL_METHOD_RESULT);
+        }
+
+        [Fact]
+        public async Task create_request_from_not_overrided_virtual_method()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var request = server.CreateHttpApiRequest<ImplementationAbstractController>(controller => controller.Virtual2Method());
+
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            responseMessage.IsSuccessStatusCode.Should().BeTrue();
+        }
+
+        [Fact]
+        public async Task Create_request_with_list_parameter()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var param = new string[] { "one", "two" };
+
+            var request = server.CreateHttpApiRequest<BugsController>(controller => controller.GetWithListParam(param));
+
+            var responseMessage = await request.GetAsync();
+
+            responseMessage.EnsureSuccessStatusCode();
+            var response = await responseMessage.ReadContentAsAsync<IEnumerable<string>>();
+
+            response.Should().BeEquivalentTo(param);
+        }
+
+        [Fact]
+        public async Task Create_get_request_with_cancellation_token_parameter()
+        {
+            var server = new TestServerBuilder()
+                .UseDefaultStartup()
+                .Build();
+
+            var param = "one";
+            var source = new CancellationTokenSource();
+            var token = source.Token;
             
+            var request = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.GetWithCancellationToken(param, token));
             var responseMessage = await request.GetAsync();
 
             responseMessage.EnsureSuccessStatusCode();
             var response = await responseMessage.Content.ReadAsStringAsync();
-
-            response.Should().Be(id.ToString());
+            response.Should().Be(param);
         }
 
         [Fact]
-        public async Task create_request_and_add_additional_parameter()
+        public async Task Create_post_request_with_cancellation_token_parameter()
         {
             var server = new TestServerBuilder()
                 .UseDefaultStartup()
                 .Build();
 
-            var id1 = new Random().Next(1, 100);
-            var id2 = new Random().Next(1, 100);
+            var param = "one";
+            var source = new CancellationTokenSource();
+            var token = source.Token;
 
-            var request = server.CreateHttpApiRequest<ValuesController>(controller => controller.GetAdditionalParameterFromRequestQuery(id1))
-                .AddQueryParameter(nameof(id2), id2);
-
-            var responseMessage = await request.GetAsync();
+            var request = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.PostWithCancellationToken(param, token));
+            var responseMessage = await request.PostAsync();
 
             responseMessage.EnsureSuccessStatusCode();
             var response = await responseMessage.Content.ReadAsStringAsync();
-
-            response.Should().Be(JsonSerializer.Serialize(new { id1 = id1.ToString(), id2 = id2.ToString() }));
+            response.Should().Be(param);
         }
 
         [Fact]
-        public async Task create_request_and_add_parameter_when_you_have_path_parameter()
+        public async Task Create_request_with_action_name_in_route()
         {
             var server = new TestServerBuilder()
                 .UseDefaultStartup()
                 .Build();
 
-            var id1 = new Random().Next(1, 100);
-            var id2 = new Random().Next(1, 100);
+            var request = server.CreateHttpApiRequest<BugsController>(controller => controller.ActionNameInRoute());
 
-            var request = server.CreateHttpApiRequest<ValuesController>(controller => controller.GetAdditionalParameterFromRequestQueryAndPath(id1))
-                .AddQueryParameter(nameof(id2), id2);
+            request.GetConfiguredAddress().Should().Be($"{BASE_PATH_BUGS}/{nameof(BugsController.ActionNameInRoute)}".ToLower());
 
             var responseMessage = await request.GetAsync();
-
             responseMessage.EnsureSuccessStatusCode();
-            var response = await responseMessage.Content.ReadAsStringAsync();
-
-            response.Should().Be(JsonSerializer.Serialize(new { id1 = id1.ToString(), id2 = id2.ToString() }));
         }
 
         private class PrivateNonControllerClass

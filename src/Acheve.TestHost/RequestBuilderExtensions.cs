@@ -1,8 +1,9 @@
-﻿using System;
-using Acheve.TestHost;
+﻿using Acheve.TestHost;
+using Microsoft.Net.Http.Headers;
+using System;
 using System.Collections.Generic;
 using System.Security.Claims;
-using Microsoft.Net.Http.Headers;
+using System.Text.RegularExpressions;
 
 namespace Microsoft.AspNetCore.TestHost
 {
@@ -97,11 +98,42 @@ namespace Microsoft.AspNetCore.TestHost
                 var separatoChar = '?';
                 if (configure.RequestUri.ToString().Contains(separatoChar))
                     separatoChar = '&';
-                
+
                 configure.RequestUri = new Uri($"{configure.RequestUri}{separatoChar}{Uri.EscapeDataString(name)}={Uri.EscapeDataString(value.ToString())}", UriKind.Relative);
             });
 
             return requestBuilder;
+        }
+
+        /// <summary>
+        /// Remove the given parameter from the request
+        /// </summary>
+        /// <param name="requestBuilder">The requestBuilder instance</param>
+        /// <param name="name">Parameter name</param>
+        /// <returns>RequestBuilder instance</returns>
+        public static RequestBuilder RemoveQueryParameter(this RequestBuilder requestBuilder, string name)
+        {
+            requestBuilder.And(configure =>
+            {
+                var regexOptions = RegexOptions.Compiled | RegexOptions.IgnoreCase;
+                var isTheLastParameter = new Regex(@$"[?|&]{name}=[^&]+$", regexOptions);
+                var isTheFistParamaeterAndHasOtherParamaters = new Regex(@$"[?]{name}=[^&]+[&]", regexOptions);
+                var isTheMiddleParameter = new Regex(@$"[&]{name}=[^&]+[&]", regexOptions);
+
+                var newUri = configure.RequestUri.ToString()
+                    .ReplaceRegex(isTheLastParameter, string.Empty)
+                    .ReplaceRegex(isTheFistParamaeterAndHasOtherParamaters, "?")
+                    .ReplaceRegex(isTheMiddleParameter, "&");
+
+                configure.RequestUri = new Uri(newUri, UriKind.Relative);
+            });
+
+            return requestBuilder;
+        }
+
+        private static string ReplaceRegex(this string value, Regex regex, string replacement)
+        {
+            return regex.Replace(value, replacement);
         }
     }
 }
