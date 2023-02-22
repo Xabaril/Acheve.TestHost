@@ -1,58 +1,69 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
+using System.Collections;
 using System.Linq;
 using System.Reflection;
 
-namespace Acheve.TestHost.Routing.Tokenizers
+namespace Acheve.TestHost.Routing.Tokenizers;
+
+class ComplexParameterActionTokenizer
+    : ITokenizer
 {
-    class ComplexParameterActionTokenizer
-        : ITokenizer
+    public void AddTokens<TController>(TestServerAction action, TestServerTokenCollection tokens) where TController : class
     {
-        public void AddTokens<TController>(TestServerAction action, TestServerTokenCollection tokens) where TController : class
+        var parameters = action.MethodInfo.GetParameters();
+
+        for (int i = 0; i < parameters.Length; i++)
         {
-            var parameters = action.MethodInfo.GetParameters();
+            var type = parameters[i].ParameterType;
+            var instance = action.ArgumentValues.Any(x => x.Key == i) ? action.ArgumentValues[i].Instance : null;
 
-            for (int i = 0; i < parameters.Length; i++)
+            if (instance == null || type.IsPrimitiveType() || IgnoreBind(parameters[i]))
             {
-                var type = parameters[i].ParameterType;
-                var instance = action.ArgumentValues.Any(x => x.Key == i) ? action.ArgumentValues[i].Instance : null;
+                continue;
+            }
 
-                if (instance != null && !type.IsPrimitiveType())
+            foreach (var property in type.GetProperties())
+            {
+                var value = property.GetValue(instance);
+                if (value == null)
                 {
-                    if (!IgnoreBind(parameters[i]))
-                    {
-                        foreach (var property in type.GetProperties())
-                        {
-                            var tokenName = property.Name.ToLowerInvariant();
-                            var value = property.GetValue(instance);
-
-                            if (value != null)
-                            {
-                                tokens.AddToken(tokenName, value.ToString(), isConventional: false);
-                            }
-                        }
-                    }
+                    continue;
                 }
+
+                var tokenName = property.Name.ToLowerInvariant();
+                string tokenValue;
+                if (property.PropertyType.IsEnumerable() && property.PropertyType.GetEnumerableElementType().IsPrimitiveType())
+                {
+                    tokenValue = EnumerableParameterActionTokenizer.GetTokenValue((IList)value, tokenName);
+                }
+                else
+                {
+                    tokenValue = value.ToString();
+                }
+
+                tokens.AddToken(tokenName, tokenValue, isConventional: false);
+            }
+        }
+    }
+
+    static bool IgnoreBind(ParameterInfo parameter)
+    {
+        var attributes = parameter.GetCustomAttributes(false);
+
+        foreach (var attribute in attributes)
+        {
+            switch (attribute)
+            {
+                case FromBodyAttribute:
+                case FromFormAttribute:
+                case BindNeverAttribute:
+                    return true;
+                default: continue;
             }
         }
 
-        bool IgnoreBind(ParameterInfo parameter)
-        {
-            var attributes = parameter.GetCustomAttributes(false);
-
-            foreach (var attribute in attributes)
-            {
-                switch (attribute)
-                {
-                    case FromBodyAttribute body: return true;
-                    case FromFormAttribute form: return true;
-                    case BindNeverAttribute bind: return true;
-                    default: continue;
-                }
-            }
-
-            return false;
-        }
+        return false;
     }
 }
