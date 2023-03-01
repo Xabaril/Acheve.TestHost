@@ -1723,17 +1723,17 @@ public class CreateApiRequestShould
             .UseDefaultStartup()
             .Build();
 
-        var model = new ParamWithList
+        var model = new ParamWithSeveralTypes
         {
-            Values = new List<string>() { "one", "two" }
+            StringValues = new List<string>() { "one", "two" }
         };
 
-        var request = server.CreateHttpApiRequest<BugsController>(controller => controller.GetWithObjectWithList(model));
+        var request = server.CreateHttpApiRequest<BugsController>(controller => controller.GetWithObject(model));
         var responseMessage = await request.GetAsync();
 
         responseMessage.EnsureSuccessStatusCode();
-        var response = await responseMessage.ReadContentAsAsync<ParamWithList>();
-        response.Values.Should().Equal(model.Values);
+        var response = await responseMessage.ReadContentAsAsync<ParamWithSeveralTypes>();
+        response.StringValues.Should().Equal(model.StringValues);
     }
 
     [Fact]
@@ -1743,17 +1743,17 @@ public class CreateApiRequestShould
             .UseDefaultStartup()
             .Build();
 
-        var model = new ParamWithList
+        var model = new ParamWithSeveralTypes
         {
-            Values = new List<string>() { "one", "two" }
+            StringValues = new List<string>() { "one", "two" }
         };
 
-        var request = server.CreateHttpApiRequest<BugsController>(controller => controller.PostWithObjectWithList(model));
+        var request = server.CreateHttpApiRequest<BugsController>(controller => controller.PostWithObject(model));
         var responseMessage = await request.PostAsync();
 
         await responseMessage.IsSuccessStatusCodeOrThrow();
-        var response = await responseMessage.ReadContentAsAsync<ParamWithList>();
-        response.Values.Should().Equal(model.Values);
+        var response = await responseMessage.ReadContentAsAsync<ParamWithSeveralTypes>();
+        response.StringValues.Should().Equal(model.StringValues);
     }
 
     [Fact]
@@ -1770,6 +1770,170 @@ public class CreateApiRequestShould
 
         responseMessage.EnsureSuccessStatusCode();
         var response = await responseMessage.ReadContentAsAsync<IEnumerable<string>>();
+        response.Should().Equal(model);
+    }
+
+    [Fact]
+    public async Task Create_get_request_with_datetime()
+    {
+        var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+        var model = new DateTime(2023, 03, 01);
+
+        var request = server.CreateHttpApiRequest<BugsController>(controller => controller.GetWithDatetimeParam(model));
+        var responseMessage = await request.GetAsync();
+
+        responseMessage.EnsureSuccessStatusCode();
+        var response = await responseMessage.ReadContentAsAsync<DateTime>();
+        response.Should().Be(model);
+    }
+
+    [Fact]
+    public async Task Create_get_request_with_datetime_in_object()
+    {
+        var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+        var model = new ParamWithSeveralTypes
+        {
+            DateTimeValue = new DateTime(2023, 03, 01)
+        };
+
+        var request = server.CreateHttpApiRequest<BugsController>(controller => controller.GetWithObject(model));
+        var responseMessage = await request.GetAsync();
+
+        responseMessage.EnsureSuccessStatusCode();
+        var response = await responseMessage.ReadContentAsAsync<ParamWithSeveralTypes>();
+        response.DateTimeValue.Should().Be(model.DateTimeValue);
+    }
+
+    [Fact]
+    public async Task Create_get_request_with_datetime_list_in_object()
+    {
+        var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+        var model = new ParamWithSeveralTypes
+        {
+            DateTimeValues = new List<DateTime>
+            {
+                new DateTime(2023, 03, 01),
+                new DateTime(2023, 05, 04)
+            }
+        };
+
+        var request = server.CreateHttpApiRequest<BugsController>(controller => controller.GetWithObject(model));
+        var responseMessage = await request.GetAsync();
+
+        await responseMessage.IsSuccessStatusCodeOrThrow();
+        var response = await responseMessage.ReadContentAsAsync<ParamWithSeveralTypes>();
+        response.DateTimeValues.Should().Equal(model.DateTimeValues);
+    }
+
+    [Fact]
+    public async Task Create_get_request_with_datetime_list()
+    {
+        var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+        var model = new List<DateTime>
+        {
+            new DateTime(2023, 03, 01),
+            new DateTime(2023, 05, 04)
+        };
+
+        var request = server.CreateHttpApiRequest<BugsController>(controller => controller.GetWithDatetimeListParam(model));
+        var responseMessage = await request.GetAsync();
+
+        await responseMessage.IsSuccessStatusCodeOrThrow();
+        var response = await responseMessage.ReadContentAsAsync<List<DateTime>>();
+        response.Should().Equal(model);
+    }
+
+    [Fact]
+    public async Task Create_post_request_with_datetime()
+    {
+        var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+        var model = new DateTime(2023, 03, 01);
+
+        var request = server.CreateHttpApiRequest<BugsController>(controller => controller.PostWithDatetimeParam(model));
+        var responseMessage = await request.PostAsync();
+
+        responseMessage.EnsureSuccessStatusCode();
+        var response = await responseMessage.ReadContentAsAsync<DateTime>();
+        response.Should().Be(model);
+    }
+
+    [Fact]
+    public async Task Create_post_request_with_datetime_in_object()
+    {
+        var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+        var model = new ParamWithSeveralTypes
+        {
+            DateTimeValue = new DateTime(2023, 03, 01)
+        };
+
+        var request = server.CreateHttpApiRequest<BugsController>(controller => controller.PostWithObject(model));
+        var responseMessage = await request.PostAsync();
+
+        await responseMessage.IsSuccessStatusCodeOrThrow();
+        var response = await responseMessage.ReadContentAsAsync<ParamWithSeveralTypes>();
+        response.DateTimeValue.Should().Be(model.DateTimeValue);
+    }
+
+    [Fact]
+    public async Task Create_post_request_with_datetime_list_in_object()
+    {
+        var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+        var model = new ParamWithSeveralTypes
+        {
+            DateTimeValues = new List<DateTime>
+            {
+                new DateTime(2023, 03, 01),
+                new DateTime(2023, 05, 04)
+            }
+        };
+
+        var request = server.CreateHttpApiRequest<BugsController>(controller => controller.PostWithObject(model));
+        var responseMessage = await request.PostAsync();
+
+        await responseMessage.IsSuccessStatusCodeOrThrow();
+        var response = await responseMessage.ReadContentAsAsync<ParamWithSeveralTypes>();
+        response.DateTimeValues.Should().Equal(model.DateTimeValues);
+    }
+
+    [Fact]
+    public async Task Create_post_request_with_datetime_list()
+    {
+        var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+        var model = new List<DateTime>
+        {
+            new DateTime(2023, 03, 01),
+            new DateTime(2023, 05, 04)
+        };
+
+        var request = server.CreateHttpApiRequest<BugsController>(controller => controller.PostWithDatetimeListParam(model));
+        var responseMessage = await request.PostAsync();
+
+        await responseMessage.IsSuccessStatusCodeOrThrow();
+        var response = await responseMessage.ReadContentAsAsync<List<DateTime>>();
         response.Should().Equal(model);
     }
 

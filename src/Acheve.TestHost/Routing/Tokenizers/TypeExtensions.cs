@@ -12,7 +12,13 @@ internal static class TypeExtensions
         return type.IsPrimitive
             || type == typeof(string)
             || type == typeof(decimal)
-            || type == typeof(Guid);
+            || type == typeof(Guid)
+            || type.IsDateTime();
+    }
+
+    internal static bool IsDateTime(this Type typeToInspect)
+    {
+        return typeToInspect == typeof(DateTime);
     }
 
     internal static bool IsEnumerable(this Type typeToInspect)
