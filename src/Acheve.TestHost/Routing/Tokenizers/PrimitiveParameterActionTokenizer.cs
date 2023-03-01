@@ -15,12 +15,13 @@ internal class PrimitiveParameterActionTokenizer
 
         for (int i = 0; i < parameters.Length; i++)
         {
-            if (IgnoreHeader(parameters[i]))
+            var parameter = parameters[i];
+            if (IgnoreHeader(parameter))
             {
                 continue;
             }
 
-            Type parameterType = parameters[i].ParameterType;
+            Type parameterType = parameter.ParameterType;
             if (!parameterType.IsPrimitiveType())
             {
                 continue;
@@ -32,15 +33,25 @@ internal class PrimitiveParameterActionTokenizer
                 continue;
             }
 
-            string tokenName = parameters[i].Name.ToLowerInvariant();
-            tokens.AddToken(tokenName, tokenValue.ToString(), isConventional: false);
+            string tokenName = parameter.Name.ToLowerInvariant();
+            if (parameterType.IsDateTime())
+            {
+                tokens.AddToken(tokenName, PrimitiveValueToString(tokenValue), isConventional: false);
+            }
+            else
+            {
+                tokens.AddToken(tokenName, PrimitiveValueToString(tokenValue), isConventional: false);
+            }
         }
     }
 
-    private static bool IgnoreHeader(ParameterInfo parameter)
-    {
-        object[] attributes = parameter.GetCustomAttributes(false);
+    public static string PrimitiveValueToString(object value)
+        => value.GetType().IsDateTime() ?
+            ((DateTime)value).ToString("yyyy/MM/ddTHH:mm:ss.fff") :
+            value.ToString();
 
-        return attributes.Any(a => a.GetType() == typeof(FromHeaderAttribute));
-    }
+    private static bool IgnoreHeader(ParameterInfo parameter)
+        => parameter
+            .GetCustomAttributes(false)
+            .Any(a => a.GetType() == typeof(FromHeaderAttribute));
 }
