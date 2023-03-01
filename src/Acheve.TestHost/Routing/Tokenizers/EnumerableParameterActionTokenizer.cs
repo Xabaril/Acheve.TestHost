@@ -20,8 +20,8 @@ internal class EnumerableParameterActionTokenizer
                 continue;
             }
 
-            var arrayValues = (Array)action.ArgumentValues[i].Instance;
-            if (arrayValues == null || arrayValues.Length == 0)
+            var arrayValues = (IList)action.ArgumentValues[i].Instance;
+            if (arrayValues == null || arrayValues.Count == 0)
             {
                 continue;
             }
@@ -38,7 +38,7 @@ internal class EnumerableParameterActionTokenizer
 
         foreach (var element in array)
         {
-            list.Add(element.ToString());
+            list.Add(PrimitiveParameterActionTokenizer.PrimitiveValueToString(element));
         }
 
         return string.Join($"&{tokenName}=", list);

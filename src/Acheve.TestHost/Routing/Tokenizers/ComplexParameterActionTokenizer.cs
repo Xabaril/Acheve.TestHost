@@ -40,7 +40,7 @@ class ComplexParameterActionTokenizer
                 }
                 else
                 {
-                    tokenValue = value.ToString();
+                    tokenValue = PrimitiveParameterActionTokenizer.PrimitiveValueToString(value);
                 }
 
                 tokens.AddToken(tokenName, tokenValue, isConventional: false);

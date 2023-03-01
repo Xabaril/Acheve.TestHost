@@ -47,7 +47,7 @@ public class BugsController
     }
 
     [HttpGet("arrayPerson")]
-    public ActionResult<int[]> PersonArraySupport([FromQuery] Person[] param1)
+    public ActionResult<Person[]> PersonArraySupport([FromQuery] Person[] param1)
     {
         return Ok(param1);
     }
@@ -64,12 +64,6 @@ public class BugsController
         return Ok($"{param1}/{param2}");
     }
 
-    [HttpGet(nameof(GetWithListParam))]
-    public ActionResult<IEnumerable<string>> GetWithListParam([FromQuery] IEnumerable<string> param)
-    {
-        return Ok(param);
-    }
-
     [HttpGet]
     [Route("[action]")]
     public ActionResult<IEnumerable<string>> ActionNameInRoute()
@@ -77,21 +71,35 @@ public class BugsController
         return Ok();
     }
 
-    [HttpGet(nameof(GetWithObjectWithList))]
-    public ActionResult<string> GetWithObjectWithList([FromQuery] ParamWithList param)
-    {
-        return Ok(param);
-    }
+    [HttpGet(nameof(GetWithObject))]
+    public ActionResult<string> GetWithObject([FromQuery] ParamWithSeveralTypes param)
+        => Ok(param);
+
+    [HttpPost(nameof(PostWithObject))]
+    public ActionResult<string> PostWithObject([FromBody] ParamWithSeveralTypes param)
+    => Ok(param);
+
+    [HttpGet(nameof(GetWithListParam))]
+    public ActionResult<IEnumerable<string>> GetWithListParam([FromQuery] IEnumerable<string> param)
+        => Ok(param);
 
     [HttpPost(nameof(PostWithListParam))]
     public ActionResult<IEnumerable<string>> PostWithListParam([FromBody] IEnumerable<string> param)
-    {
-        return Ok(param);
-    }
+        => Ok(param);
 
-    [HttpPost(nameof(PostWithObjectWithList))]
-    public ActionResult<string> PostWithObjectWithList([FromBody] ParamWithList param)
-    {
-        return Ok(param);
-    }
+    [HttpGet(nameof(GetWithDatetimeParam))]
+    public ActionResult<string> GetWithDatetimeParam([FromQuery] DateTime param)
+        => Ok(param);
+
+    [HttpPost(nameof(PostWithDatetimeParam))]
+    public ActionResult<DateTime> PostWithDatetimeParam([FromBody] DateTime param)
+        => Ok(param);
+
+    [HttpGet(nameof(GetWithDatetimeListParam))]
+    public ActionResult<string> GetWithDatetimeListParam([FromQuery] IEnumerable<DateTime> param)
+    => Ok(param);
+
+    [HttpPost(nameof(PostWithDatetimeListParam))]
+    public ActionResult<DateTime> PostWithDatetimeListParam([FromBody] IEnumerable<DateTime> param)
+        => Ok(param);
 }
