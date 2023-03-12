@@ -4,41 +4,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 
-namespace Acheve.TestHost
+namespace Acheve.TestHost;
+
+internal static class DefautClaimsEncoder
 {
-    internal static class DefautClaimsEncoder
+    public static string Encode(IEnumerable<Claim> claims)
     {
-        public static string Encode(IEnumerable<Claim> claims)
+        var ticket = new AuthenticationTicket(
+            principal: new ClaimsPrincipal(
+                new ClaimsIdentity(claims)),
+            authenticationScheme: "TestServer");
+
+        var serializer = new TicketSerializer();
+        var bytes = serializer.Serialize(ticket);
+
+        return Convert.ToBase64String(bytes);
+    }
+
+    public static IEnumerable<Claim> Decode(string encodedValue)
+    {
+        if (string.IsNullOrEmpty(encodedValue))
         {
-            var ticket = new AuthenticationTicket(
-                principal: new ClaimsPrincipal(
-                    new ClaimsIdentity(claims)),
-                authenticationScheme: "TestServer");
-
-            var serializer = new TicketSerializer();
-            var bytes = serializer.Serialize(ticket);
-
-            return Convert.ToBase64String(bytes);
+            return Enumerable.Empty<Claim>();
         }
 
-        public static IEnumerable<Claim> Decode(string encodedValue)
+        var serializer = new TicketSerializer();
+        try
         {
-            if (string.IsNullOrEmpty(encodedValue))
-            {
-                return Enumerable.Empty<Claim>();
-            }
+            var ticket = serializer.Deserialize(Convert.FromBase64String(encodedValue));
 
-            var serializer = new TicketSerializer();
-            try
-            {
-                var ticket = serializer.Deserialize(Convert.FromBase64String(encodedValue));
-
-                return ticket.Principal.Claims;
-            }
-            catch (Exception)
-            {
-                return Enumerable.Empty<Claim>();
-            }            
+            return ticket.Principal.Claims;
+        }
+        catch
+        {
+            return Enumerable.Empty<Claim>();
         }
     }
 }
