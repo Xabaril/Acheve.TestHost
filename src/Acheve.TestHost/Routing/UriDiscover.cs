@@ -40,19 +40,14 @@ static class UriDiscover
 
         var template = (verbsTemplate ?? routeTemplate);
 
-        if (template != null)
+        if (template is null)
         {
-            if (IsTildeOverride(template, out string overrideTemplate))
-            {
-                return $"{overrideTemplate}{queryStringTemplate}";
-            }
-            else
-            {
-                return $"{controllerTemplate}/{template}{queryStringTemplate}";
-            }
+            return $"{controllerTemplate}{queryStringTemplate}";
         }
 
-        return $"{controllerTemplate}{queryStringTemplate}";
+        return IsTildeOverride(template, out string overrideTemplate) ?
+            $"{overrideTemplate}{queryStringTemplate}" :
+            $"{controllerTemplate}/{template}{queryStringTemplate}";
     }
 
     static TestServerTokenCollection AddTokens<TController>(TestServerAction action, object tokenValues)
@@ -85,7 +80,7 @@ static class UriDiscover
 
         if (isTildeOverride)
         {
-            overrideTemplate = template.Substring(2); // remove ~/
+            overrideTemplate = template[2..]; // remove ~/
         }
 
         return isTildeOverride;

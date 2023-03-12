@@ -1671,7 +1671,7 @@ public class CreateApiRequestShould
             .Build();
 
         var param = "one";
-        var source = new CancellationTokenSource();
+        using var source = new CancellationTokenSource();
         var token = source.Token;
 
         var request = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.GetWithCancellationToken(param, token));
@@ -1690,7 +1690,7 @@ public class CreateApiRequestShould
             .Build();
 
         var param = "one";
-        var source = new CancellationTokenSource();
+        using var source = new CancellationTokenSource();
         var token = source.Token;
 
         var request = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.PostWithCancellationToken(param, token));
