@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -57,9 +58,12 @@ public class IncludeContentAsFormUrlEncoded : RequestContentOptions
             return null;
         }
 
-        var value = jValue?.Type == JTokenType.Date ?
-                        jValue?.ToString("o", CultureInfo.InvariantCulture) :
-                        jValue?.ToString(CultureInfo.InvariantCulture);
+        var value = jValue?.Type switch
+        {
+            JTokenType.Date => jValue?.ToString("o", CultureInfo.InvariantCulture),
+            JTokenType.Float => jValue?.ToString(),
+            _ => jValue?.ToString(CultureInfo.InvariantCulture)
+        };
 
         return new Dictionary<string, string> { { token.Path, value } };
     }
