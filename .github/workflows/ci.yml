@@ -26,6 +26,7 @@ jobs:
             3.1.417
             5.0.101
             6.0.300
+            7.0.302
 
       - name: Build .NET 3.1
         run: dotnet build -c $BUILD_CONFIG --framework netcoreapp3.1
