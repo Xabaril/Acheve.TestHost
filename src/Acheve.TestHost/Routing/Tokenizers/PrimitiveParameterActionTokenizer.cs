@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -34,21 +35,17 @@ internal class PrimitiveParameterActionTokenizer
             }
 
             string tokenName = parameter.Name.ToLowerInvariant();
-            if (parameterType.IsDateTime())
-            {
-                tokens.AddToken(tokenName, PrimitiveValueToString(tokenValue), isConventional: false);
-            }
-            else
-            {
-                tokens.AddToken(tokenName, PrimitiveValueToString(tokenValue), isConventional: false);
-            }
+            tokens.AddToken(tokenName, PrimitiveValueToString(tokenValue), isConventional: false);
         }
     }
 
-    public static string PrimitiveValueToString(object value)
-        => value.GetType().IsDateTime() ?
-            ((DateTime)value).ToString("yyyy/MM/ddTHH:mm:ss.fff") :
-            value.ToString();
+    public static string PrimitiveValueToString<T>(T value)
+        => value switch
+        {
+            DateTime dateTimeValue => dateTimeValue.ToString("yyyy/MM/ddTHH:mm:ss.fff"),
+            double doubleValue => JsonConvert.SerializeObject(doubleValue),
+            _ => value.ToString()
+        };
 
     private static bool IgnoreHeader(ParameterInfo parameter)
         => parameter

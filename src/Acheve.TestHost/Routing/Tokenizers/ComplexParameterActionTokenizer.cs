@@ -33,15 +33,10 @@ class ComplexParameterActionTokenizer
                 }
 
                 var tokenName = property.Name.ToLowerInvariant();
-                string tokenValue;
-                if (property.PropertyType.IsEnumerable() && property.PropertyType.GetEnumerableElementType().IsPrimitiveType())
-                {
-                    tokenValue = EnumerableParameterActionTokenizer.GetTokenValue((IList)value, tokenName);
-                }
-                else
-                {
-                    tokenValue = PrimitiveParameterActionTokenizer.PrimitiveValueToString(value);
-                }
+                string tokenValue =
+                    property.PropertyType.IsEnumerable() && property.PropertyType.GetEnumerableElementType().IsPrimitiveType() ?
+                    EnumerableParameterActionTokenizer.GetTokenValue((IList)value, tokenName) :
+                    PrimitiveParameterActionTokenizer.PrimitiveValueToString(value);
 
                 tokens.AddToken(tokenName, tokenValue, isConventional: false);
             }

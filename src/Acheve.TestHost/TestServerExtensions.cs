@@ -37,9 +37,6 @@ namespace Microsoft.AspNetCore.TestHost
                 throw new ArgumentNullException(nameof(actionSelector));
             }
 
-            // Include content as Json by default
-            contentOptions = contentOptions ?? new IncludeContentAsJson();
-
             var action = GetTestServerAction(actionSelector);
 
             if (!IsValidActionMethod(action.MethodInfo))
@@ -52,6 +49,9 @@ namespace Microsoft.AspNetCore.TestHost
             var validUri = UriDiscover.Discover<TController>(action, tokenValues);
 
             var requestBuilder = server.CreateRequest(validUri);
+
+            // Include content as Json by default
+            contentOptions ??= action.ArgumentValues.Values.Any(a => a.IsFromForm) ? new IncludeContentAsFormUrlEncoded() : new IncludeContentAsJson();
 
             if (contentOptions.IncludeFromBodyAsContent)
             {
