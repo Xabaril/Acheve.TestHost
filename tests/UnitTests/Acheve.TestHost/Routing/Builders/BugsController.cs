@@ -66,18 +66,22 @@ public class BugsController
 
     [HttpGet]
     [Route("[action]")]
-    public ActionResult<IEnumerable<string>> ActionNameInRoute()
+    public IActionResult ActionNameInRoute()
     {
         return Ok();
     }
 
     [HttpGet(nameof(GetWithObject))]
-    public ActionResult<string> GetWithObject([FromQuery] ParamWithSeveralTypes param)
+    public ActionResult<ParamWithSeveralTypes> GetWithObject([FromQuery] ParamWithSeveralTypes param)
         => Ok(param);
 
     [HttpPost(nameof(PostWithObject))]
-    public ActionResult<string> PostWithObject([FromBody] ParamWithSeveralTypes param)
-    => Ok(param);
+    public ActionResult<ParamWithSeveralTypes> PostWithObject([FromBody] ParamWithSeveralTypes param)
+        => Ok(param);
+
+    [HttpPost(nameof(PostWithObjectFromForm))]
+    public ActionResult<ParamWithSeveralTypes> PostWithObjectFromForm([FromForm] ParamWithSeveralTypes param)
+        => Ok(param);
 
     [HttpGet(nameof(GetWithListParam))]
     public ActionResult<IEnumerable<string>> GetWithListParam([FromQuery] IEnumerable<string> param)
@@ -88,7 +92,7 @@ public class BugsController
         => Ok(param);
 
     [HttpGet(nameof(GetWithDatetimeParam))]
-    public ActionResult<string> GetWithDatetimeParam([FromQuery] DateTime param)
+    public ActionResult<DateTime> GetWithDatetimeParam([FromQuery] DateTime param)
         => Ok(param);
 
     [HttpPost(nameof(PostWithDatetimeParam))]
@@ -96,10 +100,10 @@ public class BugsController
         => Ok(param);
 
     [HttpGet(nameof(GetWithDatetimeListParam))]
-    public ActionResult<string> GetWithDatetimeListParam([FromQuery] IEnumerable<DateTime> param)
+    public ActionResult<IEnumerable<DateTime>> GetWithDatetimeListParam([FromQuery] IEnumerable<DateTime> param)
     => Ok(param);
 
     [HttpPost(nameof(PostWithDatetimeListParam))]
-    public ActionResult<DateTime> PostWithDatetimeListParam([FromBody] IEnumerable<DateTime> param)
+    public ActionResult<IEnumerable<DateTime>> PostWithDatetimeListParam([FromBody] IEnumerable<DateTime> param)
         => Ok(param);
 }
