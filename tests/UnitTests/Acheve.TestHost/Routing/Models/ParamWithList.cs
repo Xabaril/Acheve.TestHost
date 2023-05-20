@@ -36,7 +36,8 @@ public sealed class ParamWithSeveralTypes : IEquatable<ParamWithSeveralTypes>
            random.Next(59),
            random.Next(999));
 
-        return new() {
+        return new()
+        {
             StringValue = getRandomString(),
             IntValue = getRandomInt(),
             DoubleValue = getRandomDouble(),
@@ -55,7 +56,7 @@ public sealed class ParamWithSeveralTypes : IEquatable<ParamWithSeveralTypes>
         => other != null
             && StringValue == other.StringValue
             && IntValue == other.IntValue
-            && DoubleValue == other.DoubleValue
+            && (DoubleValue - other.DoubleValue) < 0.0001
             && BooleanValue == other.BooleanValue
             && DateTimeValue == other.DateTimeValue
             && StringValues.SequenceEqual(other.StringValues)

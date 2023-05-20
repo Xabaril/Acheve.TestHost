@@ -1852,6 +1852,25 @@ public class CreateApiRequestShould
         response.Should().Be(model);
     }
 
+    [Fact]
+    public async Task Create_get_request_with_object_from_query_setting_action_response_type()
+    {
+        var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+        var model = ParamWithSeveralTypes.CreateRandom();
+
+        var request = server.CreateHttpApiRequest<BugsController, ActionResult<ParamWithSeveralTypes>>(
+            controller => controller.GetWithObject(model)
+        );
+        var responseMessage = await request.GetAsync();
+
+        await responseMessage.IsSuccessStatusCodeOrThrow();
+        var response = await responseMessage.ReadContentAsAsync<ParamWithSeveralTypes>();
+        response.Should().Be(model);
+    }
+
     private class PrivateNonControllerClass
     {
         public int SomeAction()
