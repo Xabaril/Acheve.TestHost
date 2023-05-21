@@ -101,7 +101,7 @@ public class BugsController
 
     [HttpGet(nameof(GetWithDatetimeListParam))]
     public ActionResult<IEnumerable<DateTime>> GetWithDatetimeListParam([FromQuery] IEnumerable<DateTime> param)
-    => Ok(param);
+        => Ok(param);
 
     [HttpPost(nameof(PostWithDatetimeListParam))]
     public ActionResult<IEnumerable<DateTime>> PostWithDatetimeListParam([FromBody] IEnumerable<DateTime> param)
