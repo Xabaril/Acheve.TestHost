@@ -45,7 +45,7 @@ internal static class UriDiscover
 
         //the uri discover use only attribute route conventions.
 
-        var validUri = UriDiscover.Discover<TController>(action, tokenValues);
+        var validUri = Discover<TController>(action, tokenValues);
 
         var requestBuilder = server.CreateRequest(validUri);
 

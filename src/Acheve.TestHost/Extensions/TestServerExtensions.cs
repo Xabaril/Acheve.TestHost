@@ -1,5 +1,7 @@
 ﻿using Acheve.TestHost.Routing;
+using Microsoft.AspNetCore.Http;
 using System;
+using System.IO;
 using System.Linq.Expressions;
 
 namespace Microsoft.AspNetCore.TestHost;
@@ -44,4 +46,17 @@ public static class TestServerExtensions
         RequestContentOptions contentOptions = null)
         where TController : class
         => UriDiscover.CreateHttpApiRequest<TController>(server, actionSelector, tokenValues, contentOptions);
+
+    public static IFormFile GivenFile(this TestServer server, string parameterName = "file", string filename = "test.txt", string content = "test")
+    {
+        var stream = new MemoryStream();
+        var writer = new StreamWriter(stream);
+        writer.Write(content);
+        writer.Flush();
+        stream.Position = 0;
+
+        IFormFile file = new FormFile(stream, 0, stream.Length, parameterName, filename);
+
+        return file;
+    }
 }

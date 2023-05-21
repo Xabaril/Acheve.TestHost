@@ -1,4 +1,4 @@
-using Newtonsoft.Json;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace System.Net.Http;
@@ -37,6 +37,11 @@ public static class HttpResponseMessageExtensions
             content = $"\"{content}\"";
         }
 
-        return JsonConvert.DeserializeObject<T>(content);
+        var json = JsonSerializer.Deserialize<T>(content, new JsonSerializerOptions()
+        {
+            PropertyNameCaseInsensitive = true
+        });
+
+        return json;
     }
 }
