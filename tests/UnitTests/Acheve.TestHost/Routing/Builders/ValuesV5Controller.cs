@@ -45,7 +45,7 @@ namespace UnitTests.Acheve.TestHost.Builders
 
             return Ok();
         }
-        
+
         [HttpGet(nameof(GetWithCancellationToken))]
         public ActionResult<string> GetWithCancellationToken([FromQuery] string value, CancellationToken cancellationToken)
         {
@@ -64,8 +64,20 @@ namespace UnitTests.Acheve.TestHost.Builders
             {
                 return BadRequest();
             }
-            
+
             return Ok(value);
+        }
+
+        [HttpGet(nameof(GetBadRequest))]
+        public IActionResult GetBadRequest()
+        {
+            return BadRequest();
+        }
+
+        [HttpGet(nameof(GetOk))]
+        public IActionResult GetOk()
+        {
+            return Ok();
         }
     }
 }
