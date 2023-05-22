@@ -17,9 +17,10 @@ class ComplexParameterActionTokenizer
         for (int i = 0; i < parameters.Length; i++)
         {
             var type = parameters[i].ParameterType;
-            var instance = action.ArgumentValues.Any(x => x.Key == i) ? action.ArgumentValues[i].Instance : null;
+            var argument = action.ArgumentValues.Any(x => x.Key == i) ? action.ArgumentValues[i] : null;
+            var instance = argument?.Instance;
 
-            if (instance == null || type.IsPrimitiveType() || IgnoreBind(parameters[i]))
+            if (instance is null || type.IsPrimitiveType() || IgnoreBind(parameters[i]) || !IsQueryOrRouteParameter(argument))
             {
                 continue;
             }
@@ -43,7 +44,7 @@ class ComplexParameterActionTokenizer
         }
     }
 
-    static bool IgnoreBind(ParameterInfo parameter)
+    private static bool IgnoreBind(ParameterInfo parameter)
     {
         var attributes = parameter.GetCustomAttributes(false);
 
@@ -61,4 +62,7 @@ class ComplexParameterActionTokenizer
 
         return false;
     }
+
+    private static bool IsQueryOrRouteParameter(TestServerArgument argument)
+        => !(argument.IsFromHeader || argument.IsFromForm || argument.IsFromBody);
 }

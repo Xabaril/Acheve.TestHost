@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -35,10 +36,15 @@ namespace Acheve.TestHost.Routing
                 isFromBody = true;
             }
 
-            var isCancellationToken = argument.ParameterType == typeof(System.Threading.CancellationToken);
-            if (isCancellationToken)
+            if (argument.ParameterType == typeof(System.Threading.CancellationToken))
             {
                 isFromBody = isFromForm = isFromHeader = false;
+            }
+
+            if (argument.ParameterType == typeof(IFormFile))
+            {
+                isFromForm = true;
+                isFromBody = isFromHeader = false;
             }
 
             if (!ArgumentValues.ContainsKey(order))

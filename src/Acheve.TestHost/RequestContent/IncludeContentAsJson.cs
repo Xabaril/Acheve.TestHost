@@ -1,7 +1,7 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Text;
+using System.Text.Json;
 
 namespace Microsoft.AspNetCore.TestHost
 {
@@ -13,14 +13,14 @@ namespace Microsoft.AspNetCore.TestHost
     {
         /// <inheritdoc/>
         public override bool IncludeFromBodyAsContent => true;
-        
+
         /// <inheritdoc/>
         public override bool IncludeFromFormAsContent => false;
 
         /// <inheritdoc/>
         public override Func<object, HttpContent> ContentBuilder =>
             content => new StringContent(
-                JsonConvert.SerializeObject(content),
+                JsonSerializer.Serialize(content),
                 Encoding.UTF8,
                 "application/json");
     }

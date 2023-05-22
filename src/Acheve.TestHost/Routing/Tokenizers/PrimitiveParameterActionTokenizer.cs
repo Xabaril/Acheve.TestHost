@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Text.Json;
 
 namespace Acheve.TestHost.Routing.Tokenizers;
 
@@ -42,8 +43,8 @@ internal class PrimitiveParameterActionTokenizer
     public static string PrimitiveValueToString<T>(T value)
         => value switch
         {
-            DateTime dateTimeValue => dateTimeValue.ToString("yyyy/MM/ddTHH:mm:ss.fff"),
-            double doubleValue => JsonConvert.SerializeObject(doubleValue),
+            (DateTime or DateTimeOffset) and IFormattable dateTimeValue => dateTimeValue.ToString("o", CultureInfo.InvariantCulture),
+            float or double or long or decimal => JsonSerializer.Serialize(value),
             _ => value.ToString()
         };
 
