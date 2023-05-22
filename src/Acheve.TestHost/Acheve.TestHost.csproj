@@ -10,7 +10,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.TestHost" />
-    <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
 
 </Project>

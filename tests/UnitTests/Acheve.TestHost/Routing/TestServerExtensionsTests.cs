@@ -814,13 +814,13 @@ public class CreateApiRequestShould
            controller => controller.Post2(1, pagination));
 
         requestPost.GetConfiguredAddress()
-            .Should().Be("post2/1?pageindex=1&pagecount=2");
+            .Should().Be("post2/1");
 
         requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
            controller => controller.Put2(1, pagination));
 
         requestPost.GetConfiguredAddress()
-            .Should().Be("put2/1?pageindex=1&pagecount=2");
+            .Should().Be("put2/1");
 
         requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
             controller => controller.Delete2(1, pagination));
@@ -838,13 +838,13 @@ public class CreateApiRequestShould
            controller => controller.Post3(1, pagination));
 
         requestPost.GetConfiguredAddress()
-            .Should().Be("post3/1?pageindex=1&pagecount=2");
+            .Should().Be("post3/1");
 
         requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
            controller => controller.Put3(1, pagination));
 
         requestPost.GetConfiguredAddress()
-            .Should().Be("put3/1?pageindex=1&pagecount=2");
+            .Should().Be("put3/1");
 
         requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
             controller => controller.Delete3(1, pagination));
@@ -899,13 +899,13 @@ public class CreateApiRequestShould
            controller => controller.Post2(1, pagination));
 
         requestPost.GetConfiguredAddress()
-            .Should().Be("post2/1?pageindex=1");
+            .Should().Be("post2/1");
 
         requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
            controller => controller.Put2(1, pagination));
 
         requestPost.GetConfiguredAddress()
-            .Should().Be("put2/1?pageindex=1");
+            .Should().Be("put2/1");
 
         requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
             controller => controller.Delete2(1, pagination));
@@ -923,13 +923,13 @@ public class CreateApiRequestShould
            controller => controller.Post3(1, pagination));
 
         requestPost.GetConfiguredAddress()
-            .Should().Be("post3/1?pageindex=1");
+            .Should().Be("post3/1");
 
         requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
            controller => controller.Put3(1, pagination));
 
         requestPost.GetConfiguredAddress()
-            .Should().Be("put3/1?pageindex=1");
+            .Should().Be("put3/1");
 
         requestPost = server.CreateHttpApiRequest<ValuesV4Controller>(
             controller => controller.Delete3(1, pagination));
@@ -1869,6 +1869,39 @@ public class CreateApiRequestShould
         await responseMessage.IsSuccessStatusCodeOrThrow();
         var response = await responseMessage.ReadContentAsAsync<ParamWithSeveralTypes>();
         response.Should().Be(model);
+    }
+
+    [Fact]
+    public async Task Create_post_request_with_file()
+    {
+        var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+        var model = server.GivenFile(content: nameof(Create_post_request_with_file));
+        var request = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.PostFile(model));
+        var responseMessage = await request.PostAsync();
+
+        await responseMessage.IsSuccessStatusCodeOrThrow();
+        var content = await responseMessage.Content.ReadAsStringAsync();
+        content.Should().Be(nameof(Create_post_request_with_file));
+    }
+
+    [Fact]
+    public async Task Create_post_request_with_object_with_file()
+    {
+        var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+        var file = server.GivenFile(content: nameof(Create_post_request_with_file));
+        var model = new ParamWithFile(file);
+        var request = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.PostObjectWithFile(model));
+        var responseMessage = await request.PostAsync();
+
+        await responseMessage.IsSuccessStatusCodeOrThrow();
+        var content = await responseMessage.Content.ReadAsStringAsync();
+        content.Should().Be($"{model.Id}+{nameof(Create_post_request_with_file)}");
     }
 
     private class PrivateNonControllerClass
