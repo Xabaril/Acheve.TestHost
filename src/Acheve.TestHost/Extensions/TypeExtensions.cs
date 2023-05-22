@@ -18,7 +18,7 @@ internal static class TypeExtensions
 
     internal static bool IsDateTime(this Type typeToInspect)
     {
-        return typeToInspect == typeof(DateTime);
+        return typeToInspect == typeof(DateTime) || typeToInspect == typeof(DateTimeOffset);
     }
 
     internal static bool IsEnumerable(this Type typeToInspect)
