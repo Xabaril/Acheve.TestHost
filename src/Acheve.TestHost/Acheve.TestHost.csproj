@@ -3,11 +3,6 @@
   <PropertyGroup>
     <TargetFrameworks>$(NetCoreTargetVersion)</TargetFrameworks>
   </PropertyGroup>
-  
-  <ItemGroup>
-    <Folder Include="Routing\AttributeTemplates\" />
-    <Folder Include="Routing\Tokenizers\" />
-  </ItemGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
@@ -15,7 +10,6 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.TestHost" />
-    <PackageReference Include="Newtonsoft.Json" />
   </ItemGroup>
 
 </Project>

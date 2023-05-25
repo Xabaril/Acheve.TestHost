@@ -2,11 +2,11 @@
 
 [![Build status](https://github.com/Xabaril/Acheve.TestHost/actions/workflows/nuget.yml/badge.svg)](https://github.com/Xabaril/Acheve.TestHost/actions/workflows/nuget.yml/badge.svg) [![NuGet](https://img.shields.io/nuget/v/acheve.testhost.svg)](https://www.nuget.org/packages/acheve.testhost/)
 
-NuGet package to improve  AspNetCore TestServer experiences
+NuGet package to improve AspNetCore TestServer experiences
 
 Unit testing your Mvc controllers is not enough to verify the correctness of your WebApi. Are the filters working? Is the correct status code sent when that condition is reached? Is the user authorized to request that endpoint?
 
-The NuGet package [Microsoft.AspNetCore.TestHost](https://www.nuget.org/packages/Microsoft.AspNetCore.TestHost/) allows you to create an in memory server that exposes an HttpClient to be able to send request to the server. All in memory, all in the same process. Fast. It's the best way to create integration tests in your Mvc application. But at this moment this library has some gaps that *Acheve* try to fill.
+The NuGet package [Microsoft.AspNetCore.TestHost](https://www.nuget.org/packages/Microsoft.AspNetCore.TestHost/) allows you to create an in memory server that exposes an HttpClient to be able to send request to the server. All in memory, all in the same process. Fast. It's the best way to create integration tests in your Mvc application. But at this moment this library has some gaps that _Acheve_ try to fill.
 
 ## Get started
 
@@ -66,29 +66,29 @@ the claims for authenticated calls to the WebApi.
 
 In the TestServer startup class you shoud incude the authentication service and add the .Net Core new AUthentication middleware:
 
- ```csharp
-     public class TestStartup
-    {
-        public void ConfigureServices(IServiceCollection services)
-        {
-            services.AddAuthentication(options =>
-                {
-                    options.DefaultScheme = TestServerDefaults.AuthenticationScheme;
-                })
-                .AddTestServer();
+```csharp
+    public class TestStartup
+   {
+       public void ConfigureServices(IServiceCollection services)
+       {
+           services.AddAuthentication(options =>
+               {
+                   options.DefaultScheme = TestServerDefaults.AuthenticationScheme;
+               })
+               .AddTestServer();
 
-            var mvcCoreBuilder = services.AddMvcCore();
-            ApiConfiguration.ConfigureCoreMvc(mvcCoreBuilder);
-        }
+           var mvcCoreBuilder = services.AddMvcCore();
+           ApiConfiguration.ConfigureCoreMvc(mvcCoreBuilder);
+       }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app)
-        {
-            app.UseAuthentication();
+       // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+       public void Configure(IApplicationBuilder app)
+       {
+           app.UseAuthentication();
 
-            app.UseMvcWithDefaultRoute();
-        }
-    }
+           app.UseMvcWithDefaultRoute();
+       }
+   }
 ```
 
 And in your tests you can use an HttpClient with default credentials or build
@@ -178,7 +178,7 @@ var response = await _server.CreateRequest("api/values/public")
 In general, in our tests a new simple API class is created to hide this uri and improve the code.
 
 ```csharp
- // some code on tests 
+ // some code on tests
 
 var response = await _server.CreateRequest(Api.Values.Public)
                 .GetAsync();
@@ -199,7 +199,7 @@ The main problems on this approach are:
 1. If any route convention is changed all integration test will fail.
 1. If you refactor any parameter order the integration test will fail.
 
-With *Acheve* you can create the uri dynamically using the attribute routing directly from your controllers.
+With _Acheve_ you can create the uri dynamically using the attribute routing directly from your controllers.
 
 ```csharp
 var response = await _server.CreateHttpApiRequest<ValuesController>(controller=>controller.PublicValues())
@@ -208,7 +208,7 @@ var response = await _server.CreateHttpApiRequest<ValuesController>(controller=>
 
 ## About adding extra query parameters
 
-The package has a *RequestBuilder* extension to add a new query parameter: *AddQueryParameter*.
+The package has a _RequestBuilder_ extension to add a new query parameter: _AddQueryParameter_.
 
 ```csharp
 [Fact]
@@ -221,9 +221,9 @@ public async Task MyFirstTest()
 }
 ```
 
-## About removin query parameters
+## About removing query parameters
 
-The package has a *RequestBuilder* extension to remove a query parameter: *RemoveQueryParameter*.
+The package has a _RequestBuilder_ extension to remove a query parameter: _RemoveQueryParameter_.
 
 ```csharp
 [Fact]
@@ -236,12 +236,26 @@ public async Task MyFirstTest()
 }
 ```
 
+## About sending files
+
+The package has a _TestServer_ extension to get a test file: _GivenFile_.
+
+```csharp
+[Fact]
+public async Task MyFirstTest()
+{
+    ...
+    var file = server.GivenFile();
+    ...
+}
+```
+
 ## Improving assertions in API responses
 
 The package has HttpResponseMessage extension to help us assert the response.
 
-- *IsSuccessStatusCodeOrThrow*: Throw exception with the response content in the message.
-- *ReadContentAsAsync*: Read the response content and cast it.
+- _IsSuccessStatusCodeOrThrow_: Throw exception with the response content in the message.
+- _ReadContentAsAsync_: Read the response content and cast it.
 
 ```csharp
 [Fact]
