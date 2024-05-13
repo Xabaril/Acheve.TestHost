@@ -10,23 +10,21 @@ internal class EnumerableParameterActionTokenizer
     public void AddTokens<TController>(TestServerAction action, TestServerTokenCollection tokens)
         where TController : class
     {
-        var parameters = action.MethodInfo.GetParameters();
-
-        for (var i = 0; i < parameters.Length; i++)
+        foreach (var argument in action.ArgumentValues.Values)
         {
-            var parameterType = parameters[i].ParameterType;
+            var parameterType = argument.Type;
             if (!parameterType.IsEnumerable() || !parameterType.GetEnumerableElementType().IsPrimitiveType())
             {
                 continue;
             }
 
-            var arrayValues = (IList)action.ArgumentValues[i].Instance;
+            var arrayValues = (IList)argument.Instance;
             if (arrayValues == null || arrayValues.Count == 0)
             {
                 continue;
             }
 
-            var tokenName = parameters[i].Name.ToLowerInvariant();
+            var tokenName = argument.Name.ToLowerInvariant();
             var tokenValue = GetTokenValue(arrayValues, tokenName);
             tokens.AddToken(tokenName, tokenValue, isConventional: false);
         }

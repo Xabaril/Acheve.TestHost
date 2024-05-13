@@ -111,4 +111,12 @@ public class ValuesV5Controller : ControllerBase
         using var reader = new StreamReader(file.OpenReadStream());
         return await reader.ReadToEndAsync();
     }
+
+    [HttpPost($"{nameof(PostWithDifferentFroms)}/{{{nameof(ParamWithDifferentFroms.ParamFromRoute)}}}")]
+    public ActionResult<ParamWithDifferentFroms> PostWithDifferentFroms(ParamWithDifferentFroms request)
+        => Ok(request);
+
+    [HttpPut($"{nameof(PutWithDifferentFroms)}/{{{nameof(ParamWithDifferentFroms.ParamFromRoute)}}}")]
+    public ActionResult<ParamWithDifferentFroms> PutWithDifferentFroms(ParamWithDifferentFroms request)
+        => Ok(request);
 }
