@@ -24,7 +24,7 @@ namespace Acheve.TestHost.Routing
         public void AddArgument(int order, Expression expression, bool activeBodyApiController)
         {
             var argument = MethodInfo.GetParameters()[order];
-            var (fromType, isNeverBind, canBeObjectWithMultipleFroms) = GetIsFrom(argument, activeBodyApiController, value => value.ParameterType, value => value.GetCustomAttributes());
+            var (fromType, canBeObjectWithMultipleFroms, isNeverBind) = GetIsFrom(argument, activeBodyApiController, value => value.ParameterType, value => value.GetCustomAttributes());
 
             if (!ArgumentValues.ContainsKey(order))
             {
@@ -52,16 +52,14 @@ namespace Acheve.TestHost.Routing
                                 var instance = Expression.Lambda(member)
                                     .Compile()
                                     .DynamicInvoke();
-                                ArgumentValues.Add(order, new TestServerArgument(instance, fromType, isNeverBind, argument.ParameterType, argument.Name));
-                                //AddArgumentValues(order, instance, argument.Name, fromType, isNeverBind, argument.ParameterType, canBeObjectWithMultipleFroms);
+                                AddArgumentValues(order, instance, argument.Name, fromType, isNeverBind, argument.ParameterType, canBeObjectWithMultipleFroms);
                             }
                             break;
 
                         case MethodCallExpression method:
                             {
                                 var instance = Expression.Lambda(method).Compile().DynamicInvoke();
-                                ArgumentValues.Add(order, new TestServerArgument(instance, fromType, isNeverBind, argument.ParameterType, argument.Name));
-                                //AddArgumentValues(order, instance, argument.Name, fromType, isNeverBind, argument.ParameterType, canBeObjectWithMultipleFroms);
+                                AddArgumentValues(order, instance, argument.Name, fromType, isNeverBind, argument.ParameterType, canBeObjectWithMultipleFroms);
                             }
                             break;
 
@@ -87,11 +85,11 @@ namespace Acheve.TestHost.Routing
                 {
                     foreach (var property in properties)
                     {
-                        (fromType, isNeverBind, _) = GetIsFrom(property, false, value => value.PropertyType, value => value.GetCustomAttributes());
+                        (fromType, canBeObjectWithMultipleFroms, var isNeverBindProp) = GetIsFrom(property, false, value => value.PropertyType, value => value.GetCustomAttributes());
                         argumentName = property.Name;
                         var propertyValue = property.GetValue(value);
 
-                        ArgumentValues.Add(order, new TestServerArgument(propertyValue, fromType, isNeverBind, property.PropertyType, argumentName));
+                        ArgumentValues.Add(order, new TestServerArgument(propertyValue, fromType, isNeverBind || isNeverBindProp, property.PropertyType, argumentName));
                         order++;
                     }
 
