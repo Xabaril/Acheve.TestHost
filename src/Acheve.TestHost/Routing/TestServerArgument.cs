@@ -1,26 +1,38 @@
-﻿namespace Acheve.TestHost.Routing
+﻿using System;
+
+namespace Acheve.TestHost.Routing
 {
+    [Flags]
+    public enum TestServerArgumentFromType
+    {
+        None = 0,
+        Body = 1,
+        Form = 2,
+        Header = 4,
+        Query = 8,
+        Route = 32,
+    }
+
     public class TestServerArgument
     {
         public TestServerArgument(
              object instance,
-             bool isFromBody = false,
-             bool isFromForm = false,
-             bool isFromHeader = false,
+             TestServerArgumentFromType fromType,
+             bool neverBind,
+             Type type,
              string headerName = null)
         {
             Instance = instance;
-            IsFromBody = isFromBody;
-            IsFromForm = isFromForm;
-            IsFromHeader = isFromHeader;
-            HeaderName = isFromHeader ? headerName : null;
+            FromType = fromType;
+            HeaderName = fromType == TestServerArgumentFromType.Header ? headerName : null;
+            NeverBind = neverBind;
+            Type = type;
         }
 
-        public object Instance { get; private set; }
-
-        public bool IsFromBody { get; private set; }
-        public bool IsFromForm { get; private set; }
-        public bool IsFromHeader { get; private set; }
-        public string HeaderName { get; private set; }
+        public object Instance { get; }
+        public TestServerArgumentFromType FromType { get; }
+        public string HeaderName { get; }
+        public bool NeverBind { get; }
+        public Type Type { get; }
     }
 }

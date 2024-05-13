@@ -1904,6 +1904,56 @@ public class CreateApiRequestShould
         content.Should().Be($"{model.Id}+{nameof(Create_post_request_with_file)}");
     }
 
+    [Fact]
+    public async Task Create_post_request_with_object_with_different_froms()
+    {
+        var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+        var model = new ParamWithDifferentFroms()
+        {
+            ParamFromBody = ParamWithSeveralTypes.CreateRandom(),
+            ParamFromQuery = "fromQuery",
+            ParamFromRoute = "fromRoute",
+            ParamFromHeader = "fromHeader"
+        };
+        var request = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.PostWithDifferentFroms(model));
+        var responseMessage = await request.PostAsync();
+
+        await responseMessage.IsSuccessStatusCodeOrThrow();
+        var content = await responseMessage.ReadContentAsAsync<ParamWithDifferentFroms>();
+        content.ParamFromHeader.Should().Be(model.ParamFromHeader);
+        content.ParamFromQuery.Should().Be(model.ParamFromQuery);
+        content.ParamFromRoute.Should().Be(model.ParamFromRoute);
+        content.ParamFromBody.Should().Be(model.ParamFromBody);
+    }
+
+    [Fact]
+    public async Task Create_put_request_with_object_with_different_froms()
+    {
+        var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+        var model = new ParamWithDifferentFroms()
+        {
+            ParamFromBody = ParamWithSeveralTypes.CreateRandom(),
+            ParamFromQuery = "fromQuery",
+            ParamFromRoute = "fromRoute",
+            ParamFromHeader = "fromHeader"
+        };
+        var request = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.PutWithDifferentFroms(model));
+        var responseMessage = await request.SendAsync("PUT");
+
+        await responseMessage.IsSuccessStatusCodeOrThrow();
+        var content = await responseMessage.ReadContentAsAsync<ParamWithDifferentFroms>();
+        content.ParamFromHeader.Should().Be(model.ParamFromHeader);
+        content.ParamFromQuery.Should().Be(model.ParamFromQuery);
+        content.ParamFromRoute.Should().Be(model.ParamFromRoute);
+        content.ParamFromBody.Should().Be(model.ParamFromBody);
+    }
+
     private class PrivateNonControllerClass
     {
         public int SomeAction()

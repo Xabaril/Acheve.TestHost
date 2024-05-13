@@ -64,5 +64,5 @@ class ComplexParameterActionTokenizer
     }
 
     private static bool IsQueryOrRouteParameter(TestServerArgument argument)
-        => !(argument.IsFromHeader || argument.IsFromForm || argument.IsFromBody);
+        => argument.FromType == TestServerArgumentFromType.None || argument.FromType.HasFlag(TestServerArgumentFromType.Query) || argument.FromType.HasFlag(TestServerArgumentFromType.Route);
 }
