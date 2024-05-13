@@ -270,7 +270,7 @@ internal static class UriDiscover
 
         foreach (var fromHeaderArgument in fromHeaderArguments)
         {
-            requestBuilder.And(x => x.Headers.Add(fromHeaderArgument.HeaderName, fromHeaderArgument.Instance.ToString()));
+            requestBuilder.And(x => x.Headers.Add(fromHeaderArgument.Name, fromHeaderArgument.Instance.ToString()));
         }
     }
 }

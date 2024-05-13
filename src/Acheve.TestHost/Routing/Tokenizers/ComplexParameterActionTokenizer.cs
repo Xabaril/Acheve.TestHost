@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections;
-using System.Linq;
 using System.Reflection;
 
 namespace Acheve.TestHost.Routing.Tokenizers;
@@ -12,15 +11,12 @@ class ComplexParameterActionTokenizer
 {
     public void AddTokens<TController>(TestServerAction action, TestServerTokenCollection tokens) where TController : class
     {
-        var parameters = action.MethodInfo.GetParameters();
-
-        for (int i = 0; i < parameters.Length; i++)
+        foreach (var argument in action.ArgumentValues.Values)
         {
-            var type = parameters[i].ParameterType;
-            var argument = action.ArgumentValues.Any(x => x.Key == i) ? action.ArgumentValues[i] : null;
-            var instance = argument?.Instance;
+            var type = argument.Type;
+            var instance = argument.Instance;
 
-            if (instance is null || type.IsPrimitiveType() || IgnoreBind(parameters[i]) || !IsQueryOrRouteParameter(argument))
+            if (instance is null || type.IsPrimitiveType() || argument.NeverBind || !IsQueryOrRouteParameter(argument))
             {
                 continue;
             }

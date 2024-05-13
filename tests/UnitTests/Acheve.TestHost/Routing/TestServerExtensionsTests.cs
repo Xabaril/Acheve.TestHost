@@ -1263,7 +1263,7 @@ public class CreateApiRequestShould
     }
 
     [Fact]
-    public void Create_valid_request_without_using_frombody_with_apicontroller_attribute()
+    public async Task Create_valid_request_without_using_frombody_with_apicontroller_attribute()
     {
         var server = new TestServerBuilder().UseDefaultStartup()
                                             .Build();
@@ -1276,7 +1276,7 @@ public class CreateApiRequestShould
 
         var requestPost1 = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.Post1(complexParameter));
 
-        string body = requestPost1.GetRequest().Content.ReadAsStringAsync().Result;
+        string body = await requestPost1.GetRequest().Content.ReadAsStringAsync();
         JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
         JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
     }

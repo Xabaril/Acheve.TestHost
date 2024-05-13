@@ -20,18 +20,18 @@ namespace Acheve.TestHost.Routing
              TestServerArgumentFromType fromType,
              bool neverBind,
              Type type,
-             string headerName = null)
+             string name)
         {
             Instance = instance;
             FromType = fromType;
-            HeaderName = fromType == TestServerArgumentFromType.Header ? headerName : null;
+            Name = name;
             NeverBind = neverBind;
             Type = type;
         }
 
         public object Instance { get; }
         public TestServerArgumentFromType FromType { get; }
-        public string HeaderName { get; }
+        public string Name { get; }
         public bool NeverBind { get; }
         public Type Type { get; }
     }
