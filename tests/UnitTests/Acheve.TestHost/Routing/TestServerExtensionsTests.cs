@@ -1282,7 +1282,7 @@ public class CreateApiRequestShould
     }
 
     [Fact]
-    public void Create_valid_request_without_using_frombody_with_apicontroller_attribute_and_route_parameter()
+    public async Task Create_valid_request_without_using_frombody_with_apicontroller_attribute_and_route_parameter()
     {
         var server = new TestServerBuilder().UseDefaultStartup()
                                             .Build();
@@ -1295,14 +1295,14 @@ public class CreateApiRequestShould
 
         var requestPost2 = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.Post2(1, complexParameter));
 
-        string body = requestPost2.GetRequest().Content.ReadAsStringAsync().Result;
+        string body = await requestPost2.GetRequest().Content.ReadAsStringAsync();
         JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
         JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
         requestPost2.GetConfiguredAddress().StartsWith($"{BASE_PATH_VALUES}/1").Should().Be(true);
     }
 
     [Fact]
-    public void Create_valid_request_without_using_frombody_with_apicontroller_and_string_parameter_in_route()
+    public async Task Create_valid_request_without_using_frombody_with_apicontroller_and_string_parameter_in_route()
     {
         var server = new TestServerBuilder().UseDefaultStartup()
                                             .Build();
@@ -1317,7 +1317,7 @@ public class CreateApiRequestShould
 
         var requestPost3 = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.Post3($"{id}", complexParameter));
 
-        string body = requestPost3.GetRequest().Content.ReadAsStringAsync().Result;
+        string body = await requestPost3.GetRequest().Content.ReadAsStringAsync();
         JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
         JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
         requestPost3.GetConfiguredAddress().StartsWith($"{BASE_PATH_VALUES}/{id}").Should().Be(true);
@@ -1327,7 +1327,7 @@ public class CreateApiRequestShould
     [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
-    public void Create_valid_request_without_using_frombody_with_apicontroller_and_string_parameter_with_invalid_value(string id)
+    public async Task Create_valid_request_without_using_frombody_with_apicontroller_and_string_parameter_with_invalid_value(string id)
     {
         var server = new TestServerBuilder().UseDefaultStartup()
                                             .Build();
@@ -1340,14 +1340,14 @@ public class CreateApiRequestShould
 
         var requestPost3 = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.Post3($"{id}", complexParameter));
 
-        string body = requestPost3.GetRequest().Content.ReadAsStringAsync().Result;
+        string body = await requestPost3.GetRequest().Content.ReadAsStringAsync();
         JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
         JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
         requestPost3.GetConfiguredAddress().StartsWith($"{BASE_PATH_VALUES}/").Should().Be(true);
     }
 
     [Fact]
-    public void Create_valid_request_of_patch_without_using_frombody_with_apicontroller_attribute_and_route_parameter()
+    public async Task Create_valid_request_of_patch_without_using_frombody_with_apicontroller_attribute_and_route_parameter()
     {
         var server = new TestServerBuilder().UseDefaultStartup()
                                             .Build();
@@ -1360,7 +1360,7 @@ public class CreateApiRequestShould
 
         var requestPost2 = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.Patch1(1, complexParameter));
 
-        string body = requestPost2.GetRequest().Content.ReadAsStringAsync().Result;
+        string body = await requestPost2.GetRequest().Content.ReadAsStringAsync();
         JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
         JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
         requestPost2.GetConfiguredAddress().StartsWith($"{BASE_PATH_VALUES}/1").Should().Be(true);
