@@ -112,7 +112,7 @@ public class ValuesV5Controller : ControllerBase
         return await reader.ReadToEndAsync();
     }
 
-    [HttpPost(nameof(PostWithDifferentFroms))]
+    [HttpPost($"{nameof(PostWithDifferentFroms)}/{{{nameof(ParamWithDifferentFroms.ParamFromRoute)}}}")]
     public ActionResult<ParamWithDifferentFroms> PostWithDifferentFroms(ParamWithDifferentFroms request)
         => Ok(request);
 
