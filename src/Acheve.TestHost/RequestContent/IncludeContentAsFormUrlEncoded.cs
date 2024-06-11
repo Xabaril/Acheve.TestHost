@@ -2,9 +2,9 @@
 using System;
 using System.Collections;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading;
 
 namespace Microsoft.AspNetCore.TestHost;
@@ -45,13 +45,13 @@ public class IncludeContentAsFormUrlEncoded : RequestContentOptions
             case CancellationToken:
                 break;
             case IFormFile file:
-                using (var ms = new MemoryStream())
-                {
-                    file.CopyTo(ms);
-                    var fileContent = new ByteArrayContent(ms.ToArray());
+                var fileContent = new StreamContent(file.OpenReadStream());
+                if (!string.IsNullOrEmpty(file.ContentType))
+                    fileContent.Headers.ContentType = new MediaTypeHeaderValue(file.ContentType);
+                if (!string.IsNullOrEmpty(file.ContentDisposition))
+                    fileContent.Headers.ContentDisposition = new ContentDispositionHeaderValue(file.ContentDisposition);
 
-                    multipartContent.Add(fileContent, file.Name, file.FileName);
-                }
+                multipartContent.Add(fileContent, file.Name, file.FileName);
                 break;
             case object when data.GetType().IsPrimitiveType():
                 multipartContent.Add(new StringContent(PrimitiveValueToString(data)), propertyName);
