@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -108,7 +109,20 @@ public class ValuesV5Controller : ControllerBase
 
     private static async Task<string> ReadFormFile(IFormFile file)
     {
+        if (string.IsNullOrEmpty(file.FileName) || string.IsNullOrEmpty(file.Name) || string.IsNullOrEmpty(file.ContentType))
+        {
+            throw new ArgumentException("Error in file", nameof(file));
+        }
+
         using var reader = new StreamReader(file.OpenReadStream());
         return await reader.ReadToEndAsync();
     }
+
+    [HttpPost($"{nameof(PostWithDifferentFroms)}/{{{nameof(ParamWithDifferentFroms.ParamFromRoute)}}}")]
+    public ActionResult<ParamWithDifferentFroms> PostWithDifferentFroms(ParamWithDifferentFroms request)
+        => Ok(request);
+
+    [HttpPut($"{nameof(PutWithDifferentFroms)}/{{{nameof(ParamWithDifferentFroms.ParamFromRoute)}}}")]
+    public ActionResult<ParamWithDifferentFroms> PutWithDifferentFroms(ParamWithDifferentFroms request)
+        => Ok(request);
 }

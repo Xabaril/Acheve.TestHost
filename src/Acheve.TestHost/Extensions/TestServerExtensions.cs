@@ -1,8 +1,10 @@
 ﻿using Acheve.TestHost.Routing;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Net.Http.Headers;
 using System;
 using System.IO;
 using System.Linq.Expressions;
+using System.Net.Mime;
 using System.Text;
 
 namespace Microsoft.AspNetCore.TestHost;
@@ -48,11 +50,18 @@ public static class TestServerExtensions
         where TController : class
         => UriDiscover.CreateHttpApiRequest<TController>(server, actionSelector, tokenValues, contentOptions);
 
-    public static IFormFile GivenFile(this TestServer _, string parameterName = "file", string filename = "test.txt", string content = "test")
+    public static IFormFile GivenFile(this TestServer _, string parameterName = "file", string filename = "test.txt", string content = "test", string contentType = MediaTypeNames.Text.Plain)
     {
         var stream = new MemoryStream(Encoding.UTF8.GetBytes(content));
 
-        IFormFile file = new FormFile(stream, 0, stream.Length, parameterName, filename);
+        IFormFile file = new FormFile(stream, 0, stream.Length, parameterName, filename)
+        {
+            Headers = new HeaderDictionary()
+            {
+                [HeaderNames.ContentType] = contentType
+            },
+            ContentType = contentType
+        };
 
         return file;
     }

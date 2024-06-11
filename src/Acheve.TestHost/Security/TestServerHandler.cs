@@ -13,14 +13,22 @@ namespace Acheve.TestHost
 {
     public class TestServerHandler : AuthenticationHandler<TestServerOptions>
     {
+#if NET8_0_OR_GREATER
+        public TestServerHandler(
+            IOptionsMonitor<TestServerOptions> options,
+            ILoggerFactory logger,
+            UrlEncoder encoder)
+            : base(options, logger, encoder)
+        { }
+#else
         public TestServerHandler(
             IOptionsMonitor<TestServerOptions> options,
             ILoggerFactory logger,
             UrlEncoder encoder,
             ISystemClock clock)
             : base(options, logger, encoder, clock)
-        {
-        }
+        { }
+#endif
 
         protected new TestServerEvents Events
         {

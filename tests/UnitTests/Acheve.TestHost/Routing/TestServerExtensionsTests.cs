@@ -1263,7 +1263,7 @@ public class CreateApiRequestShould
     }
 
     [Fact]
-    public void Create_valid_request_without_using_frombody_with_apicontroller_attribute()
+    public async Task Create_valid_request_without_using_frombody_with_apicontroller_attribute()
     {
         var server = new TestServerBuilder().UseDefaultStartup()
                                             .Build();
@@ -1276,13 +1276,13 @@ public class CreateApiRequestShould
 
         var requestPost1 = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.Post1(complexParameter));
 
-        string body = requestPost1.GetRequest().Content.ReadAsStringAsync().Result;
+        string body = await requestPost1.GetRequest().Content.ReadAsStringAsync();
         JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
         JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
     }
 
     [Fact]
-    public void Create_valid_request_without_using_frombody_with_apicontroller_attribute_and_route_parameter()
+    public async Task Create_valid_request_without_using_frombody_with_apicontroller_attribute_and_route_parameter()
     {
         var server = new TestServerBuilder().UseDefaultStartup()
                                             .Build();
@@ -1295,14 +1295,14 @@ public class CreateApiRequestShould
 
         var requestPost2 = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.Post2(1, complexParameter));
 
-        string body = requestPost2.GetRequest().Content.ReadAsStringAsync().Result;
+        string body = await requestPost2.GetRequest().Content.ReadAsStringAsync();
         JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
         JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
         requestPost2.GetConfiguredAddress().StartsWith($"{BASE_PATH_VALUES}/1").Should().Be(true);
     }
 
     [Fact]
-    public void Create_valid_request_without_using_frombody_with_apicontroller_and_string_parameter_in_route()
+    public async Task Create_valid_request_without_using_frombody_with_apicontroller_and_string_parameter_in_route()
     {
         var server = new TestServerBuilder().UseDefaultStartup()
                                             .Build();
@@ -1317,7 +1317,7 @@ public class CreateApiRequestShould
 
         var requestPost3 = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.Post3($"{id}", complexParameter));
 
-        string body = requestPost3.GetRequest().Content.ReadAsStringAsync().Result;
+        string body = await requestPost3.GetRequest().Content.ReadAsStringAsync();
         JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
         JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
         requestPost3.GetConfiguredAddress().StartsWith($"{BASE_PATH_VALUES}/{id}").Should().Be(true);
@@ -1327,7 +1327,7 @@ public class CreateApiRequestShould
     [InlineData(null)]
     [InlineData("")]
     [InlineData(" ")]
-    public void Create_valid_request_without_using_frombody_with_apicontroller_and_string_parameter_with_invalid_value(string id)
+    public async Task Create_valid_request_without_using_frombody_with_apicontroller_and_string_parameter_with_invalid_value(string id)
     {
         var server = new TestServerBuilder().UseDefaultStartup()
                                             .Build();
@@ -1340,14 +1340,14 @@ public class CreateApiRequestShould
 
         var requestPost3 = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.Post3($"{id}", complexParameter));
 
-        string body = requestPost3.GetRequest().Content.ReadAsStringAsync().Result;
+        string body = await requestPost3.GetRequest().Content.ReadAsStringAsync();
         JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
         JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
         requestPost3.GetConfiguredAddress().StartsWith($"{BASE_PATH_VALUES}/").Should().Be(true);
     }
 
     [Fact]
-    public void Create_valid_request_of_patch_without_using_frombody_with_apicontroller_attribute_and_route_parameter()
+    public async Task Create_valid_request_of_patch_without_using_frombody_with_apicontroller_attribute_and_route_parameter()
     {
         var server = new TestServerBuilder().UseDefaultStartup()
                                             .Build();
@@ -1360,7 +1360,7 @@ public class CreateApiRequestShould
 
         var requestPost2 = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.Patch1(1, complexParameter));
 
-        string body = requestPost2.GetRequest().Content.ReadAsStringAsync().Result;
+        string body = await requestPost2.GetRequest().Content.ReadAsStringAsync();
         JsonSerializer.Deserialize<Pagination>(body).PageIndex.Should().Be(complexParameter.PageIndex);
         JsonSerializer.Deserialize<Pagination>(body).PageCount.Should().Be(complexParameter.PageCount);
         requestPost2.GetConfiguredAddress().StartsWith($"{BASE_PATH_VALUES}/1").Should().Be(true);
@@ -1902,6 +1902,56 @@ public class CreateApiRequestShould
         await responseMessage.IsSuccessStatusCodeOrThrow();
         var content = await responseMessage.Content.ReadAsStringAsync();
         content.Should().Be($"{model.Id}+{nameof(Create_post_request_with_file)}");
+    }
+
+    [Fact]
+    public async Task Create_post_request_with_object_with_different_froms()
+    {
+        var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+        var model = new ParamWithDifferentFroms()
+        {
+            ParamFromBody = ParamWithSeveralTypes.CreateRandom(),
+            ParamFromQuery = "fromQuery",
+            ParamFromRoute = "fromRoute",
+            ParamFromHeader = "fromHeader"
+        };
+        var request = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.PostWithDifferentFroms(model));
+        var responseMessage = await request.PostAsync();
+
+        await responseMessage.IsSuccessStatusCodeOrThrow();
+        var content = await responseMessage.ReadContentAsAsync<ParamWithDifferentFroms>();
+        content.ParamFromHeader.Should().Be(model.ParamFromHeader);
+        content.ParamFromQuery.Should().Be(model.ParamFromQuery);
+        content.ParamFromRoute.Should().Be(model.ParamFromRoute);
+        content.ParamFromBody.Should().Be(model.ParamFromBody);
+    }
+
+    [Fact]
+    public async Task Create_put_request_with_object_with_different_froms()
+    {
+        var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+        var model = new ParamWithDifferentFroms()
+        {
+            ParamFromBody = ParamWithSeveralTypes.CreateRandom(),
+            ParamFromQuery = "fromQuery",
+            ParamFromRoute = "fromRoute",
+            ParamFromHeader = "fromHeader"
+        };
+        var request = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.PutWithDifferentFroms(model));
+        var responseMessage = await request.SendAsync("PUT");
+
+        await responseMessage.IsSuccessStatusCodeOrThrow();
+        var content = await responseMessage.ReadContentAsAsync<ParamWithDifferentFroms>();
+        content.ParamFromHeader.Should().Be(model.ParamFromHeader);
+        content.ParamFromQuery.Should().Be(model.ParamFromQuery);
+        content.ParamFromRoute.Should().Be(model.ParamFromRoute);
+        content.ParamFromBody.Should().Be(model.ParamFromBody);
     }
 
     private class PrivateNonControllerClass

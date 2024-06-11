@@ -1,12 +1,12 @@
 ﻿<Project>
     <PropertyGroup Label="SDK Versions">
-        <NetCoreTargetVersion>netcoreapp3.1;net5.0;net6.0;net7.0</NetCoreTargetVersion>
+        <NetCoreTargetVersion>net6.0;net7.0;net8.0</NetCoreTargetVersion>
         <LangVersion>latest</LangVersion>
         <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
     </PropertyGroup>
 
     <PropertyGroup Label="Package information">
-        <Version>3.5.0</Version>
+        <Version>4.0.0</Version>
 
         <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
         <PackageProjectUrl>http://github.com/xabaril/Acheve.TestHost</PackageProjectUrl>

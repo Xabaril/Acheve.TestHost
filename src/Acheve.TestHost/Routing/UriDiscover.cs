@@ -50,7 +50,9 @@ internal static class UriDiscover
         var requestBuilder = server.CreateRequest(validUri);
 
         // Include content as Json by default
-        contentOptions ??= action.ArgumentValues.Values.Any(a => a.IsFromForm) ? new IncludeContentAsFormUrlEncoded() : new IncludeContentAsJson();
+        contentOptions ??= action.ArgumentValues.Values.Any(a => a.FromType.HasFlag(TestServerArgumentFromType.Form))
+            ? new IncludeContentAsFormUrlEncoded()
+            : new IncludeContentAsJson();
 
         if (contentOptions.IncludeFromBodyAsContent)
         {
@@ -237,7 +239,7 @@ internal static class UriDiscover
         TestServerAction action,
         RequestContentOptions contentOptions)
     {
-        var fromBodyArgument = action.ArgumentValues.Values.SingleOrDefault(x => x.IsFromBody);
+        var fromBodyArgument = action.ArgumentValues.Values.SingleOrDefault(x => x.FromType.HasFlag(TestServerArgumentFromType.Body));
 
         if (fromBodyArgument != null)
         {
@@ -251,7 +253,7 @@ internal static class UriDiscover
         TestServerAction action,
         RequestContentOptions contentOptions)
     {
-        var fromFormArgument = action.ArgumentValues.Values.SingleOrDefault(x => x.IsFromForm);
+        var fromFormArgument = action.ArgumentValues.Values.SingleOrDefault(x => x.FromType.HasFlag(TestServerArgumentFromType.Form));
 
         if (fromFormArgument != null)
         {
@@ -264,11 +266,11 @@ internal static class UriDiscover
        RequestBuilder requestBuilder,
        TestServerAction action)
     {
-        var fromHeaderArguments = action.ArgumentValues.Values.Where(x => x.IsFromHeader);
+        var fromHeaderArguments = action.ArgumentValues.Values.Where(x => x.FromType.HasFlag(TestServerArgumentFromType.Header));
 
         foreach (var fromHeaderArgument in fromHeaderArguments)
         {
-            requestBuilder.And(x => x.Headers.Add(fromHeaderArgument.HeaderName, fromHeaderArgument.Instance.ToString()));
+            requestBuilder.And(x => x.Headers.Add(fromHeaderArgument.Name, fromHeaderArgument.Instance.ToString()));
         }
     }
 }
