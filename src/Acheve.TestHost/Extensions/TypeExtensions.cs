@@ -13,7 +13,8 @@ internal static class TypeExtensions
             || type == typeof(string)
             || type == typeof(decimal)
             || type == typeof(Guid)
-            || type.IsDateTime();
+            || type.IsDateTime()
+            || type.IsEnum;
     }
 
     internal static bool IsDateTime(this Type typeToInspect)

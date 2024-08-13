@@ -1954,6 +1954,40 @@ public class CreateApiRequestShould
         content.ParamFromBody.Should().Be(model.ParamFromBody);
     }
 
+    [Fact]
+    public async Task Create_get_request_with_enum_from_query()
+    {
+        var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+        var enumValue = SampleEnumeration.Value3;
+
+        var request = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.GetWithEnumInQuery(enumValue));
+        var responseMessage = await request.GetAsync();
+
+        await responseMessage.IsSuccessStatusCodeOrThrow();
+        var response = await responseMessage.Content.ReadAsStringAsync();
+        response.Should().Be(enumValue.ToString());
+    }
+
+    [Fact]
+    public async Task Create_get_request_with_enum_from_route()
+    {
+        var server = new TestServerBuilder()
+            .UseDefaultStartup()
+            .Build();
+
+        var enumValue = SampleEnumeration.Value3;
+
+        var request = server.CreateHttpApiRequest<ValuesV5Controller>(controller => controller.GetWithEnumInRoute(enumValue));
+        var responseMessage = await request.GetAsync();
+
+        await responseMessage.IsSuccessStatusCodeOrThrow();
+        var response = await responseMessage.Content.ReadAsStringAsync();
+        response.Should().Be(enumValue.ToString());
+    }
+
     private class PrivateNonControllerClass
     {
         public int SomeAction()
