@@ -215,7 +215,9 @@ internal static class UriDiscover
             throw new InvalidOperationException($"The action selector is not a valid lambda expression");
         }
 
-        var methodCall = (MethodCallExpression)actionSelector.Body;
+        var methodCall = actionSelector.Body as MethodCallExpression;
+        if (methodCall is null)
+            methodCall = (actionSelector.Body as UnaryExpression).Operand as MethodCallExpression;
 
         var action = new TestServerAction(methodCall.Method);
         bool haveAttributeApiController = typeof(TController).GetTypeInfo().GetCustomAttribute(typeof(ApiControllerAttribute)) != null;

@@ -125,4 +125,12 @@ public class ValuesV5Controller : ControllerBase
     [HttpPut($"{nameof(PutWithDifferentFroms)}/{{{nameof(ParamWithDifferentFroms.ParamFromRoute)}}}")]
     public ActionResult<ParamWithDifferentFroms> PutWithDifferentFroms(ParamWithDifferentFroms request)
         => Ok(request);
+
+    [HttpGet($"{nameof(GetWithEnumInRoute)}/{{request}}")]
+    public string GetWithEnumInRoute([FromRoute] SampleEnumeration request)
+        => request.ToString();
+
+    [HttpGet($"{nameof(GetWithEnumInQuery)}")]
+    public string GetWithEnumInQuery([FromQuery] SampleEnumeration request)
+        => request.ToString();
 }
