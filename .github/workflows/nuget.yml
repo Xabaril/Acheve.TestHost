@@ -21,7 +21,8 @@ jobs:
           dotnet-version: |
             6.0.421
             7.0.408
-            8.0.204
+            8.0.415
+            9.0.306
 
       - name: Build
         run: dotnet build -c $BUILD_CONFIG

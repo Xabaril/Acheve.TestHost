@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-//using Newtonsoft.Json;
 using System.Security.Claims;
 
 namespace Sample.Api
