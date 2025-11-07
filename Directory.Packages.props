@@ -1,15 +1,25 @@
 ﻿<Project>
   <PropertyGroup Label=".Net version" Condition=" '$(TargetFramework)' == 'net6.0' ">
-    <NetCoreVersion>6.0.29</NetCoreVersion>
+    <NetCoreVersion>6.0.36</NetCoreVersion>
+    <MicrosoftNETTestSdkVersion>17.9.0</MicrosoftNETTestSdkVersion>
+    <XUnitRunnerVisualStudioVersion>2.8.2</XUnitRunnerVisualStudioVersion>
   </PropertyGroup>
   <PropertyGroup Label=".Net version" Condition=" '$(TargetFramework)' == 'net7.0' ">
-    <NetCoreVersion>7.0.18</NetCoreVersion>
+    <NetCoreVersion>7.0.20</NetCoreVersion>
+    <MicrosoftNETTestSdkVersion>17.9.0</MicrosoftNETTestSdkVersion>
+    <XUnitRunnerVisualStudioVersion>2.8.2</XUnitRunnerVisualStudioVersion>
   </PropertyGroup>
   <PropertyGroup Label=".Net version" Condition=" '$(TargetFramework)' == 'net8.0' ">
-    <NetCoreVersion>8.0.4</NetCoreVersion>
+    <NetCoreVersion>8.0.21</NetCoreVersion>
+    <MicrosoftNETTestSdkVersion>18.0.0</MicrosoftNETTestSdkVersion>
+    <XUnitRunnerVisualStudioVersion>3.1.5</XUnitRunnerVisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup Label=".Net version" Condition=" '$(TargetFramework)' == 'net9.0' ">
+    <NetCoreVersion>9.0.10</NetCoreVersion>
+    <MicrosoftNETTestSdkVersion>18.0.0</MicrosoftNETTestSdkVersion>
+    <XUnitRunnerVisualStudioVersion>3.1.5</XUnitRunnerVisualStudioVersion>
   </PropertyGroup>
   <ItemGroup Label="General Dependencies">
-    <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageVersion Include="Microsoft.AspNetCore.TestHost" Version="$(NetCoreVersion)" />
   </ItemGroup>
   <ItemGroup Label="Sample Dependencies">
@@ -17,11 +27,11 @@
   </ItemGroup>
   <ItemGroup Label="Testing Dependencies">
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.Testing" Version="$(NetCoreVersion)" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-    <PackageVersion Include="FluentAssertions" Version="6.12.0" />
-    <PackageVersion Include="xunit" Version="2.8.0" />
-    <PackageVersion Include="xunit.runner.visualstudio" Version="2.8.0" />
-    <PackageVersion Include="coverlet.collector" Version="6.0.2" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftNETTestSdkVersion)" />
+    <PackageVersion Include="FluentAssertions" Version="[7.2.0]" />
+    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="$(XUnitRunnerVisualStudioVersion)" />
+    <PackageVersion Include="coverlet.collector" Version="6.0.4" />
   </ItemGroup>
   <ItemGroup Label="Github Dependencies">
     <PackageVersion Include="Microsoft.SourceLink.GitHub" Version="8.0.0" />
