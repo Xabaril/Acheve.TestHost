@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading.Tasks;
 using Xunit;
 
 namespace Sample.IntegrationTests.Infrastructure
 {
-    public class TestHostFixture : IDisposable, IAsyncLifetime
+    public sealed class TestHostFixture : IDisposable, IAsyncLifetime
     {
-        private IWebHost _host;
+        private IHost _host;
 
         public TestServer Server => _host.GetTestServer();
 
@@ -21,10 +22,13 @@ namespace Sample.IntegrationTests.Infrastructure
         /// <inheritdoc />
         public async Task InitializeAsync()
         {
-            _host = new WebHostBuilder()
-                .UseTestServer()
-                .UseStartup<TestStartup>()
-                .Build();
+            _host = Host.CreateDefaultBuilder()
+                .ConfigureWebHost(webHostBuilder =>
+                {
+                    webHostBuilder
+                        .UseStartup<TestStartup>()
+                        .UseTestServer();
+                }).Build();
 
             await _host.StartAsync();
         }

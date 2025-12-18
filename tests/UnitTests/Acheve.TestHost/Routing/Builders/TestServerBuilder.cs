@@ -1,25 +1,29 @@
-﻿using System.Reflection;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using System.Reflection;
 
 namespace UnitTests.Acheve.TestHost.Builders
 {
     public class TestServerBuilder
     {
-        private readonly WebHostBuilder _webHostBuilder;
+        private readonly HostBuilder _hostBuilder;
 
         public TestServerBuilder()
         {
-            _webHostBuilder = new WebHostBuilder();
-            
+            _hostBuilder = new HostBuilder();
         }
 
         public TestServerBuilder UseDefaultStartup()
         {
-            _webHostBuilder.UseStartup<DefaultStartup>();
+            _hostBuilder.ConfigureWebHost(webHostBuilder =>
+            {
+                webHostBuilder
+                    .UseTestServer()
+                    .UseStartup<DefaultStartup>();
+            });
 
             return this;
         }
@@ -27,7 +31,12 @@ namespace UnitTests.Acheve.TestHost.Builders
 
         public TestServer Build()
         {
-            return new TestServer(_webHostBuilder);
+            var host = _hostBuilder
+                .Build();
+
+            host.Start();
+
+            return host.GetTestServer();
         }
 
         class DefaultStartup
