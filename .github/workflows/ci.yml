@@ -24,10 +24,9 @@ jobs:
         uses: actions/setup-dotnet@v2
         with:
           dotnet-version: |
-            6.0.421
-            7.0.408
             8.0.415
             9.0.306
+            10.0.101
 
       - name: Build
         run: dotnet build -c $BUILD_CONFIG
