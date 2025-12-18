@@ -139,11 +139,7 @@ namespace Acheve.TestHost.Routing
             bool canBeObjectWithMultipleFroms = false;
             if (hasNoAttributes && !isPrimitive)
             {
-#if NET8_0_OR_GREATER
                 canBeObjectWithMultipleFroms = MethodInfo.GetParameters().Length == 1;
-#else
-                canBeObjectWithMultipleFroms = false;
-#endif
 
                 if (activeBodyApiController)
                 {
